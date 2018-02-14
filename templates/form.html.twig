@@ -1,0 +1,24 @@
+{% macro input(name,label, placeholder, options=[]) %}
+<div class="row">
+    <div class="col-md-3 field-label-responsive">
+        <label for="{{ name }}">{{ label }}</label>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-{{options.class}}"></i></div>
+                <input type="{{ options.type ?: 'text' }}" name="{{ name }}" class="form-control" id="{{ name }}"
+                       placeholder="{{ placeholder }}"  autofocus>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-control-feedback">
+                        <span class="text-danger align-middle">
+                            <!-- Put name validation error messages here -->
+                        </span>
+        </div>
+    </div>
+</div>
+
+{% endmacro %}
