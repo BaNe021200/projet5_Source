@@ -1,0 +1,12 @@
+{
+    "name": "connector/twig-grafikart",
+    "authors": [
+        {
+            "name": "Bane021200",
+            "email": "fluffybear021200@gmail.com"
+        }
+    ],
+    "require": {
+        "twig/twig": "^2.4"
+    }
+}
