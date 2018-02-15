@@ -3,19 +3,51 @@ declare(strict_types=1);
 require_once 'twig.php';
 require_once 'controler/backend.php';
 
-$page = 'home';
-if (isset($_GET['p'])) {
-    $page = $_GET['p'];
+try
+{
+
+if (isset($_GET['p']))
+{
+    if ($_GET['p'] == 'home'){
+        home();
+    }
+
+    elseif ($_GET['p'] == 'signUp'){
+        signUp();
+    }
+
+    elseif ($_GET['p'] == 'register'){
+        addNewUser();
+    }
+
+    elseif ($_GET['p'] == 'connexion'){
+        connectUser();
+    }
+
+    elseif ($_GET['p'] == 'getConnexion'){
+        getUserData();
+    }
+
+
+
+
 }
 
-switch ($page){
-    case 'home':
-        twigRender('home.html.twig');
-        break;
-    case 'signUp':
-        twigRender('signUp.html.twig');
-        break;
+
+else
+{
+    home();
 }
+
+}
+
+
+catch (Exception $e)
+{
+    $errorMessage= $e->getMessage();
+    require('templates/404.html.twig');
+}
+
 
 
 

@@ -1,0 +1,14 @@
+{% extends 'layout.html.twig' %}
+{% block head %}
+    <link rel="stylesheet" href="public/css/style.css">
+{% endblock %}
+{% block title %} Dead {% endblock %}
+
+{% block main %}
+
+    <h1>Ne vous laissez pas distraire : <br>
+        une erreur est survenue !<br>
+        <span class="red"><?= $errorMessage ?></span>
+
+    </h1>
+{% endblock %}

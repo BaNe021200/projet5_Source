@@ -1,5 +1,7 @@
 {% extends 'layout.html.twig' %}
-
+{% block head %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+{% endblock %}
 {% block title %} Projet twig {% endblock title %}
 
 
@@ -10,16 +12,8 @@
 
 
 {% block main %}
+    <h1>Hello {{ userDatum.first_name }}</h1>
 
-    {% for userDatum in userData %}
-<h1>la page de {{ userDatum.username }}</h1>
-
-
-
-
-
-
-{% endfor %}
 
 
 
