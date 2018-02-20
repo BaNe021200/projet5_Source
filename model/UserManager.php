@@ -35,7 +35,7 @@ class UserManager extends Manager
         public function getUserMainData(){
 
         $pdo=$this->dbConnect();
-        $pdoStat=$pdo->prepare('SELECT id, first_name, username  FROM projet5_user WHERE username=:username');
+        $pdoStat=$pdo->prepare('SELECT id,gender, first_name, username  FROM projet5_user WHERE username=:username');
         $pdoStat->bindValue(':username',$_POST['username'],PDO::PARAM_STR);
         $userMainData = $pdoStat->execute();
         $userMainData = $pdoStat->fetch();//var_dump($userMainData);die;
@@ -49,6 +49,27 @@ class UserManager extends Manager
         return $userData;
         }
 
+        public function disconnect(){
+        session_abort();
+        setcookie("ID","", time()- 60);
+        setcookie("username","", time()- 60);
+        setcookie("first_name","", time()- 60);
 
+    }
+
+        public function getConnexion()
+    {
+
+        $pwd=$_POST['password'];
+
+
+        $pdo=$this->dbConnect();
+        $pdoStat=$pdo->prepare('SELECT id, password,gender  FROM projet5_user WHERE username=:username');
+        $pdoStat->bindValue(':username',$_POST['username'],PDO::PARAM_STR);
+        $hashedPass = $pdoStat->execute();
+        $hashedPass = $pdoStat->fetch();
+        $verifyPassword = $hashedPass['password'];
+        return $verifyPassword;
+    }
 
 }

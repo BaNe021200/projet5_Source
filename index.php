@@ -25,7 +25,23 @@ if (isset($_GET['p']))
     }
 
     elseif ($_GET['p'] == 'getConnexion'){
-        getUserData();
+        authentificationConnexion();
+    }
+
+    elseif ($_GET['p'] == 'deconnexion'){
+        disconnectUser();
+    }
+
+    elseif ($_GET['p'] == 'page2'){
+        newPage();
+    }
+
+    elseif ($_GET['p'] == 'upload'){
+        UploadPictures();
+    }
+
+    elseif ($_GET['p'] == 'uploadStatement'){
+        uploadStatement();
     }
 
 

@@ -1,0 +1,84 @@
+{% extends "hello.html.twig" %}
+{% import 'form.html.twig' as form %}
+{% block navMenu %}{% endblock %}
+{% block head %}
+    <link rel="stylesheet" href="public/css/album.css">
+    <link rel="stylesheet" href="public/css/users.css">
+{% endblock %}
+
+{% block main %}
+
+    <h1>Hello again {{ userDatum.first_name }}  </h1>
+
+
+
+
+<div class="album py-5 bg-light">
+    <div class="container">
+
+        <div class="row">
+        <div class="col-md-4">
+            <div class="card mb-4 box-shadow">
+                <img class="card-img-top" src="" alt="Card image cap">
+                <div class="card-body">
+                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#exampleModal" id="uploadButton">Upload</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                        </div>
+                        <small class="text-muted"></small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row align-items-center">
+        <div class="col-lg-6 order-lg-2">
+            <form action="index.php?p=upload" id="uploadFormHidden" method="post" class="form-horizontal hidden" enctype="multipart/form-data">
+                <fieldset class="form-control">
+                    <input type="hidden" class="form-control" value="{{userDatum.username}}" name="username" >
+
+
+                    {{ form.inputSimple('pic1', 'Photo N°1','',{class:'image', type:'file'}) }}
+                    {{ form.inputSimple('pic2', 'Photo N°2','',{class:'image', type:'file'}) }}
+                    {{ form.inputSimple('pic3', 'Photo N°3','',{class:'image', type:'file'}) }}
+                    {{ form.inputSimple('pic4', 'Photo N°4','',{class:'image', type:'file'}) }}
+
+
+
+                </fieldset>
+                <button type="submit" id="submitButton" class="btn btn-outline-primary btn-sm" >envoyer</button>
+                <button type="reset" class="btn btn-outline-danger btn-sm" >tout effacer</button>
+
+            </form>
+
+
+
+
+
+
+    </div>
+</div>
+
+
+
+
+    {% block script %}
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script>window.jQuery || document.write('<script src="assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+        <script src="public/assets/js/vendor/popper.min.js"></script>
+        <script src="public/dist/js/bootstrap.min.js"></script>
+        <script src="public/assets/js/vendor/holder.min.js"></script>
+        <script src="public/js/upload.js"></script>
+        <script src="public/js/uploadStatement.js"></script>
+
+    {% endblock script %}
+
+
+{% endblock %}

@@ -2,19 +2,27 @@
 {% block head %}
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 {% endblock %}
-{% block title %} Projet twig {% endblock title %}
+{% block title %} La page de {{ userDatum.username }}  {% endblock title %}
 
 
-    {% block signUp%}s'incrire{% endblock %}
-    {% block signUpLink%}index.php?p=signUp{% endblock %}
-    {% block connexion %}connexion{% endblock %}
-    {% block connexionLink %}index.php?p=connexion{% endblock %}
+    {% block signUp%}
+    La page de {{ userDatum.username }} {% endblock %}
+    {% block signUpLink %}#{% endblock %}
 
+
+
+
+    {% block connexion %}déconnexion{% endblock %}
+    {% block connexionLink %}index.php?p=deconnexion{% endblock %}
+
+    {% block navMenu %}
+        <li class="nav-item">
+        <a class="nav-link" href="index.php?p=page2">page 2</a>
+        </li>
+    {% endblock %}
 
 {% block main %}
-    <h1>Hello {{ userDatum.first_name }}</h1>
-
-
+    <h1>Hello {{ userDatum.first_name }}  </h1>
 
 
 

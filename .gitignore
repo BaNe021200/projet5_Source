@@ -3,3 +3,8 @@
 
 /vendor/
 /public/img/bg_1.jpg
+/public/assets/
+/public/dist/
+/users/img/user/
+/dialog.html
+/modal.php

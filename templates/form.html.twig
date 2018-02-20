@@ -22,3 +22,21 @@
 </div>
 
 {% endmacro %}
+
+{% macro inputSimple(name,label, placeholder, options=[]) %}
+
+    <p><label for="{{ name }}"><i class="fa fa-{{options.class}}"></i> {{ label }}</label>
+
+
+
+
+        <input type="{{ options.type ?: 'text' }}" class="form-control" name="{{ name }}" id="{{ name }}" placeholder="{{ placeholder }}"  autofocus>
+
+
+
+    </p>
+
+
+
+
+{% endmacro %}
