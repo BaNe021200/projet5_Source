@@ -1,4 +1,4 @@
-{% extends "page2.html.twig" %}
+{% extends "homeUser.html.twig" %}
 
 {% block main %}
 
@@ -30,11 +30,11 @@
     {% block script %}
        {{ parent() }}
 
-        <script>  $('#Succes').modal('show');</script>
-        <script> document.getElementById('dismissModal').addEventListener('click',function () {
-                window.location.href="index.php?p=page2"
-            });
-        </script>
+          <script>  $('#Succes').modal('show');</script>
+       <script> document.getElementById('dismissModal').addEventListener('click',function () {
+                 window.location.href="index.php?p=homeUser"
+             });
+         </script>
 
     {% endblock %}
 

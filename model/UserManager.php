@@ -49,13 +49,7 @@ class UserManager extends Manager
         return $userData;
         }
 
-        public function disconnect(){
-        session_abort();
-        setcookie("ID","", time()- 60);
-        setcookie("username","", time()- 60);
-        setcookie("first_name","", time()- 60);
 
-    }
 
         public function getConnexion()
     {
@@ -71,5 +65,41 @@ class UserManager extends Manager
         $verifyPassword = $hashedPass['password'];
         return $verifyPassword;
     }
+
+        public function addUserFiles($userId)
+        {
+            $images= glob('users/img/user/'.$_SESSION['username'].'/*.jpg');
+            foreach ($images as $avatar){$avatar;};
+            $pdo=$this->dbConnect();
+            $PdoStat= $pdo->prepare('INSERT INTO projet5_images VALUES(NULL,:userId,:img_name,NULL) ');
+            $PdoStat->bindValue(':userId',$userId,PDO::PARAM_STR);
+            $PdoStat->bindValue(':img_name',$avatar,PDO::PARAM_STR);
+
+            $addImage = $PdoStat->execute();
+            return $addImage;
+
+        }
+
+        public function getUserFiles($userId)
+        {
+            $pdo=$this->dbConnect();
+            $PdoStat=$pdo->prepare('SELECT img_name FROM projet5_images WHERE user_id= :userId ');
+            $PdoStat->bindValue(':userId',$userId,PDO::PARAM_STR);
+            $userImages=$PdoStat->execute();
+            $userImages = $PdoStat->fetchall();
+            return $userImages;
+
+
+        }
+
+        public function getAllFiles()
+        {
+            $pdo=$this->dbConnect();
+            $PdoStat=$pdo->query('SELECT img_name FROM projet5_images');
+            $files = $PdoStat->execute();
+            $files = $PdoStat->fetchAll();
+
+            return $files;
+        }
 
 }

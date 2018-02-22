@@ -30,6 +30,7 @@ use model\UserManager;
 
             echo $twig->render($renderPath,[
                 'userDatum' => $_SESSION,
+
                 $argument1 => $argument2
 
             ]);

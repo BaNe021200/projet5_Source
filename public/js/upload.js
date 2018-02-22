@@ -9,33 +9,36 @@ function unhideForm()
     })
 }
 
+function delayedModal(){
+    var timeoutID;
+    timeoutID = window.setTimeout(showModal(),2000);
+}
+
+function showModal() {
+    $('#Success').modal('show');
+}
 
 
-/*function showModal() {
 
 
-  var modal = document.getElementById("Succes");
- modal.addEventListener("load",function () {
-    // showModal("succes");
- });
-        //$('#Succes').modal('show');
-        //$('#Succes').modal({ show: false});
-}*/
-
-/*$(function () {
-
-    var $button;
-    $button= $('#submitButton');
-
-    $button.on('click', function () {
-        $('#Succes').modal('show');
-    });
 
 
-});*/
+
+
+
+
+
+
+
+
+
 
 
 
 
 unhideForm();
 
+/*setTimeout(function (e) {
+            e.preventDefault();
+            $('#Success').modal('show');
+        }, 100)*/

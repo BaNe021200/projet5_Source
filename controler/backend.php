@@ -5,7 +5,8 @@ require_once 'model/UserManager.php';
 require_once 'twig.php';
 require_once 'functionUpload.php';
 require_once 'model/User.php';
-
+require_once 'resize2.php';
+require_once 'crop.php';
 use model\UserManager;
 use model\User;
 
@@ -35,6 +36,27 @@ function home()
     twigRender('home.html.twig','userData', $userData = $user->userData());
 }
 
+function homeUser()
+{
+    //session_start();
+    twigRender('homeUser.html.twig','','');
+}
+
+function galerie1()
+{
+    //session_start();
+    twigRender('galerie1.html.twig','','');
+}
+
+function galerie2()
+{
+    //session_start();
+    twigRender('galerie2.html.twig','','');
+}
+
+
+
+
 function connectUser()
 {
     twigRender('connexion.html.twig','','');
@@ -59,22 +81,10 @@ function authentificationConnexion()
             setcookie("username", $_SESSION['username'], time() + 3600 * 24 * 365, '', '', false, true);
             setcookie("first_name", $_SESSION['first_name'], time() + 3600 * 24 * 365, '', '', false, true);
 
-            switch ($_SESSION['gender']) {
-                case 'female':
-
-                    twigRender('ladies.html.twig','userDatum',$_SESSION);
-                    break;
-                case 'male':
-                    //viewBackendTemplate('menPage.php');
-                    twigRender('men.html.twig','userDatum',$_SESSION);
-                    break;
-                case 'other':
-                    twigRender('others.html.twig','userDatum',$_SESSION);
-                    break;
-
-            }
+            twigRender('homeUser.html.twig','','');
 
             //header('Location:index.php?action=verifyUSerDataFilled');
+
 
 
         } else {
@@ -88,25 +98,23 @@ function authentificationConnexion()
 
 function disconnectUser()
 {
-    $user= new UserManager();
-    $logOut = $user->disconnect();
+    session_abort();
+    setcookie("ID","", time()- 60);
+    setcookie("username","", time()- 60);
+    setcookie("first_name","", time()- 60);
 
    home();
 }
 
-function newPage()
-{
-    //session_start();
-    twigRender('page2.html.twig','userDatum',$_SESSION);
-}
-
-
 function UploadPictures()
 {
+
+    $user=new UserManager();
+
     $messages = [];
 
     if(!file_exists('users/img/user/'.$_POST['username']))
-    {
+    {   $i=1;
         newFolder();
         foreach ($_FILES as $file) {//var_dump($file['name']);
 
@@ -144,7 +152,8 @@ function UploadPictures()
                         //$extension = substr(strchr($file['name'],"."),1);
                         $extension = strtolower(substr(strchr($file['name'], "."), 1));
                         //$destinationPath='upload/user/'.$file['name'];
-                        $destinationPath = 'users/img/user/' . $_POST['username'] . '/' . sleep(1) . time() . '.' . $extension;
+                        $destinationPath = 'users/img/user/' . $_POST['username'] . '/' . 'img_00'.$i++ . '.' . $extension;
+                        //var_dump($destinationPath);die;
 
 
                         $temporaryPath = $file['tmp_name'];
@@ -165,12 +174,37 @@ function UploadPictures()
             } else {
                 $messages[] = 'un problème est survenu lors de l\'upload';
             }
-
-        }//twigRender('page2.html.twig', 'message', $messages);
+            $destinationPath= $user->addUserFiles($_SESSION['id']);
+        }//twigRender('homeUser.html.twig', 'message', $messages);
 
     }
     else
-    {
+    { //$i=0;
+      $countFiles = count(glob('users/img/user/'.$_POST['username'].'/*.jpg'))+1;
+      $maxFiles = count(glob('users/img/user/'.$_POST['username'].'/*.jpg'));
+        if ($maxFiles===6) {
+            throw  new Exception(("vous ne pouvez pas uploader plus de 6 photos"));
+        }
+
+
+      /*if ($countFiles !=0 && $countFiles< 5) {
+            for ($i === $countFiles ; $i < 5; $i++) {
+
+
+                $i;  //var_dump($i);die;
+            }
+        }/*
+        elseif ($countFiles===5) {
+            throw  new Exception(("vous ne pouvez pas uploader plus de 5 photos"));
+        }
+        elseif($countFiles===0)
+            {
+                for($i=1;$i<=5; $i++)
+                {
+                    $i;
+                }
+
+            }*/
         foreach ($_FILES as $file) {//var_dump($file['name']);
 
 
@@ -206,9 +240,12 @@ function UploadPictures()
 
                         //$extension = substr(strchr($file['name'],"."),1);
                         $extension = strtolower(substr(strchr($file['name'], "."), 1));
-                        //$destinationPath='upload/user/'.$file['name'];
-                        $destinationPath = 'users/img/user/' . $_POST['username'] . '/' . sleep(1) . time() . '.' . $extension;
+                        $i=$countFiles++;
+                        $destinationPath = 'users/img/user/' . $_POST['username'] . '/' .  'img_00'.$i++ . '.' . $extension;
 
+
+
+                       // $destinationPath=$user->addUserFiles($_SESSION['id']);
 
                         $temporaryPath = $file['tmp_name'];
 
@@ -228,12 +265,38 @@ function UploadPictures()
             } else {
                 $messages[] = 'un problème est survenu lors de l\'upload';
             }
-
+            $destinationPath= $user->addUserFiles($_SESSION['id']);
         }
     }
-    resizeImage();
+    //resizeImage();
+    resizeByHeight();
+    cropImages();
+
+
 twigRender('success.html.twig','message', $messages);
+
+}
+
+
+
+
+function getUserImages($userId)
+{
+    $user = new UserManager();
+    $images = $user->getUserFiles($_SESSION['id']);
+
+    twigRender('galerie1.html.twig','image',$images);
+    //require_once 'templates/photo.php';
 
 
 }
+
+function getAllImages()
+{
+    $user = new UserManager();
+    $allImages = $user->getAllFiles();
+    require_once 'templates/photo.php';
+}
+
+
 

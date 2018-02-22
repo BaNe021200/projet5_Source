@@ -12,6 +12,38 @@ if (isset($_GET['p']))
         home();
     }
 
+    elseif ($_GET['p'] == 'homeUser'){
+        if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
+            homeUser();
+        }
+        else
+        {
+            throw new Exception("Erreur vous n'êtes pas connectez. Veuillez vous identifier");
+        }
+    }
+
+    elseif ($_GET['p'] == 'galerie1'){
+        if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
+            galerie1();
+        }
+        else
+        {
+            throw new Exception("Erreur vous n'êtes pas connectez. Veuillez vous identifier");
+        }
+    }
+
+    elseif ($_GET['p'] == 'galerie2'){
+        if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
+            galerie2();
+        }
+        else
+        {
+            throw new Exception("Erreur vous n'êtes pas connectez. Veuillez vous identifier");
+        }
+    }
+
+
+
     elseif ($_GET['p'] == 'signUp'){
         signUp();
     }
@@ -21,7 +53,13 @@ if (isset($_GET['p']))
     }
 
     elseif ($_GET['p'] == 'connexion'){
-        connectUser();
+        if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
+            homeUser();
+        }
+        else
+            {
+                connectUser();
+            }
     }
 
     elseif ($_GET['p'] == 'getConnexion'){
@@ -33,7 +71,13 @@ if (isset($_GET['p']))
     }
 
     elseif ($_GET['p'] == 'page2'){
-        newPage();
+        if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
+            page2();
+        }
+        else
+        {
+            throw new Exception("Erreur vous n'êtes pas connectez. Veuillez vous identifier");
+        }
     }
 
     elseif ($_GET['p'] == 'upload'){
@@ -44,7 +88,15 @@ if (isset($_GET['p']))
         uploadStatement();
     }
 
-
+    elseif ($_GET['p'] == 'galerie1'){
+        if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
+            getUserImages($_SESSION['id']);
+        }
+        else
+        {
+            throw new Exception("Erreur vous n'êtes pas connectez. Veuillez vous identifier");
+        }
+    }
 
 
 }

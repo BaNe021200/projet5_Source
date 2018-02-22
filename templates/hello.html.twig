@@ -1,34 +1,35 @@
 {% extends 'layout.html.twig' %}
 {% block head %}
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="public/dist/css/bootstrap.min.css">
 {% endblock %}
+
+
 {% block title %} La page de {{ userDatum.username }}  {% endblock title %}
 
 
     {% block signUp%}
     La page de {{ userDatum.username }} {% endblock %}
-    {% block signUpLink %}#{% endblock %}
+    {% block signUpLink %}index.php?p=homeUser{% endblock %}
 
-
-
-
-    {% block connexion %}déconnexion{% endblock %}
-    {% block connexionLink %}index.php?p=deconnexion{% endblock %}
-
-    {% block navMenu %}
+{% block navMenu %}
         <li class="nav-item">
-        <a class="nav-link" href="index.php?p=page2">page 2</a>
+        <a class="nav-link" href="index.php?p=galerie2">galerie 2</a>
         </li>
     {% endblock %}
+{% block connexion %}déconnexion{% endblock %}
+    {% block connexionLink %}index.php?p=deconnexion{% endblock %}
 
 {% block main %}
     <h1>Hello {{ userDatum.first_name }}  </h1>
 
-
-
-
-
-
-
-
 {% endblock %}
+{% block script %}
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script src="public/assets/js/vendor/popper.min.js"></script>
+    <script src="public/dist/js/bootstrap.min.js"></script>
+    <script src="public/assets/js/vendor/holder.min.js"></script>
+    <script src="public/js/upload.js"></script>
+    <script src="public/js/uploadStatement.js"></script>
+
+{% endblock script %}
