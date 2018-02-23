@@ -84,6 +84,33 @@ if (isset($_GET['p']))
         UploadPictures();
     }
 
+    elseif ($_GET['p'] == 'upload1'){
+        uploladPicture1();
+    }
+
+    elseif ($_GET['p'] == 'upload2'){
+        uploladPicture2();
+    }
+
+    elseif ($_GET['p'] == 'upload3'){
+        uploladPicture3();
+    }
+
+    elseif ($_GET['p'] == 'upload4'){
+        uploladPicture4();
+    }
+
+    elseif ($_GET['p'] == 'upload5'){
+        uploladPicture5();
+    }
+
+    elseif ($_GET['p'] == 'upload6'){
+        uploladPicture6();
+    }
+
+
+
+
     elseif ($_GET['p'] == 'uploadStatement'){
         uploadStatement();
     }

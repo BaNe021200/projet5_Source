@@ -277,7 +277,1028 @@ twigRender('success.html.twig','message', $messages);
 
 }
 
+function uploladPicture1()
+{
 
+    $user=new UserManager();
+
+    $messages = [];
+
+    if(!file_exists('users/img/user/'.$_COOKIE['username']))
+    {
+        newFolder();
+        foreach ($_FILES as $file) {//var_dump($file['name']);
+
+
+            if ($file['error'] == UPLOAD_ERR_NO_FILE) {
+                continue;
+            }
+
+            if (is_uploaded_file($file['tmp_name'])) {
+                //on vérifie que le fichier est d'un type autorisé
+                $typeMime = mime_content_type($file['tmp_name']);
+                if ($typeMime == 'image/jpeg') {
+                    //on verifie la taille du fichier
+                    $size = filesize($file['tmp_name']);
+                    if ($size > 1600000) {
+                        $message = "le fichier est trop gros";
+                    } else {
+
+                        $beforeCleanning = $file['name'];
+                        //on remplace les caractères qui ne sont ni des lettres ni des chiffres par des tirets
+
+                        $onCleanning = preg_replace('~[^\\pL\d]+~u', '-', $beforeCleanning);
+                        //on retire les tirets en début et en fin de chaine
+                        $onCleanning = trim($onCleanning, '-');
+                        //passage d'un encodage utf 8 à ascii afin d'éviter tous problème d'encodage dans le nom du fichier
+                        $onCleanning = iconv('utf-8', 'us-ascii//TRANSLIT', $onCleanning);
+                        //on met le nom de fichier en minuscule
+                        $onCleanning = strtolower($onCleanning);
+                        $afterCleanning = preg_replace('~[^-\w]+~', '', $onCleanning);
+
+
+                        //var_dump($afterCleanning);
+
+
+                        //$extension = substr(strchr($file['name'],"."),1);
+                        $extension = strtolower(substr(strchr($file['name'], "."), 1));
+                        //$destinationPath='upload/user/'.$file['name'];
+                        $destinationPath = 'users/img/user/' . $_COOKIE['username'] . '/' .  'img_001.' . $extension;
+                        //var_dump($destinationPath);die;
+
+
+                        $temporaryPath = $file['tmp_name'];
+
+                        if (move_uploaded_file($temporaryPath, $destinationPath)) {
+                            $messages[] = "le fichier " . $file['name'] . " a été correctement uploadé";
+
+
+                        } else {
+                            $messages[] = "le fichier " . $file['name'] . " n'a pas été correctement uploadé";
+
+                        }
+
+                    }
+                } else {
+                    $messages[] = 'type de fichiers non valide';
+                }
+            } else {
+                $messages[] = 'un problème est survenu lors de l\'upload';
+            }
+            $destinationPath= $user->addUserFiles($_SESSION['id']);
+        }//twigRender('homeUser.html.twig', 'message', $messages);
+
+    }
+    else
+    { //$i=0;
+      /*$countFiles = count(glob('users/img/user/'.$_COOKIE['username'].'/*.jpg'))+1;
+      $maxFiles = count(glob('users/img/user/'.$_COOKIE['username'].'/*.jpg'));
+        if ($maxFiles===6) {
+            throw  new Exception(("vous ne pouvez pas uploader plus de 6 photos"));
+        }*/
+
+
+      /*if ($countFiles !=0 && $countFiles< 5) {
+            for ($i === $countFiles ; $i < 5; $i++) {
+
+
+                $i;  //var_dump($i);die;
+            }
+        }/*
+        elseif ($countFiles===5) {
+            throw  new Exception(("vous ne pouvez pas uploader plus de 5 photos"));
+        }
+        elseif($countFiles===0)
+            {
+                for($i=1;$i<=5; $i++)
+                {
+                    $i;
+                }
+
+            }*/
+        foreach ($_FILES as $file) {//var_dump($file['name']);
+
+
+            if ($file['error'] == UPLOAD_ERR_NO_FILE) {
+                continue;
+            }
+
+            if (is_uploaded_file($file['tmp_name'])) {
+                //on vérifie que le fichier est d'un type autorisé
+                $typeMime = mime_content_type($file['tmp_name']);
+                if ($typeMime == 'image/jpeg') {
+                    //on verifie la taille du fichier
+                    $size = filesize($file['tmp_name']);
+                    if ($size > 1600000) {
+                        $message = "le fichier est trop gros";
+                    } else {
+
+                        $beforeCleanning = $file['name'];
+                        //on remplace les caractères qui ne sont ni des lettres ni des chiffres par des tirets
+
+                        $onCleanning = preg_replace('~[^\\pL\d]+~u', '-', $beforeCleanning);
+                        //on retire les tirets en début et en fin de chaine
+                        $onCleanning = trim($onCleanning, '-');
+                        //passage d'un encodage utf 8 à ascii afin d'éviter tous problème d'encodage dans le nom du fichier
+                        $onCleanning = iconv('utf-8', 'us-ascii//TRANSLIT', $onCleanning);
+                        //on met le nom de fichier en minuscule
+                        $onCleanning = strtolower($onCleanning);
+                        $afterCleanning = preg_replace('~[^-\w]+~', '', $onCleanning);
+
+
+                        //var_dump($afterCleanning);
+
+
+                        //$extension = substr(strchr($file['name'],"."),1);
+                        $extension = strtolower(substr(strchr($file['name'], "."), 1));
+
+                        $destinationPath = 'users/img/user/' . $_COOKIE['username'] . '/' .  'img_001.' . $extension;
+
+
+
+                       // $destinationPath=$user->addUserFiles($_SESSION['id']);
+
+                        $temporaryPath = $file['tmp_name'];
+
+                        if (move_uploaded_file($temporaryPath, $destinationPath)) {
+                            $messages[] = "le fichier " . $file['name'] . " a été correctement uploadé";
+
+
+                        } else {
+                            $messages[] = "le fichier " . $file['name'] . " n'a pas été correctement uploadé";
+
+                        }
+
+                    }
+                } else {
+                    $messages[] = 'type de fichiers non valide';
+                }
+            } else {
+                $messages[] = 'un problème est survenu lors de l\'upload';
+            }
+           // $destinationPath= $user->addUserFiles($_SESSION['id']);
+        }
+    }
+    //resizeImage();
+    resizeByHeight();
+    cropImages();
+
+
+twigRender('success.html.twig','message', $messages);
+
+}
+
+function uploladPicture2()
+{
+
+    $user=new UserManager();
+
+        $messages = [];
+
+        if (!file_exists('users/img/user/' . $_COOKIE['username'])) {
+            newFolder();
+            foreach ($_FILES as $file) {//var_dump($file['name']);
+
+
+                if ($file['error'] == UPLOAD_ERR_NO_FILE) {
+                    continue;
+                }
+
+                if (is_uploaded_file($file['tmp_name'])) {
+                    //on vérifie que le fichier est d'un type autorisé
+                    $typeMime = mime_content_type($file['tmp_name']);
+                    if ($typeMime == 'image/jpeg') {
+                        //on verifie la taille du fichier
+                        $size = filesize($file['tmp_name']);
+                        if ($size > 1600000) {
+                            $message = "le fichier est trop gros";
+                        } else {
+
+                            $beforeCleanning = $file['name'];
+                            //on remplace les caractères qui ne sont ni des lettres ni des chiffres par des tirets
+
+                            $onCleanning = preg_replace('~[^\\pL\d]+~u', '-', $beforeCleanning);
+                            //on retire les tirets en début et en fin de chaine
+                            $onCleanning = trim($onCleanning, '-');
+                            //passage d'un encodage utf 8 à ascii afin d'éviter tous problème d'encodage dans le nom du fichier
+                            $onCleanning = iconv('utf-8', 'us-ascii//TRANSLIT', $onCleanning);
+                            //on met le nom de fichier en minuscule
+                            $onCleanning = strtolower($onCleanning);
+                            $afterCleanning = preg_replace('~[^-\w]+~', '', $onCleanning);
+
+
+                            //var_dump($afterCleanning);
+
+
+                            //$extension = substr(strchr($file['name'],"."),1);
+                            $extension = strtolower(substr(strchr($file['name'], "."), 1));
+                            //$destinationPath='upload/user/'.$file['name'];
+                            $destinationPath = 'users/img/user/' . $_COOKIE['username'] . '/' . 'img_002.' . $extension;
+                            //var_dump($destinationPath);die;
+
+
+                            $temporaryPath = $file['tmp_name'];
+
+                            if (move_uploaded_file($temporaryPath, $destinationPath)) {
+                                $messages[] = "le fichier " . $file['name'] . " a été correctement uploadé";
+
+
+                            } else {
+                                $messages[] = "le fichier " . $file['name'] . " n'a pas été correctement uploadé";
+
+                            }
+
+                        }
+                    } else {
+                        $messages[] = 'type de fichiers non valide';
+                    }
+                } else {
+                    $messages[] = 'un problème est survenu lors de l\'upload';
+                }
+            }
+                $destinationPath = $user->addUserFiles($_SESSION['id']);
+            }//twigRender('homeUser.html.twig', 'message', $messages);
+
+         else { //$i=0;
+            /*$countFiles = count(glob('users/img/user/' . $_COOKIE['username'] . '/*.jpg')) + 1;
+            $maxFiles = count(glob('users/img/user/' . $_COOKIE['username'] . '/*.jpg'));
+            if ($maxFiles === 6) {
+                throw  new Exception(("vous ne pouvez pas uploader plus de 6 photos"));
+            }*/
+
+
+            /*if ($countFiles !=0 && $countFiles< 5) {
+                  for ($i === $countFiles ; $i < 5; $i++) {
+
+
+                      $i;  //var_dump($i);die;
+                  }
+              }/*
+              elseif ($countFiles===5) {
+                  throw  new Exception(("vous ne pouvez pas uploader plus de 5 photos"));
+              }
+              elseif($countFiles===0)
+                  {
+                      for($i=1;$i<=5; $i++)
+                      {
+                          $i;
+                      }
+
+                  }*/
+            foreach ($_FILES as $file) {//var_dump($file['name']);
+
+
+                if ($file['error'] == UPLOAD_ERR_NO_FILE) {
+                    continue;
+                }
+
+                if (is_uploaded_file($file['tmp_name'])) {
+                    //on vérifie que le fichier est d'un type autorisé
+                    $typeMime = mime_content_type($file['tmp_name']);
+                    if ($typeMime == 'image/jpeg') {
+                        //on verifie la taille du fichier
+                        $size = filesize($file['tmp_name']);
+                        if ($size > 1600000) {
+                            $message = "le fichier est trop gros";
+                        } else {
+
+                            $beforeCleanning = $file['name'];
+                            //on remplace les caractères qui ne sont ni des lettres ni des chiffres par des tirets
+
+                            $onCleanning = preg_replace('~[^\\pL\d]+~u', '-', $beforeCleanning);
+                            //on retire les tirets en début et en fin de chaine
+                            $onCleanning = trim($onCleanning, '-');
+                            //passage d'un encodage utf 8 à ascii afin d'éviter tous problème d'encodage dans le nom du fichier
+                            $onCleanning = iconv('utf-8', 'us-ascii//TRANSLIT', $onCleanning);
+                            //on met le nom de fichier en minuscule
+                            $onCleanning = strtolower($onCleanning);
+                            $afterCleanning = preg_replace('~[^-\w]+~', '', $onCleanning);
+
+
+                            //var_dump($afterCleanning);
+
+
+                            //$extension = substr(strchr($file['name'],"."),1);
+                            $extension = strtolower(substr(strchr($file['name'], "."), 1));
+
+                            $destinationPath = 'users/img/user/' . $_COOKIE['username'] . '/' . 'img_002.' . $extension;
+
+
+                            // $destinationPath=$user->addUserFiles($_SESSION['id']);
+
+                            $temporaryPath = $file['tmp_name'];
+
+                            if (move_uploaded_file($temporaryPath, $destinationPath)) {
+                                $messages[] = "le fichier " . $file['name'] . " a été correctement uploadé";
+
+
+                            } else {
+                                $messages[] = "le fichier " . $file['name'] . " n'a pas été correctement uploadé";
+
+                            }
+
+                        }
+                    } else {
+                        $messages[] = 'type de fichiers non valide';
+                    }
+                } else {
+                    $messages[] = 'un problème est survenu lors de l\'upload';
+                }
+                $destinationPath = $user->addUserFiles($_SESSION['id']);
+            }
+        }
+        //resizeImage();
+        resizeByHeight();
+        cropImages();
+        twigRender('success.html.twig', 'message', $messages);
+
+
+
+}
+
+function uploladPicture3()
+{
+
+    $user=new UserManager();
+
+    $messages = [];
+
+    if(!file_exists('users/img/user/'.$_COOKIE['username']))
+    {
+        newFolder();
+        foreach ($_FILES as $file) {//var_dump($file['name']);
+
+
+            if ($file['error'] == UPLOAD_ERR_NO_FILE) {
+                continue;
+            }
+
+            if (is_uploaded_file($file['tmp_name'])) {
+                //on vérifie que le fichier est d'un type autorisé
+                $typeMime = mime_content_type($file['tmp_name']);
+                if ($typeMime == 'image/jpeg') {
+                    //on verifie la taille du fichier
+                    $size = filesize($file['tmp_name']);
+                    if ($size > 1600000) {
+                        $message = "le fichier est trop gros";
+                    } else {
+
+                        $beforeCleanning = $file['name'];
+                        //on remplace les caractères qui ne sont ni des lettres ni des chiffres par des tirets
+
+                        $onCleanning = preg_replace('~[^\\pL\d]+~u', '-', $beforeCleanning);
+                        //on retire les tirets en début et en fin de chaine
+                        $onCleanning = trim($onCleanning, '-');
+                        //passage d'un encodage utf 8 à ascii afin d'éviter tous problème d'encodage dans le nom du fichier
+                        $onCleanning = iconv('utf-8', 'us-ascii//TRANSLIT', $onCleanning);
+                        //on met le nom de fichier en minuscule
+                        $onCleanning = strtolower($onCleanning);
+                        $afterCleanning = preg_replace('~[^-\w]+~', '', $onCleanning);
+
+
+                        //var_dump($afterCleanning);
+
+
+                        //$extension = substr(strchr($file['name'],"."),1);
+                        $extension = strtolower(substr(strchr($file['name'], "."), 1));
+                        //$destinationPath='upload/user/'.$file['name'];
+                        $destinationPath = 'users/img/user/' . $_COOKIE['username'] . '/' .  'img_0032.' . $extension;
+                        //var_dump($destinationPath);die;
+
+
+                        $temporaryPath = $file['tmp_name'];
+
+                        if (move_uploaded_file($temporaryPath, $destinationPath)) {
+                            $messages[] = "le fichier " . $file['name'] . " a été correctement uploadé";
+
+
+                        } else {
+                            $messages[] = "le fichier " . $file['name'] . " n'a pas été correctement uploadé";
+
+                        }
+
+                    }
+                } else {
+                    $messages[] = 'type de fichiers non valide';
+                }
+            } else {
+                $messages[] = 'un problème est survenu lors de l\'upload';
+            }
+            $destinationPath= $user->addUserFiles($_SESSION['id']);
+        }//twigRender('homeUser.html.twig', 'message', $messages);
+
+    }
+    else
+    { //$i=0;
+      /*$countFiles = count(glob('users/img/user/'.$_COOKIE['username'].'/*.jpg'))+1;
+      $maxFiles = count(glob('users/img/user/'.$_COOKIE['username'].'/*.jpg'));
+        if ($maxFiles===6) {
+            throw  new Exception(("vous ne pouvez pas uploader plus de 6 photos"));
+        }*/
+
+
+      /*if ($countFiles !=0 && $countFiles< 5) {
+            for ($i === $countFiles ; $i < 5; $i++) {
+
+
+                $i;  //var_dump($i);die;
+            }
+        }/*
+        elseif ($countFiles===5) {
+            throw  new Exception(("vous ne pouvez pas uploader plus de 5 photos"));
+        }
+        elseif($countFiles===0)
+            {
+                for($i=1;$i<=5; $i++)
+                {
+                    $i;
+                }
+
+            }*/
+        foreach ($_FILES as $file) {//var_dump($file['name']);
+
+
+            if ($file['error'] == UPLOAD_ERR_NO_FILE) {
+                continue;
+            }
+
+            if (is_uploaded_file($file['tmp_name'])) {
+                //on vérifie que le fichier est d'un type autorisé
+                $typeMime = mime_content_type($file['tmp_name']);
+                if ($typeMime == 'image/jpeg') {
+                    //on verifie la taille du fichier
+                    $size = filesize($file['tmp_name']);
+                    if ($size > 1600000) {
+                        $message = "le fichier est trop gros";
+                    } else {
+
+                        $beforeCleanning = $file['name'];
+                        //on remplace les caractères qui ne sont ni des lettres ni des chiffres par des tirets
+
+                        $onCleanning = preg_replace('~[^\\pL\d]+~u', '-', $beforeCleanning);
+                        //on retire les tirets en début et en fin de chaine
+                        $onCleanning = trim($onCleanning, '-');
+                        //passage d'un encodage utf 8 à ascii afin d'éviter tous problème d'encodage dans le nom du fichier
+                        $onCleanning = iconv('utf-8', 'us-ascii//TRANSLIT', $onCleanning);
+                        //on met le nom de fichier en minuscule
+                        $onCleanning = strtolower($onCleanning);
+                        $afterCleanning = preg_replace('~[^-\w]+~', '', $onCleanning);
+
+
+                        //var_dump($afterCleanning);
+
+
+                        //$extension = substr(strchr($file['name'],"."),1);
+                        $extension = strtolower(substr(strchr($file['name'], "."), 1));
+
+                        $destinationPath = 'users/img/user/' . $_COOKIE['username'] . '/' .  'img_003.' . $extension;
+
+
+
+                       // $destinationPath=$user->addUserFiles($_SESSION['id']);
+
+                        $temporaryPath = $file['tmp_name'];
+
+                        if (move_uploaded_file($temporaryPath, $destinationPath)) {
+                            $messages[] = "le fichier " . $file['name'] . " a été correctement uploadé";
+
+
+                        } else {
+                            $messages[] = "le fichier " . $file['name'] . " n'a pas été correctement uploadé";
+
+                        }
+
+                    }
+                } else {
+                    $messages[] = 'type de fichiers non valide';
+                }
+            } else {
+                $messages[] = 'un problème est survenu lors de l\'upload';
+            }
+            $destinationPath= $user->addUserFiles($_SESSION['id']);
+        }
+    }
+    //resizeImage();
+    resizeByHeight();
+    cropImages();
+
+
+twigRender('success.html.twig','message', $messages);
+
+}
+
+function uploladPicture4()
+{
+
+    $user=new UserManager();
+
+    $messages = [];
+
+    if(!file_exists('users/img/user/'.$_COOKIE['username']))
+    {
+        newFolder();
+        foreach ($_FILES as $file) {//var_dump($file['name']);
+
+
+            if ($file['error'] == UPLOAD_ERR_NO_FILE) {
+                continue;
+            }
+
+            if (is_uploaded_file($file['tmp_name'])) {
+//on vérifie que le fichier est d'un type autorisé
+                $typeMime = mime_content_type($file['tmp_name']);
+                if ($typeMime == 'image/jpeg') {
+//on verifie la taille du fichier
+                    $size = filesize($file['tmp_name']);
+                    if ($size > 1600000) {
+                        $message = "le fichier est trop gros";
+                    } else {
+
+                        $beforeCleanning = $file['name'];
+//on remplace les caractères qui ne sont ni des lettres ni des chiffres par des tirets
+
+                        $onCleanning = preg_replace('~[^\\pL\d]+~u', '-', $beforeCleanning);
+//on retire les tirets en début et en fin de chaine
+                        $onCleanning = trim($onCleanning, '-');
+//passage d'un encodage utf 8 à ascii afin d'éviter tous problème d'encodage dans le nom du fichier
+                        $onCleanning = iconv('utf-8', 'us-ascii//TRANSLIT', $onCleanning);
+//on met le nom de fichier en minuscule
+                        $onCleanning = strtolower($onCleanning);
+                        $afterCleanning = preg_replace('~[^-\w]+~', '', $onCleanning);
+
+
+//var_dump($afterCleanning);
+
+
+//$extension = substr(strchr($file['name'],"."),1);
+                        $extension = strtolower(substr(strchr($file['name'], "."), 1));
+//$destinationPath='upload/user/'.$file['name'];
+                        $destinationPath = 'users/img/user/' . $_COOKIE['username'] . '/' .  'img_0042.' . $extension;
+//var_dump($destinationPath);die;
+
+
+                        $temporaryPath = $file['tmp_name'];
+
+                        if (move_uploaded_file($temporaryPath, $destinationPath)) {
+                            $messages[] = "le fichier " . $file['name'] . " a été correctement uploadé";
+
+
+                        } else {
+                            $messages[] = "le fichier " . $file['name'] . " n'a pas été correctement uploadé";
+
+                        }
+
+                    }
+                } else {
+                    $messages[] = 'type de fichiers non valide';
+                }
+            } else {
+                $messages[] = 'un problème est survenu lors de l\'upload';
+            }
+            $destinationPath= $user->addUserFiles($_SESSION['id']);
+        }//twigRender('homeUser.html.twig', 'message', $messages);
+
+    }
+    else
+    { //$i=0;
+       /* $countFiles = count(glob('users/img/user/'.$_COOKIE['username'].'/*.jpg'))+1;
+        $maxFiles = count(glob('users/img/user/'.$_COOKIE['username'].'/*.jpg'));
+        if ($maxFiles===6) {
+            throw  new Exception(("vous ne pouvez pas uploader plus de 6 photos"));
+        }*/
+
+
+        /*if ($countFiles !=0 && $countFiles< 5) {
+        for ($i === $countFiles ; $i < 5; $i++) {
+
+
+        $i;  //var_dump($i);die;
+        }
+        }/*
+        elseif ($countFiles===5) {
+        throw  new Exception(("vous ne pouvez pas uploader plus de 5 photos"));
+        }
+        elseif($countFiles===0)
+        {
+        for($i=1;$i<=5; $i++)
+        {
+        $i;
+        }
+
+        }*/
+        foreach ($_FILES as $file) {//var_dump($file['name']);
+
+
+            if ($file['error'] == UPLOAD_ERR_NO_FILE) {
+                continue;
+            }
+
+            if (is_uploaded_file($file['tmp_name'])) {
+//on vérifie que le fichier est d'un type autorisé
+                $typeMime = mime_content_type($file['tmp_name']);
+                if ($typeMime == 'image/jpeg') {
+//on verifie la taille du fichier
+                    $size = filesize($file['tmp_name']);
+                    if ($size > 1600000) {
+                        $message = "le fichier est trop gros";
+                    } else {
+
+                        $beforeCleanning = $file['name'];
+//on remplace les caractères qui ne sont ni des lettres ni des chiffres par des tirets
+
+                        $onCleanning = preg_replace('~[^\\pL\d]+~u', '-', $beforeCleanning);
+//on retire les tirets en début et en fin de chaine
+                        $onCleanning = trim($onCleanning, '-');
+//passage d'un encodage utf 8 à ascii afin d'éviter tous problème d'encodage dans le nom du fichier
+                        $onCleanning = iconv('utf-8', 'us-ascii//TRANSLIT', $onCleanning);
+//on met le nom de fichier en minuscule
+                        $onCleanning = strtolower($onCleanning);
+                        $afterCleanning = preg_replace('~[^-\w]+~', '', $onCleanning);
+
+
+//var_dump($afterCleanning);
+
+
+//$extension = substr(strchr($file['name'],"."),1);
+                        $extension = strtolower(substr(strchr($file['name'], "."), 1));
+
+                        $destinationPath = 'users/img/user/' . $_COOKIE['username'] . '/' .  'img_004.' . $extension;
+
+
+
+// $destinationPath=$user->addUserFiles($_SESSION['id']);
+
+                        $temporaryPath = $file['tmp_name'];
+
+                        if (move_uploaded_file($temporaryPath, $destinationPath)) {
+                            $messages[] = "le fichier " . $file['name'] . " a été correctement uploadé";
+
+
+                        } else {
+                            $messages[] = "le fichier " . $file['name'] . " n'a pas été correctement uploadé";
+
+                        }
+
+                    }
+                } else {
+                    $messages[] = 'type de fichiers non valide';
+                }
+            } else {
+                $messages[] = 'un problème est survenu lors de l\'upload';
+            }
+            $destinationPath= $user->addUserFiles($_SESSION['id']);
+        }
+    }
+//resizeImage();
+    resizeByHeight();
+    cropImages();
+
+
+    twigRender('success.html.twig','message', $messages);
+
+}
+
+function uploladPicture5()
+{
+
+    $user=new UserManager();
+
+    $messages = [];
+
+    if(!file_exists('users/img/user/'.$_COOKIE['username']))
+    {
+        newFolder();
+        foreach ($_FILES as $file) {//var_dump($file['name']);
+
+
+            if ($file['error'] == UPLOAD_ERR_NO_FILE) {
+                continue;
+            }
+
+            if (is_uploaded_file($file['tmp_name'])) {
+//on vérifie que le fichier est d'un type autorisé
+                $typeMime = mime_content_type($file['tmp_name']);
+                if ($typeMime == 'image/jpeg') {
+//on verifie la taille du fichier
+                    $size = filesize($file['tmp_name']);
+                    if ($size > 1600000) {
+                        $message = "le fichier est trop gros";
+                    } else {
+
+                        $beforeCleanning = $file['name'];
+//on remplace les caractères qui ne sont ni des lettres ni des chiffres par des tirets
+
+                        $onCleanning = preg_replace('~[^\\pL\d]+~u', '-', $beforeCleanning);
+//on retire les tirets en début et en fin de chaine
+                        $onCleanning = trim($onCleanning, '-');
+//passage d'un encodage utf 8 à ascii afin d'éviter tous problème d'encodage dans le nom du fichier
+                        $onCleanning = iconv('utf-8', 'us-ascii//TRANSLIT', $onCleanning);
+//on met le nom de fichier en minuscule
+                        $onCleanning = strtolower($onCleanning);
+                        $afterCleanning = preg_replace('~[^-\w]+~', '', $onCleanning);
+
+
+//var_dump($afterCleanning);
+
+
+//$extension = substr(strchr($file['name'],"."),1);
+                        $extension = strtolower(substr(strchr($file['name'], "."), 1));
+//$destinationPath='upload/user/'.$file['name'];
+                        $destinationPath = 'users/img/user/' . $_COOKIE['username'] . '/' .  'img_0052.' . $extension;
+//var_dump($destinationPath);die;
+
+
+                        $temporaryPath = $file['tmp_name'];
+
+                        if (move_uploaded_file($temporaryPath, $destinationPath)) {
+                            $messages[] = "le fichier " . $file['name'] . " a été correctement uploadé";
+
+
+                        } else {
+                            $messages[] = "le fichier " . $file['name'] . " n'a pas été correctement uploadé";
+
+                        }
+
+                    }
+                } else {
+                    $messages[] = 'type de fichiers non valide';
+                }
+            } else {
+                $messages[] = 'un problème est survenu lors de l\'upload';
+            }
+            $destinationPath= $user->addUserFiles($_SESSION['id']);
+        }//twigRender('homeUser.html.twig', 'message', $messages);
+
+    }
+    else
+    { //$i=0;
+        /*$countFiles = count(glob('users/img/user/'.$_COOKIE['username'].'/*.jpg'))+1;
+        $maxFiles = count(glob('users/img/user/'.$_COOKIE['username'].'/*.jpg'));
+        if ($maxFiles===6) {
+            throw  new Exception(("vous ne pouvez pas uploader plus de 6 photos"));
+        }*/
+
+
+        /*if ($countFiles !=0 && $countFiles< 5) {
+        for ($i === $countFiles ; $i < 5; $i++) {
+
+
+        $i;  //var_dump($i);die;
+        }
+        }/*
+        elseif ($countFiles===5) {
+        throw  new Exception(("vous ne pouvez pas uploader plus de 5 photos"));
+        }
+        elseif($countFiles===0)
+        {
+        for($i=1;$i<=5; $i++)
+        {
+        $i;
+        }
+
+        }*/
+        foreach ($_FILES as $file) {//var_dump($file['name']);
+
+
+            if ($file['error'] == UPLOAD_ERR_NO_FILE) {
+                continue;
+            }
+
+            if (is_uploaded_file($file['tmp_name'])) {
+//on vérifie que le fichier est d'un type autorisé
+                $typeMime = mime_content_type($file['tmp_name']);
+                if ($typeMime == 'image/jpeg') {
+//on verifie la taille du fichier
+                    $size = filesize($file['tmp_name']);
+                    if ($size > 1600000) {
+                        $message = "le fichier est trop gros";
+                    } else {
+
+                        $beforeCleanning = $file['name'];
+//on remplace les caractères qui ne sont ni des lettres ni des chiffres par des tirets
+
+                        $onCleanning = preg_replace('~[^\\pL\d]+~u', '-', $beforeCleanning);
+//on retire les tirets en début et en fin de chaine
+                        $onCleanning = trim($onCleanning, '-');
+//passage d'un encodage utf 8 à ascii afin d'éviter tous problème d'encodage dans le nom du fichier
+                        $onCleanning = iconv('utf-8', 'us-ascii//TRANSLIT', $onCleanning);
+//on met le nom de fichier en minuscule
+                        $onCleanning = strtolower($onCleanning);
+                        $afterCleanning = preg_replace('~[^-\w]+~', '', $onCleanning);
+
+
+//var_dump($afterCleanning);
+
+
+//$extension = substr(strchr($file['name'],"."),1);
+                        $extension = strtolower(substr(strchr($file['name'], "."), 1));
+
+                        $destinationPath = 'users/img/user/' . $_COOKIE['username'] . '/' .  'img_005.' . $extension;
+
+
+
+// $destinationPath=$user->addUserFiles($_SESSION['id']);
+
+                        $temporaryPath = $file['tmp_name'];
+
+                        if (move_uploaded_file($temporaryPath, $destinationPath)) {
+                            $messages[] = "le fichier " . $file['name'] . " a été correctement uploadé";
+
+
+                        } else {
+                            $messages[] = "le fichier " . $file['name'] . " n'a pas été correctement uploadé";
+
+                        }
+
+                    }
+                } else {
+                    $messages[] = 'type de fichiers non valide';
+                }
+            } else {
+                $messages[] = 'un problème est survenu lors de l\'upload';
+            }
+            $destinationPath= $user->addUserFiles($_SESSION['id']);
+        }
+    }
+//resizeImage();
+    resizeByHeight();
+    cropImages();
+
+
+    twigRender('success.html.twig','message', $messages);
+
+}
+
+function uploladPicture6()
+{
+
+    $user=new UserManager();
+
+    $messages = [];
+
+    if(!file_exists('users/img/user/'.$_COOKIE['username']))
+    {
+        newFolder();
+        foreach ($_FILES as $file) {//var_dump($file['name']);
+
+
+            if ($file['error'] == UPLOAD_ERR_NO_FILE) {
+                continue;
+            }
+
+            if (is_uploaded_file($file['tmp_name'])) {
+//on vérifie que le fichier est d'un type autorisé
+                $typeMime = mime_content_type($file['tmp_name']);
+                if ($typeMime == 'image/jpeg') {
+//on verifie la taille du fichier
+                    $size = filesize($file['tmp_name']);
+                    if ($size > 1600000) {
+                        $message = "le fichier est trop gros";
+                    } else {
+
+                        $beforeCleanning = $file['name'];
+//on remplace les caractères qui ne sont ni des lettres ni des chiffres par des tirets
+
+                        $onCleanning = preg_replace('~[^\\pL\d]+~u', '-', $beforeCleanning);
+//on retire les tirets en début et en fin de chaine
+                        $onCleanning = trim($onCleanning, '-');
+//passage d'un encodage utf 8 à ascii afin d'éviter tous problème d'encodage dans le nom du fichier
+                        $onCleanning = iconv('utf-8', 'us-ascii//TRANSLIT', $onCleanning);
+//on met le nom de fichier en minuscule
+                        $onCleanning = strtolower($onCleanning);
+                        $afterCleanning = preg_replace('~[^-\w]+~', '', $onCleanning);
+
+
+//var_dump($afterCleanning);
+
+
+//$extension = substr(strchr($file['name'],"."),1);
+                        $extension = strtolower(substr(strchr($file['name'], "."), 1));
+//$destinationPath='upload/user/'.$file['name'];
+                        $destinationPath = 'users/img/user/' . $_COOKIE['username'] . '/' .  'img_0062.' . $extension;
+//var_dump($destinationPath);die;
+
+
+                        $temporaryPath = $file['tmp_name'];
+
+                        if (move_uploaded_file($temporaryPath, $destinationPath)) {
+                            $messages[] = "le fichier " . $file['name'] . " a été correctement uploadé";
+
+
+                        } else {
+                            $messages[] = "le fichier " . $file['name'] . " n'a pas été correctement uploadé";
+
+                        }
+
+                    }
+                } else {
+                    $messages[] = 'type de fichiers non valide';
+                }
+            } else {
+                $messages[] = 'un problème est survenu lors de l\'upload';
+            }
+            $destinationPath= $user->addUserFiles($_SESSION['id']);
+        }//twigRender('homeUser.html.twig', 'message', $messages);
+
+    }
+    else
+    { //$i=0;
+        /*$countFiles = count(glob('users/img/user/'.$_COOKIE['username'].'/*.jpg'))+1;
+        $maxFiles = count(glob('users/img/user/'.$_COOKIE['username'].'/*.jpg'));
+        if ($maxFiles===6) {
+            throw  new Exception(("vous ne pouvez pas uploader plus de 6 photos"));
+        }*/
+
+
+        /*if ($countFiles !=0 && $countFiles< 6) {
+        for ($i === $countFiles ; $i < 6; $i++) {
+
+
+        $i;  //var_dump($i);die;
+        }
+        }/*
+        elseif ($countFiles===6) {
+        throw  new Exception(("vous ne pouvez pas uploader plus de 6 photos"));
+        }
+        elseif($countFiles===0)
+        {
+        for($i=1;$i<=6; $i++)
+        {
+        $i;
+        }
+
+        }*/
+        foreach ($_FILES as $file) {//var_dump($file['name']);
+
+
+            if ($file['error'] == UPLOAD_ERR_NO_FILE) {
+                continue;
+            }
+
+            if (is_uploaded_file($file['tmp_name'])) {
+//on vérifie que le fichier est d'un type autorisé
+                $typeMime = mime_content_type($file['tmp_name']);
+                if ($typeMime == 'image/jpeg') {
+//on verifie la taille du fichier
+                    $size = filesize($file['tmp_name']);
+                    if ($size > 1600000) {
+                        $message = "le fichier est trop gros";
+                    } else {
+
+                        $beforeCleanning = $file['name'];
+//on remplace les caractères qui ne sont ni des lettres ni des chiffres par des tirets
+
+                        $onCleanning = preg_replace('~[^\\pL\d]+~u', '-', $beforeCleanning);
+//on retire les tirets en début et en fin de chaine
+                        $onCleanning = trim($onCleanning, '-');
+//passage d'un encodage utf 8 à ascii afin d'éviter tous problème d'encodage dans le nom du fichier
+                        $onCleanning = iconv('utf-8', 'us-ascii//TRANSLIT', $onCleanning);
+//on met le nom de fichier en minuscule
+                        $onCleanning = strtolower($onCleanning);
+                        $afterCleanning = preg_replace('~[^-\w]+~', '', $onCleanning);
+
+
+//var_dump($afterCleanning);
+
+
+//$extension = substr(strchr($file['name'],"."),1);
+                        $extension = strtolower(substr(strchr($file['name'], "."), 1));
+
+                        $destinationPath = 'users/img/user/' . $_COOKIE['username'] . '/' .  'img_006.' . $extension;
+
+
+
+// $destinationPath=$user->addUserFiles($_SESSION['id']);
+
+                        $temporaryPath = $file['tmp_name'];
+
+                        if (move_uploaded_file($temporaryPath, $destinationPath)) {
+                            $messages[] = "le fichier " . $file['name'] . " a été correctement uploadé";
+
+
+                        } else {
+                            $messages[] = "le fichier " . $file['name'] . " n'a pas été correctement uploadé";
+
+                        }
+
+                    }
+                } else {
+                    $messages[] = 'type de fichiers non valide';
+                }
+            } else {
+                $messages[] = 'un problème est survenu lors de l\'upload';
+            }
+            $destinationPath= $user->addUserFiles($_SESSION['id']);
+        }
+    }
+//resizeImage();
+    resizeByHeight();
+    cropImages();
+
+
+    twigRender('success.html.twig','message', $messages);
+
+}
 
 
 function getUserImages($userId)

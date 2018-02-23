@@ -19,24 +19,22 @@ function showModal() {
 }
 
 
+function allowSubmit(){
+    var form = document.forms['uploadFormHidden1'];
+    var formField = form.getElementsByTagName('input').getElementsByTagName('file');
+    var buttonFormSubmit = document.getElementById('submitButton');
+     if (formField.value == ""){
+        buttonFormSubmit.disabled='true';
+     }
+     else{
+         buttonFormSubmit.disabled='false';
+     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}
 
 
 unhideForm();
+allowSubmit();
 
 /*setTimeout(function (e) {
             e.preventDefault();

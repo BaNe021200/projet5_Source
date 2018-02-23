@@ -1,7 +1,8 @@
 .hidden{
-    visibility: hidden;
+    display: none;
 }
 
-img{
-    width: 700px;
+.row
+{
+    margin-left: 10px!important;
 }

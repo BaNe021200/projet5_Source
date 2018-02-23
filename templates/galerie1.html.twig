@@ -1,8 +1,10 @@
 {% extends "hello.html.twig" %}
-
+{% import 'form.html.twig' as form %}
 {% block head %}
 
     <link rel="stylesheet" href="public/css/album.css">
+    <link rel="stylesheet" href="public/css/users.css">
+
 {% endblock %}
 
 {% block main %}
@@ -26,17 +28,18 @@
                                 <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">upload</button>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">   </button>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">delete</button>
+                                        <button type="button" title="ouvrir formulaire" class="btn btn-sm btn-outline-secondary" onclick="document.getElementById('uploadFormHidden1').style.display ='block';">upload</button>
+                                        <button type="button" title="fermer formulaire" class="btn btn-sm btn-outline-secondary" onclick="document.getElementById('uploadFormHidden1').style.display ='none';">   </button>
+                                        <button type="button" title="supprimer photo" class="btn btn-sm btn-outline-secondary">delete</button>
                                     </div>
 
-                                    <small class="text-muted">9 mins</small>
+                                    <small class="text-muted">Photo de profil</small>
                                     <form><input type="radio" name="profilPicture" value="img_001" id="img_001"></form>
                                 </div>
                             </div>
                         </div>
                     </div>
+
 
     <div class="col-md-4">
                         <div class="card mb-4 box-shadow">
@@ -45,10 +48,11 @@
                                 <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                                        <button type="button" title="ouvrir formulaire"  class="btn btn-sm btn-outline-secondary" onclick="document.getElementById('uploadFormHidden2').style.display ='block';">upload</button>
+                                        <button type="button" title="fermer formulaire" class="btn btn-sm btn-outline-secondary" onclick="document.getElementById('uploadFormHidden2').style.display ='none';">   </button>
+                                        <button type="button" title="supprimer photo" class="btn btn-sm btn-outline-secondary">delete</button>
                                     </div>
-                                    <small class="text-muted">9 mins</small>
+                                    <small class="text-muted"></small>
                                 </div>
                             </div>
                         </div>
@@ -60,10 +64,11 @@
                                 <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                                        <button type="button" title="ouvrir formulaire" class="btn btn-sm btn-outline-secondary" onclick="document.getElementById('uploadFormHidden3').style.display ='block';">upload</button>
+                                        <button type="button" title="fermer formulaire" class="btn btn-sm btn-outline-secondary" onclick="document.getElementById('uploadFormHidden3').style.display ='none';">   </button>
+                                        <button type="button" title="supprimer photo" class="btn btn-sm btn-outline-secondary">delete</button>
                                     </div>
-                                    <small class="text-muted">9 mins</small>
+                                    <small class="text-muted"></small>
                                 </div>
                             </div>
                         </div>
@@ -76,10 +81,11 @@
                                 <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                                        <button type="button" title="ouvrir formulaire" class="btn btn-sm btn-outline-secondary" onclick="document.getElementById('uploadFormHidden4').style.display ='block';">upload</button>
+                                        <button type="button" title="fermer formulaire" class="btn btn-sm btn-outline-secondary" onclick="document.getElementById('uploadFormHidden4').style.display ='none';">   </button>
+                                        <button type="button" title="supprimer photo" class="btn btn-sm btn-outline-secondary">delete</button>
                                     </div>
-                                    <small class="text-muted">9 mins</small>
+                                    <small class="text-muted"></small>
                                 </div>
                             </div>
                         </div>
@@ -91,10 +97,11 @@
                                 <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                                        <button type="button" title="ouvrir formulaire" class="btn btn-sm btn-outline-secondary" onclick="document.getElementById('uploadFormHidden5').style.display ='block';">upload</button>
+                                        <button type="button" title="fermer formulaire" class="btn btn-sm btn-outline-secondary" onclick="document.getElementById('uploadFormHidden5').style.display ='none';">   </button>
+                                        <button type="button" title="supprimer photo" class="btn btn-sm btn-outline-secondary">delete</button>
                                     </div>
-                                    <small class="text-muted">9 mins</small>
+                                    <small class="text-muted"></small>
                                 </div>
                             </div>
                         </div>
@@ -106,10 +113,11 @@
                                 <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                                        <button type="button" title="ouvrir formulaire" class="btn btn-sm btn-outline-secondary" onclick="document.getElementById('uploadFormHidden6').style.display ='block';">upload</button>
+                                        <button type="button" title="fermer formulaire" class="btn btn-sm btn-outline-secondary" onclick="document.getElementById('uploadFormHidden6').style.display ='none';">   </button>
+                                        <button type="button" title="supprimer photo" class="btn btn-sm btn-outline-secondary">delete</button>
                                     </div>
-                                    <small class="text-muted">9 mins</small>
+                                    <small class="text-muted"></small>
                                 </div>
                             </div>
                         </div>
@@ -121,9 +129,25 @@
             </div>
         </div>
 
+        {{ form.upload('1','pic1','Photo n°1') }}
+        {{ form.upload('2','pic2','Photo n°2') }}
+        {{ form.upload('3','pic3','Photo n°3') }}
+        {{ form.upload('4','pic4','Photo n°4') }}
+        {{ form.upload('5','pic5','Photo n°5') }}
+        {{ form.upload('6','pic6','Photo n°6') }}
+
+
+
+
+
 
     </main>
 
 
 
+{% endblock %}
+
+{% block script %}
+
+    <script src="public/js/galerie1.js"></script>
 {% endblock %}

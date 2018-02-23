@@ -40,3 +40,46 @@
 
 
 {% endmacro %}
+
+{% macro upload(uploadId, name,label) %}
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 order-lg-2">
+                <form action="index.php?p=upload{{ uploadId }}" id="uploadFormHidden{{uploadId}}" name="uploadFormHidden{{uploadId}}" method="post" class="form-horizontal hidden" enctype="multipart/form-data">
+                    <fieldset class="form-control">Vos Photos
+                        <input type="hidden" class="form-control" value="{{userDatum.username}}" name="username" >
+
+
+                        <p><label for="{{ name }}"><i class="fa fa-image"></i> {{ label }}</label>
+
+
+
+
+                            <input type="file" class="form-control" name="{{ name }}" id="{{ name }}"  required autofocus>
+
+
+
+                        </p>
+
+
+
+
+
+
+                    </fieldset>
+                    <button type="submit" id="submitButton" class="btn btn-outline-primary btn-sm"  >envoyer</button>
+                    <button type="reset" class="btn btn-outline-danger btn-sm" >tout effacer</button>
+
+                </form>
+
+
+
+
+
+
+
+            </div>
+        </div>
+
+    </div>
+{% endmacro %}
