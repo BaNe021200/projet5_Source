@@ -15,10 +15,11 @@
             <div class="modal-body">
 
                 {% for statement in message %}
-                   <li style="list-style-type: none">{{ statement }}</li>
-
+                   {{ statement }}
                 {% endfor %}
 </div>
+
+
             <div class="modal-footer">
                 <button type="button" id="dismissModal"  class="btn btn-success" data-dismiss="modal">Close</button>
 
@@ -31,10 +32,10 @@
        {{ parent() }}
 
           <script>  $('#Succes').modal('show');</script>
-       <script> document.getElementById('dismissModal').addEventListener('click',function () {
-                 window.location.href="index.php?p=galerie1"
-             });
-         </script>
+        <script> document.getElementById('dismissModal').addEventListener('click',function () {
+                window.location.href="index.php?p=galerie1"
+            });
+        </script>
 
     {% endblock %}
 

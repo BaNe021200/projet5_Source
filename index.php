@@ -3,6 +3,7 @@ declare(strict_types=1);
 require_once 'twig.php';
 require_once 'controler/backend.php';
 
+
 try
 {
 
@@ -22,6 +23,8 @@ if (isset($_GET['p']))
         }
     }
 
+
+
     elseif ($_GET['p'] == 'galerie1'){
         if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
             galerie1();
@@ -31,6 +34,7 @@ if (isset($_GET['p']))
             throw new Exception("Erreur vous n'êtes pas connectez. Veuillez vous identifier");
         }
     }
+
 
     elseif ($_GET['p'] == 'galerie2'){
         if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
@@ -42,14 +46,30 @@ if (isset($_GET['p']))
         }
     }
 
-
-
     elseif ($_GET['p'] == 'signUp'){
         signUp();
     }
 
-    elseif ($_GET['p'] == 'register'){
-        addNewUser();
+    elseif($_GET['p']== 'register')
+    {
+        //;
+        if(empty($_POST['first_name']) || empty($_POST['last_name'])){
+            throw new Exception('Les champs noms et prénoms doivent être remplis');
+        }
+        elseif (empty($_POST['username']) || empty($_POST['birthday'])){
+            throw new Exception('Les champs pseudos et anniversaire doivent être remplis');
+        }
+        elseif (empty($_POST['email']) || empty($_POST['password'])){
+            throw new Exception('Les champs email et mot de passe doivent être remplis');
+        }
+
+        else
+        {
+            controlUsername($_POST['username']);
+        }
+
+
+
     }
 
     elseif ($_GET['p'] == 'connexion'){
@@ -81,43 +101,33 @@ if (isset($_GET['p']))
     }
 
     elseif ($_GET['p'] == 'upload'){
-        UploadPictures();
+        uploadPicture($_COOKIE['ID'],$_GET['id']);
     }
 
-    elseif ($_GET['p'] == 'upload1'){
-        uploladPicture1();
-    }
-
-    elseif ($_GET['p'] == 'upload2'){
-        uploladPicture2();
-    }
-
-    elseif ($_GET['p'] == 'upload3'){
-        uploladPicture3();
-    }
-
-    elseif ($_GET['p'] == 'upload4'){
-        uploladPicture4();
-    }
-
-    elseif ($_GET['p'] == 'upload5'){
-        uploladPicture5();
-    }
-
-    elseif ($_GET['p'] == 'upload6'){
-        uploladPicture6();
-    }
-
-
-
-
-    elseif ($_GET['p'] == 'uploadStatement'){
-        uploadStatement();
-    }
-
-    elseif ($_GET['p'] == 'galerie1'){
+    elseif ($_GET['p'] == 'galerie3'){
         if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
             getUserImages($_SESSION['id']);
+        }
+        else
+        {
+            throw new Exception("Erreur vous n'êtes pas connectez. Veuillez vous identifier");
+        }
+    }
+
+    elseif ($_GET['p'] == 'deleteImage'){
+        if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
+
+            deleteImage($_COOKIE['ID'],$_GET['id']);
+        }
+        else
+        {
+            throw new Exception("Erreur vous n'êtes pas connectez. Veuillez vous identifier");
+        }
+    }
+
+    elseif ($_GET['p'] == 'recropped'){
+        if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
+            recropped($_GET['id']);
         }
         else
         {
@@ -140,7 +150,14 @@ else
 catch (Exception $e)
 {
     $errorMessage= $e->getMessage();
-    require('templates/404.html.twig');
+    $bg_ramdom = mt_rand(1, 3);
+
+
+   // require('templates/404.html.twig');
+    twigRender('404.html.twig','errorMessage',$errorMessage,'bgRamdom',$bg_ramdom);
+
+
+
 }
 
 

@@ -4,13 +4,14 @@ session_start();
 require_once 'vendor/autoload.php';
 require_once 'model/functions.php';
 require_once 'model/UserManager.php';
+require_once 'controler/backend.php';
 //require_once 'vendor/twig/twig/lib/Twig/Extension/Session.php';
 use model\UserManager;
 
 
 
 
-        function twigRender($renderPath,$argument1,$argument2)
+        function twigRender($renderPath,$argument1,$argument2,$argument3,$argument4)
         {
             //$user = new UserManager();
             // $userData = $user->userData();
@@ -31,7 +32,9 @@ use model\UserManager;
             echo $twig->render($renderPath,[
                 'userDatum' => $_SESSION,
 
-                $argument1 => $argument2
+
+                $argument1 => $argument2,
+                $argument3 => $argument4,
 
             ]);
 

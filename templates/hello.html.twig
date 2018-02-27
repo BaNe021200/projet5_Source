@@ -4,12 +4,24 @@
 {% endblock %}
 
 
-{% block title %} La page de {{ userDatum.username }}  {% endblock title %}
+{% block title %} La page de {{ userDatum.username }}
+
+
+{% endblock title %}
 
 
     {% block signUp%}
+
     La page de {{ userDatum.username }} {% endblock %}
-    {% block signUpLink %}index.php?p=homeUser{% endblock %}
+    {% block signUpLink %}index.php?p=homeUser {% endblock %}
+    {% block avatar %}
+        <li class="nav-item"><img class="rounded-circle" src="users/img/user/{{ userDatum.username }}/crop/img_001-cropped.jpg" alt="" width="25" height="25"></li>
+
+    {% endblock %}
+
+
+
+
 
 {% block navMenu %}
         <li class="nav-item">

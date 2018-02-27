@@ -1,14 +1,25 @@
 {% extends 'layout.html.twig' %}
+
 {% block head %}
     <link rel="stylesheet" href="public/css/style.css">
 {% endblock %}
+{% block navBarBg %}
+  bg-invert
+{% endblock %}
+
+
 {% block title %} Error {% endblock %}
+
+{% block bodyStyle %}
+<body style="background: url('public/img/bg_{{ bgRamdom }}.jpg');">
+{% endblock %}
+
 
 {% block main %}
 
     <h1>Ne vous laissez pas distraire : <br>
         une erreur est survenue !<br>
-        <span class="red"><?= $errorMessage ?></span>
+        <span class="red">{{ errorMessage }}</span>
 
     </h1>
 {% endblock %}
