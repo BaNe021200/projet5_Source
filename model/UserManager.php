@@ -121,7 +121,7 @@ class UserManager extends Manager
 
         }
 
-        public function addCropFiles($userId)
+        /*public function addCropFiles($userId)
         {
             $crop=glob('users/img/user/'.$_COOKIE['username'].'/crop/*.jpg');
             foreach ($crop as $imageCropped){
@@ -138,7 +138,56 @@ class UserManager extends Manager
             $PdoStat->bindValue(':extension',$path_parts['extension'],PDO::PARAM_STR);
             $addCropedImage = $PdoStat->execute();
             return $addCropedImage;
+         }*/
+        public function addCropFiles($userId,$img)
+        {
+
+
+            $pdo=$this->dbConnect();
+            $PdoStat= $pdo->prepare('INSERT INTO projet5_images VALUES(NULL,:userId,:dirname, :filename ,:extension) ');
+            $PdoStat->bindValue(':userId',$userId,PDO::PARAM_STR);
+            $PdoStat->bindValue(':dirname','users/img/user/'.$_COOKIE['username'].'/crop',PDO::PARAM_STR);
+            $PdoStat->bindValue(':filename','img_00'.$img.'-cropped',PDO::PARAM_STR);
+            $PdoStat->bindValue(':extension','jpg',PDO::PARAM_STR);
+            $addCropedImage = $PdoStat->execute();
+            return $addCropedImage;
          }
+
+        public function addCropCenterFiles($userId,$img)
+        {
+
+
+            $pdo=$this->dbConnect();
+            $PdoStat= $pdo->prepare('INSERT INTO projet5_images VALUES(NULL,:userId,:dirname, :filename ,:extension) ');
+            $PdoStat->bindValue(':userId',$userId,PDO::PARAM_STR);
+            $PdoStat->bindValue(':dirname','users/img/user/'.$_COOKIE['username'].'/crop',PDO::PARAM_STR);
+            $PdoStat->bindValue(':filename','img_00'.$img.'-cropped-center',PDO::PARAM_STR);
+            $PdoStat->bindValue(':extension','jpg',PDO::PARAM_STR);
+            $addCropedImage = $PdoStat->execute();
+            $lastId=$pdo->lastInsertId();
+            $PdoStat->closeCursor();
+            $PdoStat=$pdo->prepare('SELECT * FROM projet5_images WHERE id=:id AND user_id=:userId');
+            $PdoStat->bindValue(':id',$lastId,PDO::PARAM_INT);
+            $PdoStat->bindValue(':userId',$userId,PDO::PARAM_STR);
+            $cropCenterFile=$PdoStat->execute();var_dump($lastId);
+            $cropCenterFile=$PdoStat->fetch();
+
+            return $cropCenterFile;
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         public function getUserFiles($userId)
         {
@@ -169,23 +218,21 @@ class UserManager extends Manager
             $pdoStat= $pdo->prepare('DELETE FROM projet5_images WHERE user_id=:userId AND filename=:filename ');
             $pdoStat->bindValue(':userId', $userId,PDO::PARAM_INT);
             $pdoStat->bindValue(':filename', 'img_00'.$img,PDO::PARAM_STR);
-
-
             $deletedImage=$pdoStat->execute();
-            return $deletedImage;
+            $pdoStat->closeCursor();
+            $pdoStat= $pdo->prepare('DELETE FROM projet5_images WHERE user_id=:userId AND filename=:filename ');
+            $pdoStat->bindValue(':userId', $userId,PDO::PARAM_INT);
+            $pdoStat->bindValue(':filename', 'img_00'.$img.'-cropped',PDO::PARAM_STR);
+            $deletedImage=$pdoStat->execute();
+            $pdoStat->closeCursor();
+            $pdoStat= $pdo->prepare('DELETE FROM projet5_images WHERE user_id=:userId AND filename=:filename ');
+            $pdoStat->bindValue(':userId', $userId,PDO::PARAM_INT);
+            $pdoStat->bindValue(':filename', 'img_00'.$img.'-cropped-center',PDO::PARAM_STR);
+            $deletedImage=$pdoStat->execute();
+
         }
 
-        public function deleteImageCropped($userId,$img){
 
-    $pdo=$this->dbConnect();
-    $pdoStat= $pdo->prepare('DELETE FROM projet5_images WHERE user_id=:userId AND filename=:filename ');
-    $pdoStat->bindValue(':userId', $userId,PDO::PARAM_INT);
-    $pdoStat->bindValue(':filename', 'img_00'.$img.'-cropped',PDO::PARAM_STR);
-
-
-    $deletedImage=$pdoStat->execute();
-    return $deletedImage;
-}
 
 
 

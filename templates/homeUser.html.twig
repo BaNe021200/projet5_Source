@@ -27,13 +27,43 @@
 
 
         <!-- Three columns of text below the carousel -->
-        <div class="row">
+
             <div class="col-lg-4">
-                <img class="rounded-circle" src="users/img/user/{{ userDatum.username }}/crop/img_001-cropped.jpg" alt="Generic placeholder image" width="150" height="150">
+                <img class="rounded-circle" id="cropImage" src="users/img/user/{{ userDatum.username }}/crop/img_001-cropped.jpg" alt="Generic placeholder image" width="150" height="150" >
+
+
+            {#  <!--  <img class="rounded-circle" id="cropImage" src="users/img/user/{{ userDatum.username }}/crop/{{ imageProfil }}.jpg" alt="Generic placeholder image" width="150" height="150" >-->#}
+
+
+
 
             </div><!-- /.col-lg-4 -->
 
 
-        </div><!-- /.row -->
+
 
 {% endblock %}
+
+{% block script %}
+<script>
+    function changeCrop(username)
+    {
+        /*var img = new Image();
+        img.src ='user/users/img/user/'+username+'/crop/img_001-cropped-center.jpg';*/
+
+        var imgTarget = document.getElementById('cropImage');
+        imgTarget.addEventListener('click',function () {
+
+
+        imgTarget.src='users/img/user/'+username+'/crop/img_001-cropped-center.jpg';
+        return imgTarget;
+
+    });
+    }
+    changeCrop('{{ userDatum.username }}');
+
+
+
+</script>
+
+{% endblock script %}

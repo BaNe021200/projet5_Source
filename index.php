@@ -101,12 +101,13 @@ if (isset($_GET['p']))
     }
 
     elseif ($_GET['p'] == 'upload'){
+
         uploadPicture($_COOKIE['ID'],$_GET['id']);
     }
 
     elseif ($_GET['p'] == 'galerie3'){
         if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
-            getUserImages($_SESSION['id']);
+            getUserImages($_COOKIE['ID']);
         }
         else
         {
@@ -127,7 +128,17 @@ if (isset($_GET['p']))
 
     elseif ($_GET['p'] == 'recropped'){
         if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
-            recropped($_GET['id']);
+            recropped($_COOKIE['ID'],$_GET['id']);
+        }
+        else
+        {
+            throw new Exception("Erreur vous n'êtes pas connectez. Veuillez vous identifier");
+        }
+    }
+
+    elseif ($_GET['p'] == 'CroppedChoice'){
+        if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
+            CroppedChoice($_COOKIE['ID'],$_GET['id']);
         }
         else
         {

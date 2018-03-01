@@ -7,6 +7,7 @@ require_once 'functionUpload.php';
 require_once 'model/User.php';
 require_once 'resize2.php';
 require_once 'crop.php';
+
 use model\UserManager;
 use model\User;
 
@@ -159,8 +160,8 @@ function home()
 
 function homeUser()
 {
-    //session_start();
-    twigRender('homeUser.html.twig','','','','');
+    $src="img_001-cropped";
+    twigRender('homeUser.html.twig','imageProfil',$src,'','');
 }
 
 function galerie1()
@@ -202,9 +203,9 @@ function authentificationConnexion()
             setcookie("username", $_SESSION['username'], time() + 3600 * 24 * 365, '', '', false, true);
             setcookie("first_name", $_SESSION['first_name'], time() + 3600 * 24 * 365, '', '', false, true);
 
-            twigRender('homeUser.html.twig','','','','');
+            //twigRender('homeUser.html.twig','','','','');
 
-            //header('Location:index.php?action=verifyUSerDataFilled');
+            header('Location:index.php?p=homeUser');
 
 
 
@@ -432,6 +433,7 @@ function uploadPicture($userId,$img)
                         $uploadimage= $user->addUserFiles($_COOKIE['ID'],$destinationPath);
 
 
+
                         $temporaryPath = $file['tmp_name'];
 
                         if (move_uploaded_file($temporaryPath, $destinationPath)) {
@@ -506,9 +508,39 @@ function uploadPicture($userId,$img)
     resizeByHeight();
     cropImages()  ;
     $cropFiles = glob('users/img/user/'.$_COOKIE['username'].'/crop/*.jpg');
-     $cropFiles = $user->addCropFiles($_COOKIE['ID']);
-
+     $cropFiles = $user->addCropFiles($userId,$img);
 twigRender('success.html.twig','message', $messages,'','');
+
+}
+
+function recropped($userId,$img){
+
+
+    $user=new UserManager();
+    $folder="users/img/user/".$_COOKIE['username'].'/img_00'.$img.'.jpg';
+    $file2crop="users/img/user/".$_COOKIE['username'].'/crop/img_00'.$img.'-cropped.jpg';
+    if(file_exists($folder))
+    {
+        $folderpart=pathinfo($folder);
+        $folderfilename=$folderpart['filename'];
+        cropcenter($folder);
+        $cropCenterFile='users/img/user/'.$_COOKIE['username'].'/crop/img_00'.$img.'-crop-center.jpg';
+        $cropCenterFile = $user->addCropCenterFiles($userId,$img);
+
+        twigRender('recroppedView.html.twig','recrop',$cropCenterFile,'img2crop',$file2crop);
+    }
+    else
+    {
+        throw new Exception('Il n\'y a rien à recadrer');
+    }
+
+}
+
+function CroppedChoice($userId,$img){
+
+   $src= "img_001-cropped-center";
+
+    twigRender('homeUser.html.twig','imageProfil',$src,'','');
 
 }
 
@@ -518,17 +550,7 @@ function getUserImages($userId)
 {
     $user = new UserManager();
     $images= $user->getUserFiles($_COOKIE['ID']);
-
-
-
-
-
-
-
-
-
-
-    twigRender('galerie3.html.twig','image1',$images,'','');
+twigRender('galerie3.html.twig','image1',$images,'','');
     //require_once 'templates/photo.php';
 
 
@@ -558,12 +580,15 @@ function deleteImage($userId,$imageId)
 
     $user= new UserManager();
     $imageDeleted=$user->deleteImage($userId,$imageId);
-    $imagecroppedDeteleted=$user->deleteImageCropped($userId,$imageId);
+
+    $folderCroppedCenterToDelete = "users/img/user/".$_COOKIE['username'].'/crop/img_00'.$imageId.'-cropped-center.jpg';
     $folderCroppedToDelete = "users/img/user/".$_COOKIE['username'].'/crop/img_00'.$imageId.'-cropped.jpg';
     $folderToDelete = "users/img/user/".$_COOKIE['username'].'/img_00'.$imageId.'.jpg';
     if(file_exists($folderToDelete)){
         unlink($folderToDelete);
         unlink($folderCroppedToDelete);
+        unlink($folderCroppedCenterToDelete);
+
     }
     else {
         throw new Exception('Il N\'y a rien à effacer');
@@ -576,20 +601,5 @@ function deleteImage($userId,$imageId)
 
 }
 
-function recropped($img){
 
-
-        var_dump($img);
-        $folder="users/img/user/".$_COOKIE['username'].'/img_00'.$img.'.jpg';
-        $folderpart=pathinfo($folder);
-        $folderfilename=$folderpart['filename'];
-        cropcenter($folder);
-
-       header('Location:index.php?p=galerie1');
-
-
-
-
-
-}
 

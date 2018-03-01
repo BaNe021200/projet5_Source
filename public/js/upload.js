@@ -1,13 +1,41 @@
-function unhideForm()
+function showHiddenForm(uploadId)
 {
-    var button = document.getElementById('uploadButton');
-    var hiddenForm = document.getElementById('uploadFormHidden')
-    button.addEventListener('click', function (e) {
+    var buttonId= document.getElementById('uploadButton'+uploadId);
+    var hiddenForm = document.getElementById('uploadFormHidden'+uploadId);
+    buttonId.addEventListener('click',function (e) {
         e.preventDefault();
-        hiddenForm.style.visibility = "visible";
+        hiddenForm.style.display='block';
 
-    })
+    });
+
 }
+
+showHiddenForm(1);
+showHiddenForm(2);
+showHiddenForm(3);
+showHiddenForm(4);
+showHiddenForm(5);
+showHiddenForm(6);
+
+function hideForm(uploadId)
+{
+    var buttonId= document.getElementById('hideButton'+uploadId);
+    var hiddenForm = document.getElementById('uploadFormHidden'+uploadId);
+    buttonId.addEventListener('click',function (e) {
+        e.preventDefault();
+        hiddenForm.style.display='none';
+
+    });
+
+}
+
+hideForm(1);
+hideForm(2);
+hideForm(3);
+hideForm(4);
+hideForm(5);
+hideForm(6);
+
 
 function delayedModal(){
     var timeoutID;
@@ -33,7 +61,7 @@ function allowSubmit(){
 }
 
 
-unhideForm();
+
 allowSubmit();
 
 /*setTimeout(function (e) {

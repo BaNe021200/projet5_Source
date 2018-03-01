@@ -1,8 +1,11 @@
-{% extends "homeUser.html.twig" %}
+{% extends "hello.html.twig" %}
 
 {% block main %}
 
+
+
     <h1>Hello again {{ userDatum.first_name }}  </h1>
+ <!--modale success-->
 <div class="modal fade" id="Succes" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -27,11 +30,21 @@
         </div>
     </div>
 </div>
+    <!--fin modale success-->
+
+
+
+
+
+
+
+
 
     {% block script %}
        {{ parent() }}
 
           <script>  $('#Succes').modal('show');</script>
+
         <script> document.getElementById('dismissModal').addEventListener('click',function () {
                 window.location.href="index.php?p=galerie1"
             });

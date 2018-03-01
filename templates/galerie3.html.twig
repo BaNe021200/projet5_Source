@@ -11,6 +11,7 @@
 {% block main %}
     <h1>Hello {{ userDatum.first_name }}  </h1>
 
+        {{ dump(image1.0.id) }}
 
 
     <main role="main">
@@ -19,7 +20,7 @@
 
 
         <div class="album py-5 bg-light">
-            <div class="container">
+            <div class="container container-fluid">
 
                 <div class="row">
                     <div class="col-md-4">
@@ -31,9 +32,8 @@
                                 <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="btn-group">
-                                        <button type="button" data-toogle='modal' href="#formUpload" title="ouvrir formulaire" class="btn btn-sm btn-outline-secondary" onclick="document.getElementById('uploadFormHidden1').style.display ='block';">upload</button>
-                                        <button type="button" title="fermer formulaire" class="btn btn-sm btn-outline-secondary" onclick="document.getElementById('uploadFormHidden1').style.display ='none';">   </button>
-                                        <a href="index.php?p=deleteImage1"><button type="button" title="supprimer photo" class="btn btn-sm btn-outline-secondary" >delete</button></a>
+                                        <button type="button" data-toogle='modal' href="#formUpload" title="ouvrir formulaire" class="btn btn-xl btn-outline-secondary">View</button>
+
 
                                     </div>
 
@@ -62,7 +62,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="card mb-4 box-shadow">
-                            <img class="card-img-top" src="users/img/user/{{ userDatum.username }}/img_003.jpg" alt="Card image cap">
+                            <img class="card-img-top" src="{{ image1.4.dirname }}/{{ image1.4.filename }}.{{ image1.4.extension }}" alt="Card image cap">
                             <div class="card-body">
                                 <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
                                 <div class="d-flex justify-content-between align-items-center">
@@ -79,7 +79,7 @@
 
                     <div class="col-md-4">
                         <div class="card mb-4 box-shadow">
-                            <img class="card-img-top" src="users/img/user/{{ userDatum.username }}/img_004.jpg" alt="Card image cap">
+                            <img class="card-img-top" src="{{ image1.10.dirname }}/{{ image1.10.filename }}.{{ image1.10.extension }}" alt="Card image cap">
                             <div class="card-body">
                                 <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
                                 <div class="d-flex justify-content-between align-items-center">
@@ -95,7 +95,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="card mb-4 box-shadow">
-                            <img class="card-img-top" src="users/img/user/{{ userDatum.username }}/img_005.jpg" alt="Card image cap">
+                            <img class="card-img-top" src="{{ image1.6.dirname }}/{{ image1.6.filename }}.{{ image1.6.extension }}" alt="Card image cap">
                             <div class="card-body">
                                 <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
                                 <div class="d-flex justify-content-between align-items-center">
@@ -111,7 +111,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="card mb-4 box-shadow">
-                            <img class="card-img-top" src="users/img/user/{{ userDatum.username }}/img_006.jpg" alt="Card image cap">
+                            <img class="card-img-top" src="{{ image1.8.dirname }}/{{ image1.8.filename }}.{{ image1.8.extension }}" alt="Card image cap">
                             <div class="card-body">
                                 <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
                                 <div class="d-flex justify-content-between align-items-center">
