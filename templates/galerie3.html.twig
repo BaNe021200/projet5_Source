@@ -1,4 +1,4 @@
-{% extends "templateUserPages.html.twig" %}
+{% extends "homeUser.html.twig" %}
 {% import 'form.html.twig' as form %}
 {#{% block stylesheet %}
 
@@ -20,8 +20,6 @@
 
 
 
-
-
 <main role="main">
 
   <div class="album py-5 bg-light">
@@ -29,22 +27,24 @@
 
                 <div class="row">
 
-                    {% for  avatar in image  %}
+                    {% for  avatar in thumbnails |keys %}
                     <div class="col-md-4">
                         <div class="card mb-4 box-shadow">
-                            <!--<img class="card-img-top" src="users/img/user/{#{{ userDatum.username }}#}/img_001.jpg" alt="Card image cap">-->
-                            <img class="card-img-top"  src=" {{ avatar }} " alt="Card image cap">
+
+
+                            <img class="card-img-top"  src=" users/img/user/{{ userDatum.username }}/thumbnails/img_00{{ avatar|e+1 }}-thumb.jpg " alt="Card image cap">
+
 
                             <div class="card-body">
                                 <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="btn-group">
-                                        <a href="index.php?p=viewerGalerie&amp;src={{ avatar }}"> <button type="button" data-toggle="modal"  title="ouvrir photo" class="btn btn-xl btn-outline-secondary">View</button></a>
+                                        <a href="index.php?p=viewerGalerie&amp;src=users/img/user/{{ userDatum.username }}/img_00{{ avatar|e+1 }}.jpg"> <button type="button" data-toggle="modal"  title="ouvrir photo" class="btn btn-xl btn-outline-secondary">View</button></a>
 
 
                                     </div>
 
-                                    <small class="text-muted">Photo de profil</small>
+                                    <small class="text-muted"></small>
 
                                 </div>
                             </div>
@@ -53,6 +53,7 @@
 
 
                     {% endfor %}
+
 
 
 
@@ -76,8 +77,8 @@
 
 
 
-    
-{% endblock %}
+
+{% endblock main %}
 {% block script %}
     {{ parent() }}
     <script src="public/js/galerie1.js"></script>

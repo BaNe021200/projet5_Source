@@ -1,4 +1,4 @@
-{% extends "templateUserPages.html.twig" %}
+{% extends "homeUser.html.twig" %}
 {% block stylesheet %}
     {{ parent() }}
     <link rel="stylesheet" href="public/css/recroppedView.css">
@@ -28,6 +28,7 @@
 
                                 <img src="{{ img2crop }}" width="150" height="150">
                                 <p class="text-center">avant</p>
+                                <a href="index.php?p=CroppedChoice&amp;id={{ recrop.id }}" ><button class="btn btn-outline-dark text-center" id="validateBtn" type="submit">Annuler</button></a>
 
                             </div>
 
@@ -36,7 +37,7 @@
                                  width="150"
                                  height="150">
                             <p class="text-center">après</p>
-                                <a href="index.php?p=CroppedChoice&amp;id={{ recrop.id }}" ><button class="btn btn-outline-dark text-center" id="validateBtn" type="submit">Valider</button></a>
+                                <a href="index.php?p=homeUser" ><button class="btn btn-outline-dark text-center" id="validateBtn" type="submit">Valider</button></a>
 
                             </div>
 
@@ -46,9 +47,9 @@
 
                 <div class="modal-footer">
 
-                    <p>Cliquez sur valider si l'image vous satisfait.Sinon, vous pouvez fermer la boite</p>
+                    <p>Cliquez sur valider si l'image vous satisfait.Sinon, cliquez sur annuler</p>
 
-                    <button type="button" id="dismissModal"  class="btn btn-success" data-dismiss="modal" >Fermer</button>
+
 
                 </div>
             </div>

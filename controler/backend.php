@@ -160,20 +160,28 @@ function home()
 
 function homeUser()
 {
-    $src="img_001-cropped";
+    if (file_exists("users/img/user/" . $_COOKIE['username'] . "/crop/img_001-cropped-center.jpg")) {
+        $src = "users/img/user/" . $_COOKIE['username'] . "/crop/img_001-cropped-center.jpg";
+    } else {
+        $src = "users/img/user/" . $_COOKIE['username'] . "/crop/img_001-cropped.jpg";
+    }
+
+
+
     twigRender('homeUser.html.twig','imageProfil',$src,'','');
+
 }
 
-function galerie1()
+function galerie1($src)
 {
-    //session_start();
-    twigRender('galerie1.html.twig','','','','');
+
+    twigRender('galerie1.html.twig','imageProfil',$src,'','');
 }
 
-function galerie2()
+function galerie2($src)
 {
-    $folder = glob('users/img/user/'.$_COOKIE['username'].'/crop/*.jpg');
-    twigRender('galerie2.html.twig','image',$folder,'','');
+    $folder = glob('users/img/user/'.$_COOKIE['username'].'/crop/*-cropped-center.jpg');
+    twigRender('galerie2.html.twig','image',$folder,'imageProfil',$src);
 }
 
 
@@ -203,10 +211,10 @@ function authentificationConnexion()
             setcookie("username", $_SESSION['username'], time() + 3600 * 24 * 365, '', '', false, true);
             setcookie("first_name", $_SESSION['first_name'], time() + 3600 * 24 * 365, '', '', false, true);
 
-            //twigRender('homeUser.html.twig','','','','');
+
 
             header('Location:index.php?p=homeUser');
-
+            twigRender('homeUser.html.twig','','','','');
 
 
         } else {
@@ -505,8 +513,11 @@ function uploadPicture($userId,$img)
         }
     }
     //resizeImage();
+
+    thumbNails(525,700);
     resizeByHeight();
-    cropImages()  ;
+    cropImages();
+
     $cropFiles = glob('users/img/user/'.$_COOKIE['username'].'/crop/*.jpg');
      $cropFiles = $user->addCropFiles($userId,$img);
 twigRender('success.html.twig','message', $messages,'','');
@@ -538,20 +549,30 @@ function recropped($userId,$img){
 
 function croppedChoice($userId,$img){
 
-   $src= "img_001-cropped-center";
 
-    twigRender('homeUser.html.twig','imageProfil',$src,'','');
+    $src="users/img/user/".$_COOKIE['username']."/crop/img_001-cropped-center.jpg";
+
+    if(file_exists($src))
+    {
+        unlink("users/img/user/".$_COOKIE['username']."/crop/img_001-cropped-center.jpg");
+        header('Location: index.php?p=homeUser');
+    }
+    else
+    {
+        throw new Exception('Il n\'y a rien effacer');
+    }
+
 
 }
 
-function getUserImages()
+function getUserImages($src)
 {
 
-    $folder = glob('users/img/user/'.$_COOKIE['username'].'/*.jpg');
-    //var_dump($folder);die;
+    $folderThumbnails = glob('users/img/user/'.$_COOKIE['username'].'/thumbnails/*.jpg');
+    $folder=glob('users/img/user/'.$_COOKIE['username'].'/*.jpg');
 
 
-twigRender('galerie3.html.twig','image',$folder,'','');
+twigRender('galerie3.html.twig','thumbnails',$folderThumbnails,'images',$folder,'imageProfil',$src);
     //require_once 'templates/photo.php';
 
 
@@ -583,13 +604,15 @@ function deleteImage($userId,$imageId)
     $user= new UserManager();
     $imageDeleted=$user->deleteImage($userId,$imageId);
 
+    $folderThumbnails="users/img/user/".$_COOKIE['username'].'/thumbnails/img_00'.$imageId.'-thumb.jpg';
     $folderCroppedCenterToDelete = "users/img/user/".$_COOKIE['username'].'/crop/img_00'.$imageId.'-cropped-center.jpg';
     $folderCroppedToDelete = "users/img/user/".$_COOKIE['username'].'/crop/img_00'.$imageId.'-cropped.jpg';
     $folderToDelete = "users/img/user/".$_COOKIE['username'].'/img_00'.$imageId.'.jpg';
-    if(file_exists($folderToDelete)){
+    if(file_exists($folderThumbnails)){
         unlink($folderToDelete);
         unlink($folderCroppedToDelete);
         unlink($folderCroppedCenterToDelete);
+        unlink($folderThumbnails);
 
     }
     else {

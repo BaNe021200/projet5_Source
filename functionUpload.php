@@ -15,6 +15,13 @@ function newFolderCrop()
     mkdir($folderCrop);
 }
 
+function newFolderThumbnails()
+{
+    $folderThumbnails='users/img/user/'.$_COOKIE['username'].'/thumbnails';
+
+    mkdir($folderThumbnails);
+}
+
 /*function resizeImage()
 {
     $images= glob('users/img/user/'.$_POST['username'].'/*.jpg');

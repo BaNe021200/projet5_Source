@@ -1,10 +1,11 @@
-{% extends "templateUserPages.html.twig" %}
+{% extends "homeUser.html.twig" %}
 {% import 'form.html.twig' as form %}
 {% block stylesheet %}
 
 
     <link rel="stylesheet" href="public/css/album.css">
     <link rel="stylesheet" href="public/css/users.css">
+    <link rel="stylesheet" href="public/css/galerie1.css">
 
 
 {% endblock stylesheet %}
@@ -41,7 +42,7 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="card mb-4 box-shadow">
-                           <img class="card-img-top img-thumbnail" data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=cliquez sur upload pour télécharger vos photos" id="1" src="users/img/user/{{ userDatum.username }}/img_001.jpg" alt="Card image cap">
+                           <img class="card-img-top img-thumbnail" data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=cliquez sur upload pour télécharger vos photos" id="1" src="users/img/user/{{ userDatum.username }}/thumbnails/img_001-thumb.jpg" alt="Card image cap">
 
                             <div class="card-body">
                                 <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
@@ -55,16 +56,17 @@
                                 </div>
 
 
-                                <small class="text-muted"></small>
+                                <small class="text-muted">Image de Profil</small>
 
                             </div>
+                                {{ form.upload('1','pic1', 'photo N°1') }}
                             </div>
                         </div>
                     </div>
 
     <div class="col-md-4">
                         <div class="card mb-4 box-shadow">
-                            <img class="card-img-top img-thumbnail" id="2" data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=cliquez sur upload pour télécharger vos photos" src="users/img/user/{{ userDatum.username }}/img_002.jpg" alt="Card image cap">
+                            <img class="card-img-top img-thumbnail" id="2" data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=cliquez sur upload pour télécharger vos photos" src="users/img/user/{{ userDatum.username }}/thumbnails/img_002-thumb.jpg" alt="Card image cap">
                             <div class="card-body">
                                 <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
                                 <div class="d-flex justify-content-between align-items-center">
@@ -72,17 +74,18 @@
                                         <button type="button" id="uploadButton2" title="ouvrir formulaire"  class="btn btn-sm btn-outline-secondary" >upload</button>
                                         <button type="button" title="fermer formulaire" class="btn btn-sm btn-outline-secondary" id="hideButton2">   </button>
                                         <button type="button" data-toggle="modal" href="#myModal2" title="supprimer photo" class="btn btn-sm btn-outline-secondary">delete</button>
-                                        <a href="index.php?p=recropped&amp;id={{ 2 }}"><button type="submit"  name="recropped"  class="btn btn-outline-secondary btn-sm">recadrer</button></a>
+
                                     </div>
 
                                     <small class="text-muted"></small>
                                 </div>
+                                {{ form.upload('2','pic2', 'photo N°2') }}
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="card mb-4 box-shadow">
-                            <img class="card-img-top img-thumbnail" data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=cliquez sur upload pour télécharger vos photos" src="users/img/user/{{ userDatum.username }}/img_003.jpg" alt="Card image cap">
+                            <img class="card-img-top img-thumbnail" data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=cliquez sur upload pour télécharger vos photos" src="users/img/user/{{ userDatum.username }}/thumbnails/img_003-thumb.jpg" alt="Card image cap">
                             <div class="card-body">
                                 <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
                                 <div class="d-flex justify-content-between align-items-center">
@@ -90,17 +93,19 @@
                                         <button type="button" id="uploadButton3" title="ouvrir formulaire" class="btn btn-sm btn-outline-secondary" >upload</button>
                                         <button type="button" title="fermer formulaire" class="btn btn-sm btn-outline-secondary" id="hideButton3">   </button>
                                         <button type="button" data-toggle="modal" href="#myModal3" title="supprimer photo" class="btn btn-sm btn-outline-secondary">delete</button>
-                                        <a href="index.php?p=recropped&amp;id={{ 3 }}"><button type="submit"  name="recropped"  class="btn btn-outline-secondary btn-sm">recadrer</button></a>
+
                                     </div>
                                     <small class="text-muted"></small>
                                 </div>
+                                {{ form.upload('3','pic3', 'photo N°3') }}
+
                             </div>
                         </div>
                     </div>
 
                     <div class="col-md-4">
                         <div class="card mb-4 box-shadow">
-                            <img class="card-img-top img-thumbnail" data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=cliquez sur upload pour télécharger vos photos" src="users/img/user/{{ userDatum.username }}/img_004.jpg" alt="Card image cap">
+                            <img class="card-img-top img-thumbnail" data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=cliquez sur upload pour télécharger vos photos" src="users/img/user/{{ userDatum.username }}/thumbnails/img_004-thumb.jpg" alt="Card image cap">
                             <div class="card-body">
                                 <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
                                 <div class="d-flex justify-content-between align-items-center">
@@ -108,16 +113,17 @@
                                         <button type="button"  id="uploadButton4" title="ouvrir formulaire" class="btn btn-sm btn-outline-secondary" >upload</button>
                                         <button type="button" title="fermer formulaire" class="btn btn-sm btn-outline-secondary" id="hideButton4">   </button>
                                         <button type="button" data-toggle="modal" href="#myModal4" title="supprimer photo" class="btn btn-sm btn-outline-secondary">delete</button>
-                                        <a href="index.php?p=recropped&amp;id={{ 4 }}"><button type="submit"  name="recropped"  class="btn btn-outline-secondary btn-sm">recadrer</button></a>
+
                                     </div>
                                     <small class="text-muted"></small>
                                 </div>
+                                {{ form.upload('4','pic4', 'photo N°4') }}
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="card mb-4 box-shadow">
-                            <img class="card-img-top img-thumbnail" data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=cliquez sur upload pour télécharger vos photos" src="users/img/user/{{ userDatum.username }}/img_005.jpg" alt="Card image cap">
+                            <img class="card-img-top img-thumbnail" data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=cliquez sur upload pour télécharger vos photos" src="users/img/user/{{ userDatum.username }}/thumbnails/img_005-thumb.jpg" alt="Card image cap">
                             <div class="card-body">
                                 <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
                                 <div class="d-flex justify-content-between align-items-center">
@@ -125,16 +131,17 @@
                                         <button type="button" id="uploadButton5" title="ouvrir formulaire" class="btn btn-sm btn-outline-secondary" >upload</button>
                                         <button type="button" title="fermer formulaire" class="btn btn-sm btn-outline-secondary" id="hideButton5">   </button>
                                         <button type="button" data-toggle="modal" href="#myModal5" title="supprimer photo" class="btn btn-sm btn-outline-secondary">delete</button>
-                                        <a href="index.php?p=recropped&amp;id={{ 5 }}"><button type="submit"  name="recropped"  class="btn btn-outline-secondary btn-sm">recadrer</button></a>
+
                                     </div>
                                     <small class="text-muted"></small>
                                 </div>
+                                {{ form.upload('5','pic5', 'photo N°5') }}
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="card mb-4 box-shadow">
-                            <img class="card-img-top img-thumbnail" data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=cliquez sur upload pour télécharger vos photos" src="users/img/user/{{ userDatum.username }}/img_006.jpg" alt="Card image cap">
+                            <img class="card-img-top img-thumbnail" data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=cliquez sur upload pour télécharger vos photos" src="users/img/user/{{ userDatum.username }}/thumbnails/img_006-thumb.jpg" alt="Card image cap">
                             <div class="card-body">
                                 <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
                                 <div class="d-flex justify-content-between align-items-center">
@@ -142,10 +149,11 @@
                                         <button type="button" id="uploadButton6" title="ouvrir formulaire" class="btn btn-sm btn-outline-secondary" >upload</button>
                                         <button type="button" title="fermer formulaire" class="btn btn-sm btn-outline-secondary" id="hideButton6">   </button>
                                         <button type="button" data-toggle="modal" href="#myModal6" title="supprimer photo" class="btn btn-sm btn-outline-secondary">delete</button>
-                                        <a href="index.php?p=recropped&amp;id={{ 6 }}"><button type="submit"  name="recropped"  class="btn btn-outline-secondary btn-sm">recadrer</button></a>
+
                                     </div>
                                     <small class="text-muted"></small>
                                 </div>
+                                {{ form.upload('6','pic6', 'photo N°6') }}
                             </div>
                         </div>
                     </div>
@@ -173,12 +181,12 @@
 
 
 
-        {{ form.upload('1','pic1', 'photo N°1') }}
-        {{ form.upload('2','pic2', 'photo N°2') }}
-        {{ form.upload('3','pic3', 'photo N°3') }}
-        {{ form.upload('4','pic4', 'photo N°4') }}
-        {{ form.upload('5','pic5', 'photo N°5') }}
-        {{ form.upload('6','pic6', 'photo N°6') }}
+
+
+
+
+
+
 
         <!--Fin du formulaire d'upload-->
 

@@ -1,44 +1,25 @@
 {% extends 'layout.html.twig' %}
-{% block stylesheet %}
-    <link rel="stylesheet" href="public/dist/css/bootstrap.min.css">
-{% endblock %}
-
-
-{% block title %} La page de {{ userDatum.username }}{% endblock title %}
- {% block avatar %}
-     <li class="nav-item"><img class="rounded-circle" src="users/img/user/{{ userDatum.username }}/crop/img_001-cropped.jpg" alt="" width="25" height="25"></li>
-
- {% endblock avatar%}
-
-
-
-{% block signUp %}La page de {{ userDatum.username }} {% endblock signUp %}
-
-
-    {% block signUpLink %}index.php?p=homeUser {% endblock %}
 
 
 
 
 
 
-{% block navMenu %}
 
-    {% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
 {% block connexion %}déconnexion{% endblock %}
     {% block connexionLink %}index.php?p=deconnexion{% endblock %}
 
-{% block main %}
 
 
-{% endblock main %}
-{% block script %}
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script>window.jQuery || document.write('<script src="assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
-    <script src="public/assets/js/vendor/popper.min.js"></script>
-    <script src="public/dist/js/bootstrap.min.js"></script>
-    <script src="public/assets/js/vendor/holder.min.js"></script>
-    <script src="public/js/upload.js"></script>
-    <script src="public/js/uploadStatement.js"></script>
-
-{% endblock script %}

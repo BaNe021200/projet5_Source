@@ -1,10 +1,19 @@
-{% extends "templateUserPages.html.twig" %}
+{% extends "layout.html.twig" %}
 
 {% block stylesheet %}
     <link rel="stylesheet" href="public/css/users.css">
+    <link rel="stylesheet" href="public/dist/css/bootstrap.min.css">
 {% endblock stylesheet %}
 
+{% block title %} La page de {{ userDatum.username }}{% endblock title %}
+{% block avatar %}
+        <li class="nav-item"><img class="rounded-circle" src="{{ imageProfil }}" alt="" width="25" height="25"></li>
 
+    {% endblock avatar%}
+
+{% block signUp %}La page de {{ userDatum.username }} {% endblock signUp %}
+
+{% block signUpLink %}index.php?p=homeUser {% endblock %}
 
 {% block navMenu %}
     <li class="nav-item"><a class="nav-link" href="index.php?p=galerie1">galerie 1</a></li>
@@ -14,15 +23,35 @@
 
 {% endblock navMenu %}
 
+{% block connexion %}déconnexion{% endblock %}
+{% block connexionLink %}index.php?p=deconnexion{% endblock %}
+
 {% block main %}
 
     <h1>Hello  {{ userDatum.first_name }}  </h1>
 
 <div class="col-lg-4">
-              <img class="rounded-circle" id="cropImage" src="users/img/user/{{ userDatum.username }}/crop/{{ imageProfil }}.jpg" alt="Generic placeholder image" width="150" height="150" >
+    {#{%  if imagecenter is not null   %}
+
+        <img class="rounded-circle" id="cropImage" src="{{ imagecenter }}" alt="Generic placeholder image" width="150" height="150" >
+
+   {% else %}#}
+       <img class="rounded-circle" id="cropImage" src="{{ imageProfil  }}" alt="Generic placeholder image" width="150" height="150" >
+
+    {#{% endif %}#}
 
 </div><!-- /.col-lg-4 -->
 
 {% endblock %}
 
 
+{% block script %}
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script src="public/assets/js/vendor/popper.min.js"></script>
+    <script src="public/dist/js/bootstrap.min.js"></script>
+    <script src="public/assets/js/vendor/holder.min.js"></script>
+    <script src="public/js/upload.js"></script>
+    <script src="public/js/uploadStatement.js"></script>
+
+{% endblock script %}

@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="public/css/galerie1.css">
 {% macro input(name,label, placeholder, options=[]) %}
 <div class="row">
     <div class="col-md-3 field-label-responsive">
@@ -46,7 +47,7 @@
         <div class="row align-items-center">
             <div class="col-lg-6 order-lg-2">
                 <form action="index.php?p=upload&amp;id={{ uploadId }}" id="uploadFormHidden{{ uploadId }}" name="uploadFormHidden{{uploadId}}" method="post" class="form-horizontal hidden" enctype="multipart/form-data">
-                    <fieldset class="form-control">Vos Photos
+                    <fieldset class="form-control uploadForm">Vos Photos
                         <input type="hidden" class="form-control" value="{{userDatum.username}}" name="username" >
 
 
@@ -81,7 +82,7 @@
             </div>
         </div>
 
-    </div>
+   </div>
 {% endmacro %}
 
 {#{% macro upload(uploadId, name,label) %}

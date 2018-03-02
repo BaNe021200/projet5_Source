@@ -20,6 +20,8 @@ use model\UserManager;
 
 
 
+
+
             $loader = new Twig_Loader_Filesystem(__DIR__ . '/templates');
             $twig = new Twig_Environment($loader, [
 
@@ -35,6 +37,7 @@ use model\UserManager;
 
                 $argument1 => $argument2,
                 $argument3 => $argument4,
+
 
             ]);
 
