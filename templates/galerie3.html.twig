@@ -1,38 +1,45 @@
-{% extends "hello.html.twig" %}
+{% extends "templateUserPages.html.twig" %}
 {% import 'form.html.twig' as form %}
-{% block head %}
-    {{ parent() }}
+{#{% block stylesheet %}
 
+        {{ parent() }}
     <link rel="stylesheet" href="public/css/album.css">
     <link rel="stylesheet" href="public/css/users.css">
+
+{% endblock %}#}
+
+{% block navMenu %}
+
+    <li class="nav-item"><a class="nav-link" href="index.php?p=galerie1">galerie 1</a></li>
+    <li class="nav-item"><a class="nav-link" href="index.php?p=galerie2">galerie 2</a></li>
 
 {% endblock %}
 
 {% block main %}
     <h1>Hello {{ userDatum.first_name }}  </h1>
 
-        {{ dump(image1.0.id) }}
-
-
-    <main role="main">
 
 
 
 
-        <div class="album py-5 bg-light">
+<main role="main">
+
+  <div class="album py-5 bg-light">
             <div class="container container-fluid">
 
                 <div class="row">
+
+                    {% for  avatar in image  %}
                     <div class="col-md-4">
                         <div class="card mb-4 box-shadow">
                             <!--<img class="card-img-top" src="users/img/user/{#{{ userDatum.username }}#}/img_001.jpg" alt="Card image cap">-->
-                            <img class="card-img-top" src="{{ image1.0.dirname }}/{{ image1.0.filename }}.{{ image1.0.extension }}" alt="Card image cap">
+                            <img class="card-img-top"  src=" {{ avatar }} " alt="Card image cap">
 
                             <div class="card-body">
                                 <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="btn-group">
-                                        <button type="button" data-toogle='modal' href="#formUpload" title="ouvrir formulaire" class="btn btn-xl btn-outline-secondary">View</button>
+                                        <a href="index.php?p=viewerGalerie&amp;src={{ avatar }}"> <button type="button" data-toggle="modal"  title="ouvrir photo" class="btn btn-xl btn-outline-secondary">View</button></a>
 
 
                                     </div>
@@ -44,87 +51,12 @@
                         </div>
                     </div>
 
-                    <div class="col-md-4">
-                        <div class="card mb-4 box-shadow">
-                            <img class="card-img-top" src="{{ image1.2.dirname }}/{{ image1.2.filename }}.{{ image1.2.extension }}" alt="Card image cap">
-                            <div class="card-body">
-                                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="btn-group">
-                                        <button type="button" title="ouvrir formulaire"  class="btn btn-sm btn-outline-secondary" onclick="document.getElementById('uploadFormHidden2').style.display ='block';">upload</button>
-                                        <button type="button" title="fermer formulaire" class="btn btn-sm btn-outline-secondary" onclick="document.getElementById('uploadFormHidden2').style.display ='none';">   </button>
-                                        <button type="button" title="supprimer photo" class="btn btn-sm btn-outline-secondary">delete</button>
-                                    </div>
-                                    <small class="text-muted"></small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card mb-4 box-shadow">
-                            <img class="card-img-top" src="{{ image1.4.dirname }}/{{ image1.4.filename }}.{{ image1.4.extension }}" alt="Card image cap">
-                            <div class="card-body">
-                                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="btn-group">
-                                        <button type="button" title="ouvrir formulaire" class="btn btn-sm btn-outline-secondary" onclick="document.getElementById('uploadFormHidden3').style.display ='block';">upload</button>
-                                        <button type="button" title="fermer formulaire" class="btn btn-sm btn-outline-secondary" onclick="document.getElementById('uploadFormHidden3').style.display ='none';">   </button>
-                                        <button type="button" title="supprimer photo" class="btn btn-sm btn-outline-secondary">delete</button>
-                                    </div>
-                                    <small class="text-muted"></small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="col-md-4">
-                        <div class="card mb-4 box-shadow">
-                            <img class="card-img-top" src="{{ image1.10.dirname }}/{{ image1.10.filename }}.{{ image1.10.extension }}" alt="Card image cap">
-                            <div class="card-body">
-                                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="btn-group">
-                                        <button type="button" title="ouvrir formulaire" class="btn btn-sm btn-outline-secondary" onclick="document.getElementById('uploadFormHidden4').style.display ='block';">upload</button>
-                                        <button type="button" title="fermer formulaire" class="btn btn-sm btn-outline-secondary" onclick="document.getElementById('uploadFormHidden4').style.display ='none';">   </button>
-                                        <button type="button" title="supprimer photo" class="btn btn-sm btn-outline-secondary">delete</button>
-                                    </div>
-                                    <small class="text-muted"></small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card mb-4 box-shadow">
-                            <img class="card-img-top" src="{{ image1.6.dirname }}/{{ image1.6.filename }}.{{ image1.6.extension }}" alt="Card image cap">
-                            <div class="card-body">
-                                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="btn-group">
-                                        <button type="button" title="ouvrir formulaire" class="btn btn-sm btn-outline-secondary" onclick="document.getElementById('uploadFormHidden5').style.display ='block';">upload</button>
-                                        <button type="button" title="fermer formulaire" class="btn btn-sm btn-outline-secondary" onclick="document.getElementById('uploadFormHidden5').style.display ='none';">   </button>
-                                        <button type="button" title="supprimer photo" class="btn btn-sm btn-outline-secondary">delete</button>
-                                    </div>
-                                    <small class="text-muted"></small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card mb-4 box-shadow">
-                            <img class="card-img-top" src="{{ image1.8.dirname }}/{{ image1.8.filename }}.{{ image1.8.extension }}" alt="Card image cap">
-                            <div class="card-body">
-                                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="btn-group">
-                                        <button type="button" title="ouvrir formulaire" class="btn btn-sm btn-outline-secondary" onclick="document.getElementById('uploadFormHidden6').style.display ='block';">upload</button>
-                                        <button type="button" title="fermer formulaire" class="btn btn-sm btn-outline-secondary" onclick="document.getElementById('uploadFormHidden6').style.display ='none';">   </button>
-                                        <button type="button" title="supprimer photo" class="btn btn-sm btn-outline-secondary">delete</button>
-                                    </div>
-                                    <small class="text-muted"></small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    {% endfor %}
+
+
+
+
 
 
 
@@ -134,21 +66,17 @@
         </div>
 
 
-        <!--Modal-->
 
-
-        {{ form.upload('1','pic1', 'photo N°1') }}
-        {{ form.upload('2','pic2', 'photo N°2') }}
-        {{ form.upload('3','pic3', 'photo N°3') }}
-        {{ form.upload('4','pic4', 'photo N°4') }}
-        {{ form.upload('5','pic5', 'photo N°5') }}
-        {{ form.upload('6','pic6', 'photo N°6') }}
+</main>
 
 
 
-    </main>
 
 
+
+
+
+    
 {% endblock %}
 {% block script %}
     {{ parent() }}

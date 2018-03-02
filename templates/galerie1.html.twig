@@ -1,13 +1,28 @@
-{% extends "hello.html.twig" %}
+{% extends "templateUserPages.html.twig" %}
 {% import 'form.html.twig' as form %}
-{% block head %}
-    {{ parent() }}
+{% block stylesheet %}
+
 
     <link rel="stylesheet" href="public/css/album.css">
     <link rel="stylesheet" href="public/css/users.css">
 
 
+{% endblock stylesheet %}
+
+{% block title %}{% endblock %}
+
+
+    {% block signUpLink %}index.php?p=homeUser {% endblock signUpLink %}
+
+
+{% block navMenu %}
+
+    <li class="nav-item"><a class="nav-link" href="index.php?p=galerie2">galerie 2</a></li>
+
+    <li class="nav-item"><a class="nav-link" href="index.php?p=galerie3">galerie 3</a></li>
 {% endblock %}
+{% block connexion %}déconnexion{% endblock %}
+    {% block connexionLink %}index.php?p=deconnexion{% endblock %}
 
 {% block main %}
     <h1>Hello {{ userDatum.first_name }}  </h1>
@@ -26,7 +41,7 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="card mb-4 box-shadow">
-                           <img class="card-img-top" id="1" src="users/img/user/{{ userDatum.username }}/img_001.jpg" alt="Card image cap">
+                           <img class="card-img-top img-thumbnail" data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=cliquez sur upload pour télécharger vos photos" id="1" src="users/img/user/{{ userDatum.username }}/img_001.jpg" alt="Card image cap">
 
                             <div class="card-body">
                                 <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
@@ -34,7 +49,8 @@
                                 <div class="btn-group">
                                     <button type="button" id="uploadButton1"  title="ouvrir formulaire" class="btn btn-sm btn-outline-secondary" >upload</button>
                                     <button type="button" id="hideButton1" title="fermer formulaire" class="btn btn-sm btn-outline-secondary" >   </button>
-                                 <button  type="button" data-toggle="modal" href="#myModal1"title="supprimer photo" class="btn btn-sm btn-outline-secondary" >delete</button><a href="index.php?p=recropped&amp;id={{ 1 }}"><button type="submit"  name="recropped"  class="btn btn-outline-secondary btn-sm">recadrer</button></a>
+                                 <button  type="button" data-toggle="modal" href="#myModal1"title="supprimer photo" class="btn btn-sm btn-outline-secondary" >delete</button><a href="index.php?p=recropped&amp;id={{ 1 }}">
+                                        <button type="submit"  name="recropped"  class="btn btn-outline-secondary btn-sm">recadrer</button></a>
 
                                 </div>
 
@@ -48,7 +64,7 @@
 
     <div class="col-md-4">
                         <div class="card mb-4 box-shadow">
-                            <img class="card-img-top" id="2" src="users/img/user/{{ userDatum.username }}/img_002.jpg" alt="Card image cap">
+                            <img class="card-img-top img-thumbnail" id="2" data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=cliquez sur upload pour télécharger vos photos" src="users/img/user/{{ userDatum.username }}/img_002.jpg" alt="Card image cap">
                             <div class="card-body">
                                 <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
                                 <div class="d-flex justify-content-between align-items-center">
@@ -66,7 +82,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="card mb-4 box-shadow">
-                            <img class="card-img-top" src="users/img/user/{{ userDatum.username }}/img_003.jpg" alt="Card image cap">
+                            <img class="card-img-top img-thumbnail" data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=cliquez sur upload pour télécharger vos photos" src="users/img/user/{{ userDatum.username }}/img_003.jpg" alt="Card image cap">
                             <div class="card-body">
                                 <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
                                 <div class="d-flex justify-content-between align-items-center">
@@ -84,7 +100,7 @@
 
                     <div class="col-md-4">
                         <div class="card mb-4 box-shadow">
-                            <img class="card-img-top" src="users/img/user/{{ userDatum.username }}/img_004.jpg" alt="Card image cap">
+                            <img class="card-img-top img-thumbnail" data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=cliquez sur upload pour télécharger vos photos" src="users/img/user/{{ userDatum.username }}/img_004.jpg" alt="Card image cap">
                             <div class="card-body">
                                 <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
                                 <div class="d-flex justify-content-between align-items-center">
@@ -101,7 +117,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="card mb-4 box-shadow">
-                            <img class="card-img-top" src="users/img/user/{{ userDatum.username }}/img_005.jpg" alt="Card image cap">
+                            <img class="card-img-top img-thumbnail" data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=cliquez sur upload pour télécharger vos photos" src="users/img/user/{{ userDatum.username }}/img_005.jpg" alt="Card image cap">
                             <div class="card-body">
                                 <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
                                 <div class="d-flex justify-content-between align-items-center">
@@ -118,7 +134,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="card mb-4 box-shadow">
-                            <img class="card-img-top" src="users/img/user/{{ userDatum.username }}/img_006.jpg" alt="Card image cap">
+                            <img class="card-img-top img-thumbnail" data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=cliquez sur upload pour télécharger vos photos" src="users/img/user/{{ userDatum.username }}/img_006.jpg" alt="Card image cap">
                             <div class="card-body">
                                 <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
                                 <div class="d-flex justify-content-between align-items-center">

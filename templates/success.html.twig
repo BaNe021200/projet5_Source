@@ -1,10 +1,10 @@
-{% extends "hello.html.twig" %}
+{% extends "templateUserPages.html.twig" %}
 
 {% block main %}
 
 
 
-    <h1>Hello again {{ userDatum.first_name }}  </h1>
+
  <!--modale success-->
 <div class="modal fade" id="Succes" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -50,10 +50,10 @@
             });
         </script>
 
-    {% endblock %}
+    {% endblock script %}
 
 
 
 
 
-{% endblock %}
+{% endblock main %}

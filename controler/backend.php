@@ -172,8 +172,8 @@ function galerie1()
 
 function galerie2()
 {
-    //session_start();
-    twigRender('galerie2.html.twig','','','','');
+    $folder = glob('users/img/user/'.$_COOKIE['username'].'/crop/*.jpg');
+    twigRender('galerie2.html.twig','image',$folder,'','');
 }
 
 
@@ -536,7 +536,7 @@ function recropped($userId,$img){
 
 }
 
-function CroppedChoice($userId,$img){
+function croppedChoice($userId,$img){
 
    $src= "img_001-cropped-center";
 
@@ -544,17 +544,19 @@ function CroppedChoice($userId,$img){
 
 }
 
-
-
-function getUserImages($userId)
+function getUserImages()
 {
-    $user = new UserManager();
-    $images= $user->getUserFiles($_COOKIE['ID']);
-twigRender('galerie3.html.twig','image1',$images,'','');
+
+    $folder = glob('users/img/user/'.$_COOKIE['username'].'/*.jpg');
+    //var_dump($folder);die;
+
+
+twigRender('galerie3.html.twig','image',$folder,'','');
     //require_once 'templates/photo.php';
 
 
 }
+
 
 function getAllImages()
 {
@@ -599,6 +601,12 @@ function deleteImage($userId,$imageId)
 
 
 
+}
+
+
+function viewerGalerie($userName,$img)
+{
+    twigRender('galerieViewer.html.twig','src',$_GET['src'],'','');
 }
 
 

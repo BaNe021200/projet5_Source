@@ -1,69 +1,28 @@
-{% extends "hello.html.twig" %}
+{% extends "templateUserPages.html.twig" %}
 
-{% block head %}
+{% block stylesheet %}
     <link rel="stylesheet" href="public/css/users.css">
-{% endblock %}
+{% endblock stylesheet %}
 
 
 
 {% block navMenu %}
     <li class="nav-item"><a class="nav-link" href="index.php?p=galerie1">galerie 1</a></li>
+    <li class="nav-item"><a class="nav-link" href="index.php?p=galerie2">galerie 2</a></li>
     <li class="nav-item"><a class="nav-link" href="index.php?p=galerie3">galerie 3</a></li>
 
 
-
-
-
-
-
-
-
-{% endblock %}
+{% endblock navMenu %}
 
 {% block main %}
 
     <h1>Hello  {{ userDatum.first_name }}  </h1>
 
+<div class="col-lg-4">
+              <img class="rounded-circle" id="cropImage" src="users/img/user/{{ userDatum.username }}/crop/{{ imageProfil }}.jpg" alt="Generic placeholder image" width="150" height="150" >
 
-
-        <!-- Three columns of text below the carousel -->
-
-            <div class="col-lg-4">
-                <img class="rounded-circle" id="cropImage" src="users/img/user/{{ userDatum.username }}/crop/img_001-cropped.jpg" alt="Generic placeholder image" width="150" height="150" >
-
-
-            {#  <!--  <img class="rounded-circle" id="cropImage" src="users/img/user/{{ userDatum.username }}/crop/{{ imageProfil }}.jpg" alt="Generic placeholder image" width="150" height="150" >-->#}
-
-
-
-
-            </div><!-- /.col-lg-4 -->
-
-
-
+</div><!-- /.col-lg-4 -->
 
 {% endblock %}
 
-{% block script %}
-<script>
-    function changeCrop(username)
-    {
-        /*var img = new Image();
-        img.src ='user/users/img/user/'+username+'/crop/img_001-cropped-center.jpg';*/
 
-        var imgTarget = document.getElementById('cropImage');
-        imgTarget.addEventListener('click',function () {
-
-
-        imgTarget.src='users/img/user/'+username+'/crop/img_001-cropped-center.jpg';
-        return imgTarget;
-
-    });
-    }
-    changeCrop('{{ userDatum.username }}');
-
-
-
-</script>
-
-{% endblock script %}

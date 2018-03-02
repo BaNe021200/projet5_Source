@@ -107,7 +107,7 @@ if (isset($_GET['p']))
 
     elseif ($_GET['p'] == 'galerie3'){
         if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
-            getUserImages($_COOKIE['ID']);
+            getUserImages();
         }
         else
         {
@@ -138,13 +138,25 @@ if (isset($_GET['p']))
 
     elseif ($_GET['p'] == 'CroppedChoice'){
         if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
-            CroppedChoice($_COOKIE['ID'],$_GET['id']);
+            croppedChoice($_COOKIE['ID'],$_GET['id']);
         }
         else
         {
             throw new Exception("Erreur vous n'êtes pas connectez. Veuillez vous identifier");
         }
     }
+
+    elseif ($_GET['p'] == 'viewerGalerie'){
+        if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
+            viewerGalerie($_COOKIE['username'],$_GET['src']);
+        }
+        else
+        {
+            throw new Exception("Erreur vous n'êtes pas connectez. Veuillez vous identifier");
+        }
+    }
+
+
 
 
 }
