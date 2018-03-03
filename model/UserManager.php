@@ -176,19 +176,6 @@ class UserManager extends Manager
 
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
         public function getUserFiles($userId)
         {
 
@@ -231,6 +218,20 @@ class UserManager extends Manager
             $deletedImage=$pdoStat->execute();
 
         }
+
+        public function getPhoto2Thumb($img){
+            $pdo=$this->dbConnect();
+            $PdoStat=$pdo->prepare('SELECT * FROM projet5_images WHERE filename= :filename');
+            $PdoStat->bindValue(':filename','img_00'.$img,PDO::PARAM_STR);
+            $photo=$PdoStat->execute();
+            $photo=$PdoStat->fetch();
+            return $photo;
+
+
+
+
+        }
+
 
 
 

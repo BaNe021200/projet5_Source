@@ -1,7 +1,10 @@
 <?php
 declare(strict_types=1);
 require_once 'functionUpload.php';
+require_once 'model/UserManager.php';
 
+
+use model\UserManager;
 
 
 
@@ -130,5 +133,62 @@ function thumbNails($width,$height){
 
 
 }
+
+/*function thumbNails2($width,$height,$img){
+    $user= new UserManager();
+    $images=$user->getPhoto2Thumb($img);
+
+    if (!file_exists('users/img/user/'.$_COOKIE['username'].'/thumbnails'))
+    { newFolderThumbnails();
+
+       //$images=glob('users/img/user/'.$_COOKIE['username'].'/*.jpg');
+
+            foreach ($images as $image)
+            {
+                $src= 'users/img/user/'.$_COOKIE['username'].'/img_00'.$image.'.jpg';
+                $infoName= pathinfo($src);
+                $cropName=$infoName['filename'];
+                $image = imagecreatefromjpeg($src);
+                $size = getimagesize($src);
+                $thumb=imagecreatetruecolor($width,$height);
+                // On va gérer la position et le redimensionnement de la grande image
+                if($size[0]>($width/$height)*$size[1] ){ $dimY=$height; $dimX=$height*$size[0]/$size[1]; $decalX=-($dimX-$width)/2; $decalY=0;}
+                if($size[0]<($width/$height)*$size[1]){ $dimX=$width; $dimY=$width*$size[1]/$size[0]; $decalY=-($dimY-$height)/2; $decalX=0;}
+                if($size[0]==($width/$height)*$size[1]){ $dimX=$width; $dimY=$height; $decalX=0; $decalY=0;}
+                // on modifie l'image crée en y plaçant la grande image redimensionné et décalée
+                imagecopyresampled($thumb,$image,intval($decalX),intval($decalY),0,0,intval($dimX),intval($dimY),$size[0],$size[1]);
+            // On sauvegarde le tout
+                imagejpeg($thumb, 'users/img/user/'.$_COOKIE['username'].'/thumbnails/'.$cropName.'-thumb.jpg');
+            }
+
+    }
+    else
+    {
+        //$images=glob('users/img/user/'.$_COOKIE['username'].'/*.jpg');
+           foreach ($images as $image)
+           {
+                $src= 'users/img/user/'.$_COOKIE['username'].'/img_00'.$image.'.jpg';
+                $infoName= pathinfo($src);
+                $cropName=$infoName['filename'];
+                $image = imagecreatefromjpeg($src);
+                $size = getimagesize($src);
+                $thumb=imagecreatetruecolor($width,$height);
+                // On va gérer la position et le redimensionnement de la grande image
+                if($size[0]>($width/$height)*$size[1] ){ $dimY=$height; $dimX=$height*$size[0]/$size[1]; $decalX=-($dimX-$width)/2; $decalY=0;}
+                if($size[0]<($width/$height)*$size[1]){ $dimX=$width; $dimY=$width*$size[1]/$size[0]; $decalY=-($dimY-$height)/2; $decalX=0;}
+                if($size[0]==($width/$height)*$size[1]){ $dimX=$width; $dimY=$height; $decalX=0; $decalY=0;}
+                // on modifie l'image crée en y plaçant la grande image redimensionné et décalée
+                imagecopyresampled($thumb,$image,intval($decalX),intval($decalY),0,0,intval($dimX),intval($dimY),$size[0],$size[1]);
+                // On sauvegarde le tout
+                imagejpeg($thumb, 'users/img/user/'.$_COOKIE['username'].'/thumbnails/'.$cropName.'-thumb.jpg');
+           }
+
+    }
+
+
+
+}*/
+
+
 
 

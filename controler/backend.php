@@ -180,7 +180,7 @@ function galerie1($src)
 
 function galerie2($src)
 {
-    $folder = glob('users/img/user/'.$_COOKIE['username'].'/crop/*-cropped-center.jpg');
+    $folder = glob('users/img/user/'.$_COOKIE['username'].'/crop/*-cropped.jpg');
     twigRender('galerie2.html.twig','image',$folder,'imageProfil',$src);
 }
 
@@ -480,7 +480,7 @@ function uploadPicture($userId,$img)
                     //on verifie la taille du fichier
                     $size = filesize($file['tmp_name']);
                     if ($size > 1600000) {
-                        $message = "le fichier est trop gros";
+                        $messages[] = "le fichier est trop gros";
                     } else {
 
 
@@ -572,7 +572,7 @@ function getUserImages($src)
     $folder=glob('users/img/user/'.$_COOKIE['username'].'/*.jpg');
 
 
-twigRender('galerie3.html.twig','thumbnails',$folderThumbnails,'images',$folder,'imageProfil',$src);
+twigRender('galerie3.html.twig','thumbnails',$folderThumbnails,'images',$folder);
     //require_once 'templates/photo.php';
 
 

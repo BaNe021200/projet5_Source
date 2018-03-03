@@ -1,13 +1,9 @@
-#modalViewerStyle
+.modalViewerStyle
 {
     display: flex;
     width: 100%;
     justify-content: center;
     margin: auto;
-
-
-
-
     height: 700px;
     width: auto;
 }
