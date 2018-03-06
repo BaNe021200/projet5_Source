@@ -172,16 +172,16 @@ function homeUser()
 
 }
 
-function galerie1($src)
+function galerie1()
 {
 
-    twigRender('galerie1.html.twig','imageProfil',$src,'','');
+    twigRender('galerie1.html.twig','','' ,'','');
 }
 
-function galerie2($src)
+function galerie2()
 {
     $folder = glob('users/img/user/'.$_COOKIE['username'].'/crop/*-cropped.jpg');
-    twigRender('galerie2.html.twig','image',$folder,'imageProfil',$src);
+    twigRender('galerie2.html.twig','image',$folder,'','');
 }
 
 
@@ -407,6 +407,7 @@ twigRender('success.html.twig','message', $messages,'','');
 
 }*/
 
+
 function uploadPicture($userId,$img)
 {
 
@@ -432,7 +433,7 @@ function uploadPicture($userId,$img)
                     //on verifie la taille du fichier
                     $size = filesize($file['tmp_name']);
                     if ($size > 1600000) {
-                        $message = "le fichier est trop gros";
+                        $messages[] = "le fichier est trop gros";
                     } else {
 
 
@@ -458,7 +459,11 @@ function uploadPicture($userId,$img)
                     $messages[] = 'type de fichiers non valide';
                 }
             } else {
-                $messages[] = 'un problème est survenu lors de l\'upload';
+
+                if($file['error']==2){$messages[]= 'votre fichier est trop volumineux';}
+                if($file['error']==1){$messages[]= 'votre fichier excède la taille de configuration du serveur';}
+
+                //$messages[] = 'un problème est survenu lors de l\'upload';
             }
             //$destinationPath= $user->addUserFiles($_SESSION['id']);
         }//twigRender('homeUser.html.twig', 'message', $messages);
@@ -505,7 +510,11 @@ function uploadPicture($userId,$img)
                     $messages[] = 'type de fichiers non valide';
                 }
             } else {
-                $messages[] = 'un problème est survenu lors de l\'upload';
+
+                if($file['error']==2){$messages[]= 'votre fichier est trop volumineux';}
+                if($file['error']==1){$messages[]= 'votre fichier excède la taille de configuration du serveur';}
+
+                //$messages[] = 'un problème est survenu lors de l\'upload';
             }
 
 
@@ -514,13 +523,16 @@ function uploadPicture($userId,$img)
     }
     //resizeImage();
 
-    thumbNails(525,700);
-    resizeByHeight();
-    cropImages();
+
+    twigRender('success.html.twig','message', $messages,'','');
+    @$imageId= $uploadimage;
+    @thumbNails2(525,700,$_COOKIE['ID'],$imageId);
+    @resizeByHeight();
+    @cropImages();
 
     $cropFiles = glob('users/img/user/'.$_COOKIE['username'].'/crop/*.jpg');
      $cropFiles = $user->addCropFiles($userId,$img);
-twigRender('success.html.twig','message', $messages,'','');
+
 
 }
 
@@ -565,14 +577,15 @@ function croppedChoice($userId,$img){
 
 }
 
-function getUserImages($src)
+function getUserImages($userId)
 {
 
-    $folderThumbnails = glob('users/img/user/'.$_COOKIE['username'].'/thumbnails/*.jpg');
-    $folder=glob('users/img/user/'.$_COOKIE['username'].'/*.jpg');
+   /* $folderThumbnails = glob('users/img/user/'.$_COOKIE['username'].'/thumbnails/*.jpg');
+    $folder=glob('users/img/user/'.$_COOKIE['username'].'/*.jpg');*/
+    $user=new UserManager();
+    $folder=$user->getThumbnails($userId);
 
-
-twigRender('galerie3.html.twig','thumbnails',$folderThumbnails,'images',$folder);
+twigRender('galerie3.html.twig','images',$folder,'','');
     //require_once 'templates/photo.php';
 
 
@@ -627,10 +640,46 @@ function deleteImage($userId,$imageId)
 }
 
 
-function viewerGalerie($userName,$img)
+function viewerGalerie($imageId)
 {
-    twigRender('galerieViewer.html.twig','src',$_GET['src'],'','');
+    $user=new UserManager();
+    $view = $user->getUserView($imageId);
+
+    twigRender('galerieViewer.html.twig','view',$view,'','');
 }
+
+function viewerGalerie2($imageId)
+{
+    $user=new UserManager();
+    $view = $user->getUserView($imageId);
+
+    twigRender('galerieViewer.html.twig','view',$view,'','');
+}
+
+/*function slideShow($imageId)
+{
+    $folder='users/img/user/'.$_COOKIE['username'].'/';
+    $slide= glob($folder.'*.jpg');
+    usort($slide, 'strnatcmp');
+    $nb=count($slide);
+
+    if(isset($_GET['image']) && ctype_digit($_GET['image']))
+    {
+        $img=$_GET['image'];
+    }
+    else
+    {
+        $img=0;
+    }
+    if($img>0 && $img<$nb)
+    {
+
+    }
+
+
+
+
+}*/
 
 
 

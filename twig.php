@@ -9,6 +9,13 @@ require_once 'controler/backend.php';
 use model\UserManager;
 
 
+        function avatar($src)
+        {
+        }
+
+
+
+
 
 
         function twigRender($renderPath,$argument1,$argument2,$argument3,$argument4)
@@ -16,6 +23,12 @@ use model\UserManager;
             //$user = new UserManager();
             // $userData = $user->userData();
             // $userDatum = $user->getUserMainData();
+
+            if (file_exists("users/img/user/" . @$_COOKIE['username'] . "/crop/img_001-cropped-center.jpg")) {
+                @$src = "users/img/user/" . $_COOKIE['username'] . "/crop/img_001-cropped-center.jpg";
+            } else {
+                @$src = "users/img/user/" . $_COOKIE['username'] . "/crop/img_001-cropped.jpg";
+            }
 
 
 
@@ -33,10 +46,11 @@ use model\UserManager;
 
             echo $twig->render($renderPath,[
                 'userDatum' => $_SESSION,
-
+                @'imageProfil'=>$src,
 
                 $argument1 => $argument2,
                 $argument3 => $argument4,
+
 
 
             ]);

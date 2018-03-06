@@ -82,7 +82,7 @@ function cropcenter($image){
 
 }
 
-function thumbNails($width,$height){
+/*function thumbNails($width,$height){
     if (!file_exists('users/img/user/'.$_COOKIE['username'].'/thumbnails'))
     { newFolderThumbnails();
 
@@ -132,22 +132,23 @@ function thumbNails($width,$height){
 
 
 
-}
+}*/
 
-/*function thumbNails2($width,$height,$img){
+function thumbNails2($width,$height,$userId,$photoId){
     $user= new UserManager();
-    $images=$user->getPhoto2Thumb($img);
+    $images=$user->getPhoto2Thumb($userId,$photoId);
 
     if (!file_exists('users/img/user/'.$_COOKIE['username'].'/thumbnails'))
     { newFolderThumbnails();
 
-       //$images=glob('users/img/user/'.$_COOKIE['username'].'/*.jpg');
 
-            foreach ($images as $image)
-            {
-                $src= 'users/img/user/'.$_COOKIE['username'].'/img_00'.$image.'.jpg';
+
+
+
+                $src= $images[0]['dirname'].'/'.$images[0]['filename'].'.'.$images[0]['extension'];
                 $infoName= pathinfo($src);
-                $cropName=$infoName['filename'];
+                $dirname=$infoName['dirname'];
+                $fileName=$infoName['filename'];
                 $image = imagecreatefromjpeg($src);
                 $size = getimagesize($src);
                 $thumb=imagecreatetruecolor($width,$height);
@@ -156,20 +157,22 @@ function thumbNails($width,$height){
                 if($size[0]<($width/$height)*$size[1]){ $dimX=$width; $dimY=$width*$size[1]/$size[0]; $decalY=-($dimY-$height)/2; $decalX=0;}
                 if($size[0]==($width/$height)*$size[1]){ $dimX=$width; $dimY=$height; $decalX=0; $decalY=0;}
                 // on modifie l'image crée en y plaçant la grande image redimensionné et décalée
-                imagecopyresampled($thumb,$image,intval($decalX),intval($decalY),0,0,intval($dimX),intval($dimY),$size[0],$size[1]);
+                @imagecopyresampled($thumb,$image,intval($decalX),intval($decalY),0,0,intval($dimX),intval($dimY),$size[0],$size[1]);
             // On sauvegarde le tout
-                imagejpeg($thumb, 'users/img/user/'.$_COOKIE['username'].'/thumbnails/'.$cropName.'-thumb.jpg');
-            }
+                $imageThumbnail= imagejpeg($thumb, 'users/img/user/'.$_COOKIE['username'].'/thumbnails/'.$fileName.'-thumb.jpg');
+
+        $saveThumbnail=$user->addThumbnails($userId,$photoId,$dirname,$fileName);
 
     }
     else
     {
         //$images=glob('users/img/user/'.$_COOKIE['username'].'/*.jpg');
-           foreach ($images as $image)
-           {
-                $src= 'users/img/user/'.$_COOKIE['username'].'/img_00'.$image.'.jpg';
+
+
+                $src=$images[0]['dirname'].'/'.$images[0]['filename'].'.'.$images[0]['extension'];
                 $infoName= pathinfo($src);
-                $cropName=$infoName['filename'];
+                $dirname=$infoName['dirname'];
+                $fileName=$infoName['filename'];
                 $image = imagecreatefromjpeg($src);
                 $size = getimagesize($src);
                 $thumb=imagecreatetruecolor($width,$height);
@@ -178,16 +181,16 @@ function thumbNails($width,$height){
                 if($size[0]<($width/$height)*$size[1]){ $dimX=$width; $dimY=$width*$size[1]/$size[0]; $decalY=-($dimY-$height)/2; $decalX=0;}
                 if($size[0]==($width/$height)*$size[1]){ $dimX=$width; $dimY=$height; $decalX=0; $decalY=0;}
                 // on modifie l'image crée en y plaçant la grande image redimensionné et décalée
-                imagecopyresampled($thumb,$image,intval($decalX),intval($decalY),0,0,intval($dimX),intval($dimY),$size[0],$size[1]);
+                @imagecopyresampled($thumb,$image,intval($decalX),intval($decalY),0,0,intval($dimX),intval($dimY),$size[0],$size[1]);
                 // On sauvegarde le tout
-                imagejpeg($thumb, 'users/img/user/'.$_COOKIE['username'].'/thumbnails/'.$cropName.'-thumb.jpg');
-           }
+        $imageThumbnail=imagejpeg($thumb, 'users/img/user/'.$_COOKIE['username'].'/thumbnails/'.$fileName.'-thumb.jpg');
 
+                $saveThumbnail=$user->addThumbnails($userId,$photoId,$dirname,$fileName);
     }
 
 
 
-}*/
+}
 
 
 

@@ -86,6 +86,21 @@ class UserManager extends Manager
         return $verifyPassword;
     }
 
+        public function getPhoto2Thumb($userId,$photoId)
+        {
+            $pdo=$this->dbConnect();
+
+            $PdoStat=$pdo->prepare('SELECT * FROM projet5_images WHERE id=:id  AND user_id=:userId ');
+
+            $PdoStat->bindValue(':id',$photoId,PDO::PARAM_STR);
+            $PdoStat->bindValue(':userId',$userId,PDO::PARAM_STR);
+
+            $userImages=$PdoStat->execute();
+
+            $userImages = $PdoStat->fetchAll();
+            return $userImages;
+        }
+
         public function addUserFiles($userId,$img)
         {
             /*$images= glob('users/img/user/'.$_SESSION['username'].'/*.jpg');
@@ -116,9 +131,8 @@ class UserManager extends Manager
             $PdoStat->bindValue(':filename',$path_parts['filename'],PDO::PARAM_STR);
             $PdoStat->bindValue(':extension',$path_parts['extension'],PDO::PARAM_STR);
             $addImage = $PdoStat->execute();
-            return $addImage;
-
-
+            $lastId=$pdo->lastInsertId();
+            return $lastId;
         }
 
         /*public function addCropFiles($userId)
@@ -169,25 +183,71 @@ class UserManager extends Manager
             $PdoStat=$pdo->prepare('SELECT * FROM projet5_images WHERE id=:id AND user_id=:userId');
             $PdoStat->bindValue(':id',$lastId,PDO::PARAM_INT);
             $PdoStat->bindValue(':userId',$userId,PDO::PARAM_STR);
-            $cropCenterFile=$PdoStat->execute();var_dump($lastId);
+            $cropCenterFile=$PdoStat->execute();
             $cropCenterFile=$PdoStat->fetch();
 
             return $cropCenterFile;
 
         }
 
+        public function addThumbnails($userId,$photoId,$dirname,$fileName)
+        {
+            $pdo=$this->dbConnect();
+            $PdosStat=$pdo->prepare('INSERT INTO projet5_thumbnails VALUES (NULL, :userId, :imageId,:thumbnail )');
+            $PdosStat->bindValue(':userId',$userId,PDO::PARAM_STR);
+            $PdosStat->bindValue(':imageId',$photoId,PDO::PARAM_STR);
+            $PdosStat->bindValue(':thumbnail',$dirname.'/thumbnails/'.$fileName.'-thumb.jpg',PDO::PARAM_STR);
+            $savedThumnail=$PdosStat->execute();
+
+        }
+
+        public function getThumbnails($userId)
+        {
+            $pdo=$this->dbConnect();
+            $PdoStat=$pdo->prepare('SELECT * FROM projet5_thumbnails WHERE user_id=:userId ');
+            $PdoStat->bindValue(':userId',$userId,PDO::PARAM_INT);
+            $thumbnails=$PdoStat->execute();
+            $thumbnails=$PdoStat->fetchAll();
+            return $thumbnails;
+
+        }
+
+
+
+
+
         public function getUserFiles($userId)
         {
-
+            /*
             $pdo=$this->dbConnect();
             $PdoStat=$pdo->prepare('SELECT id, dirname,filename,extension FROM projet5_images WHERE  user_id=:userId ');
             $PdoStat->bindValue(':userId',$userId,PDO::PARAM_STR);
             $userImages=$PdoStat->execute();
             $userImages = $PdoStat->fetchAll();
             return $userImages;
+            */
 
 
+            $pdo=$this->dbConnect();
+            $PdoStat=$pdo->prepare('SELECT * FROM projet5_images WHERE  user_id=:userId AND dirname=:dirname');
+            $PdoStat->bindValue(':userId',$userId,PDO::PARAM_STR);
+            $PdoStat->bindValue(':dirname','users/img/user/'.$_COOKIE['username'],PDO::PARAM_STR);
+            $userImages=$PdoStat->execute();
+            $userImages = $PdoStat->fetchAll();
+            return $userImages;
         }
+
+        public function getUserView($photoId)
+        {
+            $pdo=$this->dbConnect();
+            $PdoStat=$pdo->prepare('SELECT * FROM projet5_images WHERE id=:id');
+            $PdoStat->bindValue(':id',$photoId,PDO::PARAM_INT);
+            $userView=$PdoStat->execute();
+            $userView=$PdoStat->fetch();
+            return $userView;
+        }
+
+
 
         public function getAllFiles()
         {
@@ -216,21 +276,16 @@ class UserManager extends Manager
             $pdoStat->bindValue(':userId', $userId,PDO::PARAM_INT);
             $pdoStat->bindValue(':filename', 'img_00'.$img.'-cropped-center',PDO::PARAM_STR);
             $deletedImage=$pdoStat->execute();
-
-        }
-
-        public function getPhoto2Thumb($img){
-            $pdo=$this->dbConnect();
-            $PdoStat=$pdo->prepare('SELECT * FROM projet5_images WHERE filename= :filename');
-            $PdoStat->bindValue(':filename','img_00'.$img,PDO::PARAM_STR);
-            $photo=$PdoStat->execute();
-            $photo=$PdoStat->fetch();
-            return $photo;
-
-
+            $pdoStat->closeCursor();
+            $pdoStat= $pdo->prepare('DELETE FROM projet5_thumbnails WHERE user_id=:userId AND thumbnail=:thumbnail ');
+            $pdoStat->bindValue(':userId', $userId,PDO::PARAM_INT);
+            $pdoStat->bindValue(':thumbnail', 'users/img/user/'.$_COOKIE['username'].'/thumbnails/img_00'.$img.'-thumb.jpg',PDO::PARAM_STR);
+            $deletedImage=$pdoStat->execute();
 
 
         }
+
+
 
 
 

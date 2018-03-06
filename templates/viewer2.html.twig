@@ -4,35 +4,36 @@
 
 {% endblock %}
 
+
+
 {% block main %}
+    {{ dump(images) }}
+    <!--Modale viewer simple-->
+    <div class="modal fade" id="modalViewer" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-center" id="exampleModalLabel"></h5>
+                    <button type="button" id=" dismissModalCross" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modalSlide" >
+                    <i  id="modalSlideLeft" class="fas fa-chevron-circle-left fa-3x"></i>
+                    <img class="card-img-top" id="modalViewerStyle" src=" {{ images }} "   alt="Card image cap">
+                    <a href="slideShow.php?$img={{ slide+1 }}"><i id="modalSlideRight" class="fas fa-chevron-circle-right fa-3x"></i></a>
+                </div>
 
-     <!--Modale viewer simple-->
-     <div class="modal fade" id="modalViewer" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-         <div class="modal-dialog" role="document">
-             <div class="modal-content">
-                 <div class="modal-header">
-                     <h5 class="modal-title text-center" id="exampleModalLabel"></h5>
-                     <button type="button" id=" dismissModalCross" class="close" data-dismiss="modal" aria-label="Close">
-                         <span aria-hidden="true">&times;</span>
-                     </button>
-                 </div>
-                 <div class="modal-body" id="modalSlide" >
 
+                <div class="modal-footer">
+                    <button type="button" id="dismissModal"  class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
 
-                     <img class="card-img-top" id="modalViewerStyle" src=" {{ view.dirname }}/{{ view.filename }}.{{ view.extension }} "   alt="Card image cap">
+                </div>
+            </div>
+        </div>
+    </div>
 
-                 </div>
-
-
-                 <div class="modal-footer">
-                     <button type="button" id="dismissModal"  class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
-
-                 </div>
-             </div>
-         </div>
-     </div>
-
-     <!-- Fin Modale viewer simple-->
+    <!-- Fin Modale viewer simple-->
     {#
 
        <!--Modale viewer avec carousel-->
@@ -60,7 +61,7 @@
                        <div id="carouselExampleControls" class="carousel slide " data-ride="false" data-interval="false">
                            <div class="carousel-inner" role="listbox">
                                <div class="carousel-item active">
-                                   
+
                                    <img class="d-block img-fluid" src="{{ view.dirname }}/{{ view.filename|e }}.{{ view.extension }}" alt="First slide">
 
                                </div>
@@ -118,17 +119,17 @@
     <script>  $('#modalViewer').modal('show');</script>
 
     <script> document.getElementById('dismissModal').addEventListener('click',function () {
-            window.location.href="index.php?p=galerie3"
+            window.location.href="../index.php"
         });
     </script>
 
 
-    <script src="public/js/homeUser.js"></script>
+    <script src="../public/js/homeUser.js"></script>
 
 
-    <script src="public/js/SlideShow/SlideShow.js"></script>
-    <script src="public/js/SlideShow/viewSlideshow.js"></script>
-    <script src="public/js/SlideShow/mainSlideShow.js"></script>
+    <script src="../public/js/SlideShow/SlideShow.js"></script>
+    <script src="../public/js/SlideShow/viewSlideshow.js"></script>
+    <script src="../public/js/SlideShow/mainSlideShow.js"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
 
 
