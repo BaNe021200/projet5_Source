@@ -49,7 +49,7 @@ class UserManager extends Manager
         return $userData;
         }
 
-        public function getUsername()
+        public function controlUsername()
         {
             $username= $_POST['username'];
             $pdo= $this->dbConnect();
@@ -190,6 +190,8 @@ class UserManager extends Manager
 
         }
 
+
+
         public function addThumbnails($userId,$photoId,$dirname,$fileName)
         {
             $pdo=$this->dbConnect();
@@ -211,10 +213,6 @@ class UserManager extends Manager
             return $thumbnails;
 
         }
-
-
-
-
 
         public function getUserFiles($userId)
         {
@@ -246,7 +244,6 @@ class UserManager extends Manager
             $userView=$PdoStat->fetch();
             return $userView;
         }
-
 
 
         public function getAllFiles()
@@ -284,6 +281,42 @@ class UserManager extends Manager
 
 
         }
+
+        public function deleteImageCroppedCenter($userId,$img)
+        {
+            $pdo=$this->dbConnect();
+            $pdoStat= $pdo->prepare('DELETE FROM projet5_images WHERE id=:id AND user_id=:userId ');
+            $pdoStat->bindValue(':id', $img,PDO::PARAM_STR);
+            $pdoStat->bindValue(':userId', $userId,PDO::PARAM_INT);
+
+            $deletedImage=$pdoStat->execute();
+        }
+
+        public function getUserProfilePicture()
+        {
+
+            $pdo=$this->dbConnect();
+            $PdoStat=$pdo->query('
+            SELECT projet5_images.user_id,filename, projet5_user.id,username,registry_date
+            FROM projet5_images
+            INNER JOIN projet5_user
+            ON projet5_images.user_id = projet5_user.id
+            WHERE projet5_images.filename="img_001-cropped-center"
+            OR projet5_images.filename="img_001-cropped"
+            ORDER BY registry_date DESC 
+            
+            ');
+
+
+            $profiles= $PdoStat->execute();
+            $profiles=$PdoStat->fetchAll();
+
+            return $profiles;
+
+
+        }
+
+
 
 
 

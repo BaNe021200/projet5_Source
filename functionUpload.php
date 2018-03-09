@@ -22,6 +22,12 @@ function newFolderThumbnails()
     mkdir($folderThumbnails);
 }
 
+function newFolderProfilPicture()
+{
+    $folderProfilPicture = 'users/img/user/profilPicture';
+    mkdir($folderProfilPicture);
+}
+
 /*function resizeImage()
 {
     $images= glob('users/img/user/'.$_POST['username'].'/*.jpg');

@@ -40,12 +40,8 @@ if (isset($_GET['p']))
 
     elseif ($_GET['p'] == 'galerie2'){
         if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
-            if (file_exists("users/img/user/" . $_COOKIE['username'] . "/crop/img_001-cropped-center.jpg")) {
-                $src = "users/img/user/" . $_COOKIE['username'] . "/crop/img_001-cropped-center.jpg";
-            } else {
-                $src = "users/img/user/" . $_COOKIE['username'] . "/crop/img_001-cropped.jpg";
-            }
-            galerie2($src);
+
+            galerie2();
         }
         else
         {

@@ -28,7 +28,7 @@ use model\User;
 function controlUsername($username)
 {
     $userManager= new UserManager();
-    $getUsername = $userManager->getUsername($username);
+    $getUsername = $userManager->controlUsername($username);
     if(is_null($getUsername))
     {
         calendarControl();
@@ -153,9 +153,55 @@ function signUp()
 
 function home()
 {
-    $user= new UserManager();
+    $user=new UserManager();
+    $usersProfilPictures=$user->getUserProfilePicture();
 
-    twigRender('home.html.twig','userData', $userData = $user->userData(),'','');
+
+    //php
+      foreach ($usersProfilPictures as $usersProfilPicture)
+        {
+            $pictureFilePathCenter= 'users/img/user/'.$usersProfilPicture['username'].'/crop/img_001-cropped-center.jpg';
+            $pictureFilePathCrop= 'users/img/user/'.$usersProfilPicture['username'].'/crop/img_001-cropped.jpg';
+            $profilPictureFolder="users/img/user/".$usersProfilPicture['username']."/profilPicture";
+
+            if(!file_exists($profilPictureFolder))
+            {
+                mkdir($profilPictureFolder);
+
+
+                if(file_exists($pictureFilePathCenter)&& file_exists($pictureFilePathCrop))
+                {
+                   copy($pictureFilePathCenter,"users/img/user/".$usersProfilPicture['username']."/profilPicture/img-profil.jpg");
+
+
+                }
+                elseif (file_exists($pictureFilePathCrop)&& !file_exists($pictureFilePathCenter))
+                {
+                    copy($pictureFilePathCrop,"users/img/user/".$usersProfilPicture['username']."/profilPicture/img-profil.jpg");
+                }
+            }else
+            {
+                if(file_exists($pictureFilePathCenter)&& file_exists($pictureFilePathCrop))
+                {
+                    copy($pictureFilePathCenter,"users/img/user/".$usersProfilPicture['username']."/profilPicture/img-profil.jpg");
+
+
+                }
+                elseif (file_exists($pictureFilePathCrop)&& !file_exists($pictureFilePathCenter))
+                {
+                    copy($pictureFilePathCrop,"users/img/user/".$usersProfilPicture['username']."/profilPicture/img-profil.jpg");
+                }
+            }
+        }
+
+
+
+
+
+
+   require_once 'templates/frontend/home2.php';
+
+//twigRender('frontend/home.html.twig','userdata',$usersProfilPictures ,'file_exists',$file_exists);
 }
 
 function homeUser()
@@ -561,12 +607,15 @@ function recropped($userId,$img){
 
 function croppedChoice($userId,$img){
 
-
+       $user= new UserManager();
     $src="users/img/user/".$_COOKIE['username']."/crop/img_001-cropped-center.jpg";
 
+    $croppedFile2Delete=$user->deleteImageCroppedCenter($userId,$img);var_dump($userId);
     if(file_exists($src))
     {
+
         unlink("users/img/user/".$_COOKIE['username']."/crop/img_001-cropped-center.jpg");
+
         header('Location: index.php?p=homeUser');
     }
     else
@@ -615,7 +664,7 @@ function deleteImage($userId,$imageId)
 {
 
     $user= new UserManager();
-    $imageDeleted=$user->deleteImage($userId,$imageId);
+    $imageDeleted=$user->deleteImage($userId,$imageId);var_dump($userId);
 
     $folderThumbnails="users/img/user/".$_COOKIE['username'].'/thumbnails/img_00'.$imageId.'-thumb.jpg';
     $folderCroppedCenterToDelete = "users/img/user/".$_COOKIE['username'].'/crop/img_00'.$imageId.'-cropped-center.jpg';

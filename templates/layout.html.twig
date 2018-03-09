@@ -8,42 +8,57 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    {% block stylesheet %}{% endblock %}
-  <title>{% block title %}{% endblock %}</title>
+    {% block stylesheet %}{% endblock stylesheet %}
+  <title>{% block title %}{% endblock title %}</title>
 </head>
 {% block bodyStyle %}
 <body>
-{% endblock %}
+{% endblock bodyStyle %}
+
+<header>
+    <div class="collapse bg-dark" id="navbarHeader">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-8 col-md-7 py-4">
 
 
 
-
-
-<nav class="navbar navbar-expand navbar-dark {% block navBarBg %}bg-dark{% endblock navBarBg %}">
-    <a class="navbar-brand" href="index.php?p=home">Whole Wild World</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample02" aria-controls="navbarsExample02" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarsExample02">
-        <ul class="navbar-nav mr-auto">
-
-            <li class="nav-item">
-                <a class="nav-link"
-                   href="{% block connexionLink %}{% endblock %}">{% block connexion %}{% endblock %}</a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="{% block signUpLink %}{% endblock %}">{% block signUp %}{% endblock %}{% block avatar %}
-
-                    {% endblock %}
-                    <span class="sr-only">(current)</span></a>
-            </li>
-
-            {% block navMenu %}{% endblock %}
-        </ul>
-
+                </div>
+                <div class="col-sm-4 offset-md-1 py-4">
+                    <div></div>
+                    <ul class="list-unstyled">
+                       {% block navMenu %}{% endblock %}
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
-</nav>
+    <div class="navbar navbar-dark {% block navBarBg %}bg-dark{% endblock navBarBg %} box-shadow">
+        <div class="container d-flex justify-content-between">
+            <h2  ><a class="text-white" href="index.php?p=home">{% block brand %}Whole Wild World{% endblock brand %}</a></h2>
+            {% block profilCount %}
+
+
+             {% endblock %}
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="list-unstyled">{% block avatar %}{% endblock avatar %}
+                    {% block bookmark %}{% endblock bookmark %}
+
+
+                </span>
+
+            </button>
+            <h4 class="text-white"><a  class="text-white" href="{% block signUpLink %}{% endblock %}">{% block signUp %}{% endblock %}</a></h4>
+            <a href="{% block connexionLink %}{% endblock %}" class="navbar-brand d-flex align-items-center list-unstyled">
+                {% block connexion %} {% endblock %}
+
+
+            </a>
+        </div>
+    </div>
+</header>
+
+
 
 {% block main %}{% endblock %}
 {% block script %}

@@ -7,25 +7,31 @@
 
 {% block title %} La page de {{ userDatum.username }}{% endblock title %}
 {% block avatar %}
-        <li class="nav-item"><img class="rounded-circle" src="{{ imageProfil }}" alt="" width="30" height="30"></li>
+        <li class="nav-item"><img class="rounded-circle" src="{{ imageProfil }}" alt="" width="37" height="37"></li>
 
-    {% endblock avatar%}
+    {% endblock avatar%}{% block bookmark %}<i class="fas fa-caret-down" style="color:#17a2b8" ></i>{% endblock bookmark %}
+
 
 {% block signUp %}La page de {{ userDatum.username }} {% endblock signUp %}
 
 {% block signUpLink %}index.php?p=homeUser {% endblock %}
 
 {% block navMenu %}
-    <li class="nav-item"><a class="nav-link" href="index.php?p=galerie1">galerie 1</a></li>
-    <li class="nav-item"><a class="nav-link" href="index.php?p=galerie2">galerie 2</a></li>
-    <li class="nav-item"><a class="nav-link" href="index.php?p=galerie3">galerie 3</a></li>
+    <li class="nav-item "><a class="nav-link text-white" href="index.php?p=galerie1">configuration de la galerie </a></li>
+    <li class="nav-item "><a class="nav-link text-white" href="index.php?p=galerie3">visualisation de la galerie</a></li>
+    <li class="nav-item "><a class="nav-link text-white" href="index.php?p=galerie2">gestion du profil </a></li>
 
 
 {% endblock navMenu %}
 
 {% block connexion %}déconnexion{% endblock %}
 {% block connexionLink %}index.php?p=deconnexion{% endblock %}
-
+{% block profilCount %}
+    <button type="button" class="btn btn-info">
+        Profile <span class="badge badge-light">9</span>
+        <span class="sr-only">unread messages</span>
+    </button>
+{% endblock %}
 {% block main %}
 
     <h1>Hello  {{ userDatum.first_name }}  </h1>
@@ -53,5 +59,6 @@
     <script src="public/assets/js/vendor/holder.min.js"></script>
     <script src="public/js/upload.js"></script>
     <script src="public/js/uploadStatement.js"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
 
 {% endblock script %}

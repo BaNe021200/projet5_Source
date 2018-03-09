@@ -1,19 +1,12 @@
 {% extends "homeUser.html.twig" %}
 {% import 'form.html.twig' as form %}
-{#{% block stylesheet %}
+{% block stylesheet %}
 
-        {{ parent() }}
-    <link rel="stylesheet" href="public/css/album.css">
-    <link rel="stylesheet" href="public/css/users.css">
-
-{% endblock %}#}
-
-{% block navMenu %}
-
-    <li class="nav-item"><a class="nav-link" href="index.php?p=galerie1">galerie 1</a></li>
-    <li class="nav-item"><a class="nav-link" href="index.php?p=galerie2">galerie 2</a></li>
+    <link rel="stylesheet" href="public/css/galerie3.css">
 
 {% endblock %}
+
+
 
 
 
@@ -44,7 +37,7 @@
                                 <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="btn-group">
-                                        <a href="index.php?p=viewerGalerie&amp;id={{ avatar.image_id }}"> <button type="button" data-toggle="modal"  title="ouvrir photo" class="btn btn-xl btn-outline-secondary">View</button></a>
+                                        <a href="index.php?p=viewerGalerie&amp;id={{ avatar.image_id }}"> <button type="button" data-toggle="modal"  title="ouvrir photo" id="btn1" class="btn btn-xl btn-outline-secondary">View</button></a>
 
 
                                     </div>

@@ -1,53 +1,181 @@
 {% extends "homeUser.html.twig" %}
-
+{% import 'form.html.twig' as form %}
 
 {% block stylesheet %}
+    {{ parent() }}
 
-
-    <link rel="stylesheet" href="carousel.css">
-
+    <link rel="stylesheet" href="carousel.css" xmlns="http://www.w3.org/1999/html">
+    <link rel="stylesheet" href="public/css/tuto.cs">
 {% endblock stylesheet %}
 
-{% block navMenu %}
-    <li class="nav-item"><a class="nav-link" href="index.php?p=galerie1">galerie 1</a></li>
-    <li class="nav-item"><a class="nav-link" href="index.php?p=galerie3">galerie 3</a></li>
 
-{% endblock %}
 
 {% block main %}
-    <h1>Hello {{ userDatum.first_name }}  </h1>
-    <div class="container marketing">
 
-        <!-- Three columns of text below the carousel -->
-        <div class="row">
-
-            {% for avatar in image %}
-            <div class="col-lg-4">
-
-
-                <img class="rounded-circle"  src="{{ avatar }}" alt="Generic placeholder image" width="300" height="300">
-                <h2>Heading</h2>
-                <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.</p>
-                <p>
-                <a class="btn btn-secondary" href="#" role="button">View details &raquo;</a> <br /></p>
-            </div><!-- /.col-lg-4 -->
-            {% endfor %}
-        </div><!-- /.row -->
+    <section><!--début ok1-->
+        <div class="container">
+            <form class="form-horizontal" role="form" method="POST" action="">
+                {{ form.rowVerticalSpace() }}
+                <h2>{{ form.col363('vos informations') }}</h2>
 
 
 
 
-        <!-- /END THE FEATURETTES -->
 
-    </div><!-- /.container -->
+                    {{ form.col12radioInline3(
+                        'Vous recherchez :',
+                        'gender1','gender','Une femme','female',
+                        'gender2','gender','Un homme','male',
+                        'gender3','gender','Autre','otherGender'
+                     )}}
+
+                    {{ form.col12radioInline4(
+                        'Pour :',
+                        'gender1','purpose','Rencontre amoureuse','love',
+                        'gender2','purpose','Amitié','friendship',
+                        'gender3','purpose','Sortie','walk',
+                        'gender4','purpose','Autre','otherPurpose'
+                     )}}
 
 
-    <!-- FOOTER -->
 
-    </main>
-{% endblock %}
+                <fieldset class="form-control">
+
+
+                        <h3>{{ form.col12( 'Votre situation familiale') }}</h3>
+                            {{ form.col12( 'Prenez quelques instants pour vous prensentez') }}
+                            {{ form.rowVerticalSpace() }}
+
+                    {{ form.col12radioInline5(
+                        'vous êtes :',
+                        'familiy_situation1','familiy_situation','libre comme l\'air','freeAsBird',
+                        'familiy_situation2','familiy_situation','la corde au cou','unhappyCouple',
+                        'familiy_situation3','familiy_situation','en couple mais heureux(se)','happyCouple',
+                        'familiy_situation4','familiy_situation','divorcé(e)','divorced',
+                        'familiy_situation5','familiy_situation','séparé(e)','separated'
+
+                    )}}
+
+                    {{ form.col12radioInline5(
+
+                        'Avez-vous des enfants : ',
+                        'children1','children','Non','0',
+                        'children2','children','Oui,1','1',
+                        'children3','children','Oui,2','2',
+                        'children4','children','Oui,3','3',
+                        'children5','children','oui, plus de trois','4'
+                    ) }}
+
+                     {{ form.rowVerticalSpace() }}
+                    {{ form.colcentertextarea(2,8,'familiy_situation_add','Vous m\'intriguez, pourriez-vous m\'en dire plus ?',50,10) }}
+
+                </fieldset>
+
+                {{form.rowVerticalSpace()}}<!--fin ok1-->
+
+                <fieldset class="form-control"><!--début ok2-->
+                    <fieldset class="form-control"><!--début ok3-->
+
+
+                     <h3>{{ form.col363('Et physiquement ?') }}</h3>
+                         {{ form.col12('Comment vous décririez vous ?') }}
+                         {{ form.colcentertextarea(2,8,'physic-add','Comment êtes-vous ?Quel est votre ressenti ?...',50,10) }}
+
+
+
+
+
+                    </fieldset>
+                {{ form.rowVerticalSpace() }}<!--fin ok2-->
+                    <fieldset class="form-control">
+
+                         <h3>{{ form.col12('Au final...') }}</h3>
+
+
+                         {{ form.colcentertextarea(2,8,'finaly','...Qu\'attendez-vous d\'un tel site ?',50,10) }}
+
+                     </fieldset>
+                     </fieldset>
+                     <div class="row"> <div class="col-md-12">&nbsp;</div> </div><!--fin ok3-->
+                      <fieldset class="form-control" id="Education">
+                             <fieldset class="form-control" id="EducationLevel">
+                                 <h2>{{ form.col12('Education') }}</h2>
+
+
+                                 <h4>{{ form.col363('Quel est votre niveau d\'étude ?') }}</h4>
+
+                                   {{ form.col12radioInline8(
+                                         '',
+                                        'school_level1','school_level','sans diplôme',"-2",
+                                        'school_level2','school_level','BEP/CAP',"-1",
+                                        'school_level3','school_level','bac',"0",
+                                        'school_level4','school_level','bac+1',"1",
+                                        'school_level5','school_level','bac+2',"2",
+                                        'school_level6','school_level','bac+3',"3",
+                                        'school_level7','school_level','bac+4',"4",
+                                        'school_level8','school_level','bac+5 et plus',"5"
+
+                                    )}}
+
+                        {{ form.rowVerticalSpace() }}
+
+                       {{ form.colcentertextarea(2,8,'school_level_add','Si vous avez des précision à apporter, c\'est ici',50,10) }}
+
+                        </fieldset>
+                         {{ form.rowVerticalSpace() }}
+                           <fieldset class="form-control" id="EducationJob">
+
+
+
+                               <h3>{{ form.col12('Quelle est votre profession ?') }}</h3>
+                               {{ form.col12radioInline5(
+
+                                   'Avez-vous des enfants : ',
+                                   'work1','work','Fonctionnaire','fonctionnaire',
+                                   'work2','work','salarié','salarié',
+                                   'work3','work','Profession libérale','libéral',
+                                   'work4','work','Sans Emploi','unemployed',
+                                   'work5','work','Autre','Other'
+                               ) }}
+                               {{ form.rowVerticalSpace() }}
+                               {{ form.colcentertextarea(2,8,'work-add','Si vous avez des précision à apporter, c\'est ici',50,10) }}
+
+
+                       </fieldset>
+                       </fieldset>
+
+
+
+
+
+
+
+
+
+
+
+                       <div class="row">
+                           <div class="col-md-3"></div>
+                           <div class="col-md-6">
+                               <button type="submit" id="register" class="btn btn-success"><i class="fa fa-user-plus"></i> Register</button>
+                           </div>
+                       </div>
+       
+            </form>
+        </div>
+    </section>
+
+
+
+
+
+
+
+
+{% endblock main %}
 
 {% block script %}
+    {{ parent() }}
     <script src="public/js/galerie2.js"></script>
 
 {% endblock %}
