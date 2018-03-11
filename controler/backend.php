@@ -158,7 +158,7 @@ function home()
 
 
     //php
-      foreach ($usersProfilPictures as $usersProfilPicture)
+      /*foreach ($usersProfilPictures as $usersProfilPicture)
         {
             $pictureFilePathCenter= 'users/img/user/'.$usersProfilPicture['username'].'/crop/img_001-cropped-center.jpg';
             $pictureFilePathCrop= 'users/img/user/'.$usersProfilPicture['username'].'/crop/img_001-cropped.jpg';
@@ -192,16 +192,16 @@ function home()
                     copy($pictureFilePathCrop,"users/img/user/".$usersProfilPicture['username']."/profilPicture/img-profil.jpg");
                 }
             }
-        }
+        }*/
 
 
 
 
 
 
-   require_once 'templates/frontend/home2.php';
+  // require_once 'templates/frontend/home2.php';
 
-//twigRender('frontend/home.html.twig','userdata',$usersProfilPictures ,'file_exists',$file_exists);
+twigRender('frontend/home.html.twig','userdata',$usersProfilPictures ,'','');
 }
 
 function homeUser()
@@ -667,8 +667,8 @@ function deleteImage($userId,$imageId)
     $imageDeleted=$user->deleteImage($userId,$imageId);var_dump($userId);
 
     $folderThumbnails="users/img/user/".$_COOKIE['username'].'/thumbnails/img_00'.$imageId.'-thumb.jpg';
-    $folderCroppedCenterToDelete = "users/img/user/".$_COOKIE['username'].'/crop/img_00'.$imageId.'-cropped-center.jpg';
-    $folderCroppedToDelete = "users/img/user/".$_COOKIE['username'].'/crop/img_00'.$imageId.'-cropped.jpg';
+    $folderCroppedCenterToDelete = "users/img/user/".$_COOKIE['username'].'/crop/img-profil.jpg';
+    $folderCroppedToDelete = "users/img/user/".$_COOKIE['username'].'/crop/img-profil.jpg';
     $folderToDelete = "users/img/user/".$_COOKIE['username'].'/img_00'.$imageId.'.jpg';
     if(file_exists($folderThumbnails)){
         unlink($folderToDelete);

@@ -13,37 +13,37 @@ function cropImages(){
     if (!file_exists('users/img/user/'.$_COOKIE['username'].'/crop'))
     { newFolderCrop();
 
-    $images=glob('users/img/user/'.$_COOKIE['username'].'/*.jpg');
-    foreach ($images as $image){
+    $image='users/img/user/'.$_COOKIE['username'].'/img_001.jpg';
+
 
 
         $src= $image;
         $infoName= pathinfo($src);
         $cropName=$infoName['filename'];
-        $image = imagecreatefromjpeg($src);
+        $image = imagecreatefromjpeg($src);var_dump($src);
         $size = min(imagesx($image), imagesy($image));
         $im2 = imagecrop($image, ['x' => 0, 'y' => 0, 'width' => $size, 'height' => $size]);
         if ($im2 !== FALSE) {
-            imagejpeg($im2, 'users/img/user/'.$_COOKIE['username'].'/crop/'.$cropName.'-cropped.jpg');
+            imagejpeg($im2, 'users/img/user/'.$_COOKIE['username'].'/crop/img-profil.jpg');
         }
     }
-    }
+
     else
     {
-        $images=glob('users/img/user/'.$_COOKIE['username'].'/*.jpg');
-        foreach ($images as $image){
+        $images='users/img/user/'.$_COOKIE['username'].'img_001.jpg';
 
 
-            $src= $image;
+
+            $src= $images;
             $infoName= pathinfo($src);
             $cropName=$infoName['filename'];
             $image = imagecreatefromjpeg($src);
             $size = min(imagesx($image), imagesy($image));
             $im2 = imagecrop($image, ['x' => 0, 'y' => 0, 'width' => $size, 'height' => $size]);
             if ($im2 !== FALSE) {
-                imagejpeg($im2, 'users/img/user/'.$_COOKIE['username'].'/crop/'.$cropName.'-cropped.jpg');
+                imagejpeg($im2, 'users/img/user/'.$_COOKIE['username'].'/crop/img-profil.jpg');
             }
-        }
+
     }
 
 
@@ -77,7 +77,7 @@ function cropcenter($image){
         }
 
 
-        imagejpeg($im2, 'users/img/user/'.$_COOKIE['username'].'/crop/'.$cropName.'-cropped-center.jpg',90);
+        imagejpeg($im2, 'users/img/user/'.$_COOKIE['username'].'/crop/'.$cropName.'-img-profil.jpg',90);
 
 
 }
@@ -104,7 +104,7 @@ function cropcenter($image){
             imagecopyresampled($thumb,$image,intval($decalX),intval($decalY),0,0,intval($dimX),intval($dimY),$size[0],$size[1]);
             // On sauvegarde le tout
             imagejpeg($thumb, 'users/img/user/'.$_COOKIE['username'].'/thumbnails/'.$cropName.'-thumb.jpg');
-            
+
         }
     }
     else
