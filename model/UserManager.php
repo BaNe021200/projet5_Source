@@ -190,7 +190,18 @@ class UserManager extends Manager
 
         }
 
+        public function addProfilPicture()
+        {
+            $pdo=$this->dbConnect();
+            $PdoStat=$pdo->prepare('INSERT INTO projet5_images VALUES(NULL, :userid, :dirname,:filename ,:extension)');
+            $PdoStat->bindValue(':userid',$_COOKIE['ID'],PDO::PARAM_STR);
+            $PdoStat->bindValue(':dirname','users/img/user/'.$_COOKIE['username'].'/profilPicture',PDO::PARAM_STR);
+            $PdoStat->bindValue(':filename','img-userProfil',PDO::PARAM_STR);
+            $PdoStat->bindValue(':extension','jpg',PDO::PARAM_STR);
+            $addProfilPicture = $PdoStat->execute();
 
+
+        }
 
         public function addThumbnails($userId,$photoId,$dirname,$fileName)
         {
@@ -301,12 +312,27 @@ class UserManager extends Manager
             FROM projet5_images
             INNER JOIN projet5_user
             ON projet5_images.user_id = projet5_user.id
-            WHERE projet5_images.filename="img_001-cropped-center"
-            OR projet5_images.filename="img_001-cropped"
+            WHERE projet5_images.filename="img-userProfil"
             ORDER BY registry_date DESC');
             return $PdoStat;
 
-            }
+            $username= $PdoStat->execute();
+            $username= $PdoStat->fetchAll();
+
+            return $username;
+        }
+
+        public  function deleteUserProfilPicture()
+        {
+            $pdo=$this->dbConnect();
+            $PdoStat=$pdo->prepare('
+            DELETE FROM projet5_images WHERE user_id =:userId AND filename= :filename');
+            $PdoStat->bindValue(':userId', $_COOKIE['ID'],PDO::PARAM_INT);
+            $PdoStat->bindValue(':filename', 'img-userProfil',PDO::PARAM_STR);
+            $deleteUserProfilPicture = $PdoStat->execute();
+
+
+        }
 
 
 

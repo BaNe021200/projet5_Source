@@ -74,7 +74,7 @@ function cropcenter($image){
 
             $im2 = imagecrop($image, ['x' => 0, 'y' => $newy, 'width' => $size, 'height' => $size]);
         }
-                var_dump($cropName);
+
 
         imagejpeg($im2, 'users/img/user/'.$_COOKIE['username'].'/crop/'.$cropName.'-cropped-center.jpg',90);
 
@@ -156,6 +156,7 @@ function thumbNails2($width,$height,$userId,$photoId){
                 if($size[0]<($width/$height)*$size[1]){ $dimX=$width; $dimY=$width*$size[1]/$size[0]; $decalY=-($dimY-$height)/2; $decalX=0;}
                 if($size[0]==($width/$height)*$size[1]){ $dimX=$width; $dimY=$height; $decalX=0; $decalY=0;}
                 // on modifie l'image crée en y plaçant la grande image redimensionné et décalée
+
                 @imagecopyresampled($thumb,$image,intval($decalX),intval($decalY),0,0,intval($dimX),intval($dimY),$size[0],$size[1]);
             // On sauvegarde le tout
                 $imageThumbnail= imagejpeg($thumb, 'users/img/user/'.$_COOKIE['username'].'/thumbnails/'.$fileName.'-thumb.jpg');
@@ -180,6 +181,7 @@ function thumbNails2($width,$height,$userId,$photoId){
                 if($size[0]<($width/$height)*$size[1]){ $dimX=$width; $dimY=$width*$size[1]/$size[0]; $decalY=-($dimY-$height)/2; $decalX=0;}
                 if($size[0]==($width/$height)*$size[1]){ $dimX=$width; $dimY=$height; $decalX=0; $decalY=0;}
                 // on modifie l'image crée en y plaçant la grande image redimensionné et décalée
+
                 @imagecopyresampled($thumb,$image,intval($decalX),intval($decalY),0,0,intval($dimX),intval($dimY),$size[0],$size[1]);
                 // On sauvegarde le tout
         $imageThumbnail=imagejpeg($thumb, 'users/img/user/'.$_COOKIE['username'].'/thumbnails/'.$fileName.'-thumb.jpg');

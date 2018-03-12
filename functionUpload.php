@@ -24,7 +24,7 @@ function newFolderThumbnails()
 
 function newFolderProfilPicture()
 {
-    $folderProfilPicture = 'users/img/user/profilPicture';
+    $folderProfilPicture = 'users/img/user/'.$_COOKIE['username'].'/profilPicture';
     mkdir($folderProfilPicture);
 }
 

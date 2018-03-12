@@ -17,6 +17,7 @@ if (isset($_GET['p']))
         if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
             
             homeUser();
+
         }
         else
         {

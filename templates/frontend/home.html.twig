@@ -3,6 +3,7 @@
 {% block stylesheet %}
     <link rel="stylesheet" href="public/css/tuto.cs">
     <link rel="stylesheet" href="public/css/home.css">
+    <link rel="stylesheet" href="public/css/carousel.css">
 {% endblock %}
 
 {% block title %} Whole While World {% endblock title %}
@@ -26,25 +27,25 @@
 
 
 
-        <div class="container">
+        <div class="container marketing">
 
 
-            {{ form.rowVerticalSpace() }}
-                <div class="row">
+            {#{{ form.rowVerticalSpace() }}#}
+               <div class="row">
 
             {% for userDatum in userdata %}
 
 
 
 
-                <div class="row"></div>
+               <!-- <div class="row"></div>-->
 
 
 
                 <div class="col-md-4">
                     <img class="rounded-circle "
-                                            src="users/img/user/{{ userDatum.username }}/crop/{{ userDatum.filename }}.jpg"
-                                            alt="Generic placeholder image" width="300" height="300">
+                                             src="users/img/user/{{ userDatum.username }}/profilPicture/{{ userDatum.filename }}.jpg"
+                                             width="300" height="300">
                     <h2 class="text-center">{{ userDatum.username }}</h2>
                     <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh
                         ultricies
@@ -59,7 +60,7 @@
                     {% endfor %}
 
                 </div>
-            {{ form.rowVerticalSpace() }}
+          {#{{ form.rowVerticalSpace() }}#}
 
         </div>
 

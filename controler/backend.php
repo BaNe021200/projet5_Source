@@ -134,16 +134,17 @@ function get_registry()
     $user = new UserManager();
 
     $newUser = $user->addUser();
-
+    $message=[];
     if($newUser)
     {
-        header('location:index.php?action=welcome');
 
+        $message[] = 'Bienvenue ! votre inscription à bien été prise en compte, vous pouvez désormais vous connecter avec vos idenfiants';
     }
     else
     {
-        throw new Exception('Impossible d\'enregistrer votre profil');
+        $message[]= 'Nous sommes navrés mais un erreur est survenue et votre inscription n\'a pas pu est prise en compte. vous êtes invitez à recommencer ultérieurement ';
     }
+    twigRender('frontend/registrySucces.html.twig','message',$message,'','');
 }
 
 function signUp()
@@ -156,15 +157,7 @@ function home()
     $user=new UserManager();
     $usersProfilPictures=$user->getUserProfilePicture();
 
-
-
-
-
-
-
-
-
-  // require_once 'templates/frontend/home2.php';
+   // $getpicturesProfil= glob('users/img/user/*/profilPicture/img-userProfil.jpg');var_dump($getpicturesProfil);
 
 twigRender('frontend/home.html.twig','userdata',$usersProfilPictures ,'','');
 }
@@ -177,11 +170,37 @@ function homeUser()
         $src = "users/img/user/" . $_COOKIE['username'] . "/crop/img_001-cropped.jpg";
     }
 
+    //imageProfile();
+
 
 
     twigRender('homeUser.html.twig','imageProfil',$src,'','');
 
 }
+
+function imageProfile()
+{    $user = new UserManager();
+    if (!file_exists('users/img/user/'.$_COOKIE['username'].'/profilPicture')) {
+        newFolderProfilPicture();
+        if (file_exists("users/img/user/" . $_COOKIE['username'] . "/crop/img_001-cropped-center.jpg")) {
+            copy("users/img/user/" . $_COOKIE['username'] . "/crop/img_001-cropped-center.jpg", 'users/img/user/'.$_COOKIE['username'].'/profilPicture/img-userProfil.jpg');
+        } else {
+            copy("users/img/user/" . $_COOKIE['username'] . "/crop/img_001-cropped.jpg", 'users/img/user/'.$_COOKIE['username'].'/profilPicture/img-userProfil.jpg');
+        }
+    }
+    else {
+        $deleteimageProfile=$user->deleteUserProfilPicture();
+        if (file_exists("users/img/user/" . $_COOKIE['username'] . "/crop/img_001-cropped-center.jpg")) {
+            copy("users/img/user/" . $_COOKIE['username'] . "/crop/img_001-cropped-center.jpg", 'users/img/user/'.$_COOKIE['username'].'/profilPicture/img-userProfil.jpg');
+        } else {
+            copy("users/img/user/" . $_COOKIE['username'] . "/crop/img_001-cropped.jpg", 'users/img/user/'.$_COOKIE['username'].'/profilPicture/img-userProfil.jpg');
+        }
+    }
+
+    $imageProfile = $user->addProfilPicture();
+
+}
+
 
 function galerie1()
 {
@@ -540,6 +559,7 @@ function uploadPicture($userId,$img)
     @thumbNails2(525,700,$_COOKIE['ID'],$imageId);
     @resizeByHeight();
     @cropImages();
+    @imageProfile();
 
     $cropFiles = glob('users/img/user/'.$_COOKIE['username'].'/crop/*.jpg');
      $cropFiles = $user->addCropFiles($userId,$img);
@@ -567,6 +587,7 @@ function recropped($userId,$img){
     {
         throw new Exception('Il n\'y a rien à recadrer');
     }
+    imageProfile();
 
 }
 
@@ -587,6 +608,7 @@ function croppedChoice($userId,$img){
     {
         throw new Exception('Il n\'y a rien effacer');
     }
+    imageProfile();
 
 
 }
@@ -630,13 +652,16 @@ function deleteImage($userId,$imageId)
 
     $user= new UserManager();
     $imageDeleted=$user->deleteImage($userId,$imageId);var_dump($imageId);
-
+    $deleteProfilPicture=$user->deleteUserProfilPicture();
     $folderThumbnails="users/img/user/".$_COOKIE['username'].'/thumbnails/img_00'.$imageId.'-thumb.jpg';
+    $folderProfilPicture='users/img/user/'.$_COOKIE['username'].'/profilPicture/img-userProfil.jpg';
     $folderCroppedCenterToDelete = "users/img/user/".$_COOKIE['username'].'/crop/img_00'.$imageId.'-cropped-center.jpg';
     $folderCroppedToDelete = "users/img/user/".$_COOKIE['username'].'/crop/img_00'.$imageId.'-cropped.jpg';
     $folderToDelete = "users/img/user/".$_COOKIE['username'].'/img_00'.$imageId.'.jpg';
     if(file_exists($folderThumbnails)){
         unlink($folderToDelete);
+        unlink($folderProfilPicture);
+
         unlink($folderCroppedToDelete);
         unlink($folderCroppedCenterToDelete);
         unlink($folderThumbnails);
