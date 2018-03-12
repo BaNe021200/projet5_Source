@@ -157,42 +157,7 @@ function home()
     $usersProfilPictures=$user->getUserProfilePicture();
 
 
-    //php
-      /*foreach ($usersProfilPictures as $usersProfilPicture)
-        {
-            $pictureFilePathCenter= 'users/img/user/'.$usersProfilPicture['username'].'/crop/img_001-cropped-center.jpg';
-            $pictureFilePathCrop= 'users/img/user/'.$usersProfilPicture['username'].'/crop/img_001-cropped.jpg';
-            $profilPictureFolder="users/img/user/".$usersProfilPicture['username']."/profilPicture";
 
-            if(!file_exists($profilPictureFolder))
-            {
-                mkdir($profilPictureFolder);
-
-
-                if(file_exists($pictureFilePathCenter)&& file_exists($pictureFilePathCrop))
-                {
-                   copy($pictureFilePathCenter,"users/img/user/".$usersProfilPicture['username']."/profilPicture/img-profil.jpg");
-
-
-                }
-                elseif (file_exists($pictureFilePathCrop)&& !file_exists($pictureFilePathCenter))
-                {
-                    copy($pictureFilePathCrop,"users/img/user/".$usersProfilPicture['username']."/profilPicture/img-profil.jpg");
-                }
-            }else
-            {
-                if(file_exists($pictureFilePathCenter)&& file_exists($pictureFilePathCrop))
-                {
-                    copy($pictureFilePathCenter,"users/img/user/".$usersProfilPicture['username']."/profilPicture/img-profil.jpg");
-
-
-                }
-                elseif (file_exists($pictureFilePathCrop)&& !file_exists($pictureFilePathCenter))
-                {
-                    copy($pictureFilePathCrop,"users/img/user/".$usersProfilPicture['username']."/profilPicture/img-profil.jpg");
-                }
-            }
-        }*/
 
 
 
@@ -610,7 +575,7 @@ function croppedChoice($userId,$img){
        $user= new UserManager();
     $src="users/img/user/".$_COOKIE['username']."/crop/img_001-cropped-center.jpg";
 
-    $croppedFile2Delete=$user->deleteImageCroppedCenter($userId,$img);var_dump($userId);
+    $croppedFile2Delete=$user->deleteImageCroppedCenter($userId,$img);
     if(file_exists($src))
     {
 
@@ -664,11 +629,11 @@ function deleteImage($userId,$imageId)
 {
 
     $user= new UserManager();
-    $imageDeleted=$user->deleteImage($userId,$imageId);var_dump($userId);
+    $imageDeleted=$user->deleteImage($userId,$imageId);var_dump($imageId);
 
     $folderThumbnails="users/img/user/".$_COOKIE['username'].'/thumbnails/img_00'.$imageId.'-thumb.jpg';
-    $folderCroppedCenterToDelete = "users/img/user/".$_COOKIE['username'].'/crop/img-profil.jpg';
-    $folderCroppedToDelete = "users/img/user/".$_COOKIE['username'].'/crop/img-profil.jpg';
+    $folderCroppedCenterToDelete = "users/img/user/".$_COOKIE['username'].'/crop/img_00'.$imageId.'-cropped-center.jpg';
+    $folderCroppedToDelete = "users/img/user/".$_COOKIE['username'].'/crop/img_00'.$imageId.'-cropped.jpg';
     $folderToDelete = "users/img/user/".$_COOKIE['username'].'/img_00'.$imageId.'.jpg';
     if(file_exists($folderThumbnails)){
         unlink($folderToDelete);

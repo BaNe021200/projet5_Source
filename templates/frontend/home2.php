@@ -29,28 +29,37 @@ require_once 'model/UserManager.php';
 </head>
 <body>
 
-
+<nav><a href="index.php?p=connexion">Connexion</a></nav>
 
 
 
     <div class="container">
         <div class="row">
-        <?php foreach ($usersProfilPictures as $usersProfilPicture): ?>
-        <!-- Three columns of text below the carousel -->
+            <!-- début foreach-->
+       <?php while ($data = $usersProfilPictures->fetch()) {
+           ?>
+
+           <!-- Three columns of text below the carousel -->
 
 
-
-            <div class="col-lg-4">
-
-
+           <div class="col-lg-4">
                 
-                <img class="rounded-circle" src="users/img/user/<?= $usersProfilPicture['username'] ?>/profilPicture/<?= $usersProfilPicture['filename'] ?>.jpg" alt="Generic placeholder image" width="300" height="300">
-                <h2><?= $usersProfilPicture['username']; ?></h2>
-                <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.</p>
-                <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
-            </div><!-- /.col-lg-4 -->
 
-            <?php endforeach; ?>
+               <img class="rounded-circle"  
+                    src="users/img/user/<?= $data['username'] ?>/crop/<?= $data['filename'] ?>.jpg"
+                    alt="Generic placeholder image" width="300" height="300">
+               <h2><?= $data['username']; ?></h2>
+               <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies
+                   vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo
+                   cursus magna.</p>
+               <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
+           </div><!-- /.col-lg-4 -->
+
+           <?php
+       }
+       $usersProfilPictures->closeCursor();
+            ?>
+            <!--fin foreach-->
     </div>
 
     </div>

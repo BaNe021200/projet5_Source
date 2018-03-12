@@ -161,7 +161,7 @@ class UserManager extends Manager
             $PdoStat= $pdo->prepare('INSERT INTO projet5_images VALUES(NULL,:userId,:dirname, :filename ,:extension) ');
             $PdoStat->bindValue(':userId',$userId,PDO::PARAM_STR);
             $PdoStat->bindValue(':dirname','users/img/user/'.$_COOKIE['username'].'/crop',PDO::PARAM_STR);
-            $PdoStat->bindValue(':filename','img_00'.$img.'-img-profil',PDO::PARAM_STR);
+            $PdoStat->bindValue(':filename','img_00'.$img.'-cropped',PDO::PARAM_STR);
             $PdoStat->bindValue(':extension','jpg',PDO::PARAM_STR);
             $addCropedImage = $PdoStat->execute();
             return $addCropedImage;
@@ -175,7 +175,7 @@ class UserManager extends Manager
             $PdoStat= $pdo->prepare('INSERT INTO projet5_images VALUES(NULL,:userId,:dirname, :filename ,:extension) ');
             $PdoStat->bindValue(':userId',$userId,PDO::PARAM_STR);
             $PdoStat->bindValue(':dirname','users/img/user/'.$_COOKIE['username'].'/crop',PDO::PARAM_STR);
-            $PdoStat->bindValue(':filename','img_00'.$img.'-img-profil',PDO::PARAM_STR);
+            $PdoStat->bindValue(':filename','img_00'.$img.'-cropped-center',PDO::PARAM_STR);
             $PdoStat->bindValue(':extension','jpg',PDO::PARAM_STR);
             $addCropedImage = $PdoStat->execute();
             $lastId=$pdo->lastInsertId();
@@ -303,18 +303,10 @@ class UserManager extends Manager
             ON projet5_images.user_id = projet5_user.id
             WHERE projet5_images.filename="img_001-cropped-center"
             OR projet5_images.filename="img_001-cropped"
-            ORDER BY registry_date DESC 
-            
-            ');
+            ORDER BY registry_date DESC');
+            return $PdoStat;
 
-
-            $profiles= $PdoStat->execute();
-            $profiles=$PdoStat->fetchAll();
-
-            return $profiles;
-
-
-        }
+            }
 
 
 

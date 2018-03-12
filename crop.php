@@ -13,43 +13,42 @@ function cropImages(){
     if (!file_exists('users/img/user/'.$_COOKIE['username'].'/crop'))
     { newFolderCrop();
 
-    $image='users/img/user/'.$_COOKIE['username'].'/img_001.jpg';
+        $images=glob('users/img/user/'.$_COOKIE['username'].'/*.jpg');
+        foreach ($images as $image){
 
 
-
-        $src= $image;
-        $infoName= pathinfo($src);
-        $cropName=$infoName['filename'];
-        $image = imagecreatefromjpeg($src);var_dump($src);
-        $size = min(imagesx($image), imagesy($image));
-        $im2 = imagecrop($image, ['x' => 0, 'y' => 0, 'width' => $size, 'height' => $size]);
-        if ($im2 !== FALSE) {
-            imagejpeg($im2, 'users/img/user/'.$_COOKIE['username'].'/crop/img-profil.jpg');
-        }
-    }
-
-    else
-    {
-        $images='users/img/user/'.$_COOKIE['username'].'img_001.jpg';
-
-
-
-            $src= $images;
+            $src= $image;
             $infoName= pathinfo($src);
             $cropName=$infoName['filename'];
             $image = imagecreatefromjpeg($src);
             $size = min(imagesx($image), imagesy($image));
             $im2 = imagecrop($image, ['x' => 0, 'y' => 0, 'width' => $size, 'height' => $size]);
             if ($im2 !== FALSE) {
-                imagejpeg($im2, 'users/img/user/'.$_COOKIE['username'].'/crop/img-profil.jpg');
+                imagejpeg($im2, 'users/img/user/'.$_COOKIE['username'].'/crop/'.$cropName.'-cropped.jpg');
             }
+        }
+    }
+    else
+    {
+        $images=glob('users/img/user/'.$_COOKIE['username'].'/*.jpg');
+        foreach ($images as $image){
 
+
+            $src= $image;
+            $infoName= pathinfo($src);
+            $cropName=$infoName['filename'];
+            $image = imagecreatefromjpeg($src);
+            $size = min(imagesx($image), imagesy($image));
+            $im2 = imagecrop($image, ['x' => 0, 'y' => 0, 'width' => $size, 'height' => $size]);
+            if ($im2 !== FALSE) {
+                imagejpeg($im2, 'users/img/user/'.$_COOKIE['username'].'/crop/'.$cropName.'-cropped.jpg');
+            }
+        }
     }
 
 
 
 }
-
 
 function cropcenter($image){
     //$images=glob('users/img/user/'.$_COOKIE['username'].'/*.jpg');
@@ -75,9 +74,9 @@ function cropcenter($image){
 
             $im2 = imagecrop($image, ['x' => 0, 'y' => $newy, 'width' => $size, 'height' => $size]);
         }
+                var_dump($cropName);
 
-
-        imagejpeg($im2, 'users/img/user/'.$_COOKIE['username'].'/crop/'.$cropName.'-img-profil.jpg',90);
+        imagejpeg($im2, 'users/img/user/'.$_COOKIE['username'].'/crop/'.$cropName.'-cropped-center.jpg',90);
 
 
 }
