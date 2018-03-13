@@ -25,6 +25,7 @@ use model\User;
     }
 }*/
 
+
 function controlUsername($username)
 {
     $userManager= new UserManager();
@@ -157,7 +158,15 @@ function home()
     $user=new UserManager();
     $usersProfilPictures=$user->getUserProfilePicture();
 
-   // $getpicturesProfil= glob('users/img/user/*/profilPicture/img-userProfil.jpg');var_dump($getpicturesProfil);
+
+
+
+
+
+
+
+  //require_once 'templates/frontend/home2.php';
+
 
 twigRender('frontend/home.html.twig','userdata',$usersProfilPictures ,'','');
 }
@@ -177,6 +186,77 @@ function homeUser()
     twigRender('homeUser.html.twig','imageProfil',$src,'','');
 
 }
+
+function listProfile()
+{
+    $user=new UserManager();
+    $usersProfilPictures=$user->getUserProfilePicture(); ;
+
+
+
+
+
+
+
+    twigRender('listProfile.html.twig','userdata',$usersProfilPictures,'','');
+}
+
+function homeUserFront($userId)
+{
+    $user = new UserManager();
+    $data= $user->getUserProfile($userId);
+
+
+    twigRender('frontend/homeUserFront.html.twig','data',$data,'','');
+}
+
+function userGalerie($userId,$username)
+{
+    $user= new UserManager();
+    $userGalerie= $user->frontUsergalerie($userId,$username);
+
+    twigRender('frontend/userGalerie.html.twig','images',$userGalerie,'','');
+}
+
+function pagination($currentPage,$perPage)
+{
+    $user=new UserManager();
+    $data= $user->homeDisplay();
+
+    foreach ($data as $datum)
+    {
+        $nbUsers=$datum ;
+    }
+    $perPage=6;
+    $nbPage= ceil($nbUsers/$perPage);
+
+
+
+    if (isset($_GET['p'])&& $_GET['p']>0 && $_GET['p']<=$nbPage)
+    {
+        $currentPage=$_GET['p'];
+    }
+    else{
+        $currentPage='1';
+    }
+
+
+    for ($i=1; $i<=$nbPage; $i++ )
+    {
+        if($i==$currentPage){
+            echo " $i/";
+        }
+        else{
+            echo"<a href=\"index.php?p=$i\">$i</a> ";
+        }
+
+    }
+}
+
+
+
+
+
 
 function imageProfile()
 {    $user = new UserManager();
@@ -200,6 +280,7 @@ function imageProfile()
     $imageProfile = $user->addProfilPicture();
 
 }
+
 
 
 function galerie1()
@@ -244,7 +325,7 @@ function authentificationConnexion()
 
 
             header('Location:index.php?p=homeUser');
-            twigRender('homeUser.html.twig','','','','');
+            twigRender('homeUserFront.html.twig','','','','');
 
 
         } else {
@@ -335,7 +416,7 @@ function disconnectUser()
                 $messages[] = 'un problème est survenu lors de l\'upload';
             }
             $destinationPath= $user->addUserFiles($_SESSION['id']);
-        }//twigRender('homeUser.html.twig', 'message', $messages);
+        }//twigRender('homeUserFront.html.twig', 'message', $messages);
 
     }
     else
@@ -496,7 +577,7 @@ function uploadPicture($userId,$img)
                 //$messages[] = 'un problème est survenu lors de l\'upload';
             }
             //$destinationPath= $user->addUserFiles($_SESSION['id']);
-        }//twigRender('homeUser.html.twig', 'message', $messages);
+        }//twigRender('homeUserFront.html.twig', 'message', $messages);
 
     }
     else
@@ -685,6 +766,15 @@ function viewerGalerie($imageId)
     $view = $user->getUserView($imageId);
 
     twigRender('galerieViewer.html.twig','view',$view,'','');
+}
+
+function frontGalerieViewer($imageId,$username)
+{
+    $user=new UserManager();
+    $view = $user->getFrontUserView($imageId,$username);
+
+
+    twigRender('frontend/frontGalerieViewer.html.twig','view',$view,'','');
 }
 
 function viewerGalerie2($imageId)

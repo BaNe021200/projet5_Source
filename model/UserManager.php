@@ -256,6 +256,27 @@ class UserManager extends Manager
             return $userView;
         }
 
+        public function getFrontUserView($photoId,$username)
+        {
+            $pdo=$this->dbConnect();
+            $PdoStat=$pdo->prepare('
+            SELECT projet5_images.*, projet5_user.username 
+            FROM projet5_images
+            INNER JOIN projet5_user
+            ON projet5_images.user_id = projet5_user.id
+            WHERE projet5_images.id=:id AND username = :username
+            ');
+
+            $PdoStat->bindValue(':id',$photoId,PDO::PARAM_INT);
+            $PdoStat->bindValue(':username',$username,PDO::PARAM_STR);
+
+            $userView=$PdoStat->execute();
+            $userView=$PdoStat->fetch();
+            return $userView;
+        }
+
+
+
 
         public function getAllFiles()
         {
@@ -303,24 +324,168 @@ class UserManager extends Manager
             $deletedImage=$pdoStat->execute();
         }
 
-        public function getUserProfilePicture()
+
+
+       /*public function getUserProfilePicture2()
         {
 
             $pdo=$this->dbConnect();
+            $PdoStat=$pdo->query('
+            SELECT COUNT(id) AS nbUsers
+            FROM projet5_user');
+            $data=$PdoStat->execute();
+            $data=$PdoStat->fetch();
+            foreach ($data as $datum)
+            {
+                $nbUsers=$datum ;
+            }
+            $perPage=6;
+            $nbPage= ceil($nbUsers/$perPage);
+
+
+
+            if (isset($_GET['p'])&& $_GET['p']>0 && $_GET['p']<=$nbPage)
+            {
+                $currentPage=$_GET['p'];
+            }
+            else{
+                $currentPage='1';
+            }
+
+
+            for ($i=1; $i<=$nbPage; $i++ )
+            {
+               if($i==$currentPage){
+                   echo " $i/";
+               }
+               else{
+                   echo"<a href=\"index.php?p=$i\">$i</a> ";
+               }
+
+            }
+
+
+            $PdoStat->closeCursor();
             $PdoStat=$pdo->query('
             SELECT projet5_images.user_id,filename, projet5_user.id,username,registry_date
             FROM projet5_images
             INNER JOIN projet5_user
             ON projet5_images.user_id = projet5_user.id
             WHERE projet5_images.filename="img-userProfil"
-            ORDER BY registry_date DESC');
-            return $PdoStat;
+            ORDER BY registry_date DESC LIMIT '.(($currentPage-1)*$perPage). ','.$perPage);
 
             $username= $PdoStat->execute();
             $username= $PdoStat->fetchAll();
 
             return $username;
+        }*/
+
+         public function getUserProfilePicture()
+    {
+
+        $pdo=$this->dbConnect();
+        $PdoStat=$pdo->query('
+            SELECT COUNT(id) AS nbUsers
+            FROM projet5_user');
+        $data=$PdoStat->execute();
+        $data=$PdoStat->fetch();
+        foreach ($data as $datum)
+        {
+            $nbUsers=$datum ;
         }
+        $perPage=6;
+        $nbPage= ceil($nbUsers/$perPage);
+
+
+
+        if (isset($_GET['p'])&& $_GET['p']>0 && $_GET['p']<=$nbPage)
+        {
+            $currentPage=$_GET['p'];
+        }
+        else{
+            $currentPage='1';
+        }
+
+
+        for ($i=1; $i<=$nbPage; $i++ )
+        {
+            if($i==$currentPage){
+                //echo " $i/";
+            }
+            else{
+              // echo"<a href=\"index.php?p=$i\">$i</a> ";
+            }
+
+        }
+
+
+        $PdoStat->closeCursor();
+        $PdoStat=$pdo->query('
+            SELECT projet5_images.user_id,filename, projet5_user.id,username,registry_date
+            FROM projet5_images
+            INNER JOIN projet5_user
+            ON projet5_images.user_id = projet5_user.id   
+            WHERE projet5_images.filename="img-userProfil"
+            ORDER BY registry_date DESC LIMIT '.(($currentPage-1)*$perPage). ','.$perPage);
+
+        $username= $PdoStat->execute();
+        $username= $PdoStat->fetchAll();
+
+        return $username;
+    }
+
+        public function getUserProfile($userId)
+         {
+             $pdo=$this->dbConnect();
+             $pdoStat=$pdo->prepare('
+             SELECT projet5_images.dirname,filename,extension, projet5_user.id,username
+             FROM projet5_images
+             INNER JOIN projet5_user
+              ON projet5_images.user_id = projet5_user.id
+             WHERE user_id = :userId AND filename=:filename');
+             $pdoStat->bindValue(':userId',$userId,PDO::PARAM_INT);
+             $pdoStat->bindValue(':filename',"img-userProfil",PDO::PARAM_STR);
+
+
+             $pdoStat->execute();
+             $data=$pdoStat->fetch();
+
+             return $data;
+
+         }
+
+         public function frontUsergalerie($userId,$username)
+         {
+             $pdo=$this->dbConnect();
+             $pdoStat=$pdo->prepare('
+             SELECT projet5_thumbnails.image_id,thumbnail, projet5_user.id,username
+             FROM projet5_thumbnails
+             INNER JOIN projet5_user
+             ON projet5_thumbnails.user_id = projet5_user.id
+             WHERE user_id = :userId AND username=:username');
+             $pdoStat->bindValue(':userId',$userId,PDO::PARAM_INT);
+             $pdoStat->bindValue(':username',$username,PDO::PARAM_STR);
+
+             $userGalerie = $pdoStat->execute();
+             $userGalerie = $pdoStat->fetchAll();
+
+             return $userGalerie;
+
+
+
+
+         }
+
+
+
+
+
+
+
+
+
+
+
 
         public  function deleteUserProfilPicture()
         {

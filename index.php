@@ -13,6 +13,45 @@ if (isset($_GET['p']))
         home();
     }
 
+    elseif ($_GET['p'] == '1'){
+        if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
+
+            listProfile();
+
+        }
+        else
+        {
+            throw new Exception("Erreur vous n'êtes pas connectez. Veuillez vous identifier");
+        }
+    }
+
+    elseif ($_GET['p'] == '2'){
+        if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
+
+            listProfile();
+
+        }
+        else
+        {
+            throw new Exception("Erreur vous n'êtes pas connectez. Veuillez vous identifier");
+        }
+    }
+
+    elseif ($_GET['p'] == 'listProfile'){
+        if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
+
+            listProfile();
+
+        }
+        else
+        {
+            throw new Exception("Erreur vous n'êtes pas connectez. Veuillez vous identifier");
+        }
+    }
+
+
+
+
     elseif ($_GET['p'] == 'homeUser'){
         if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
             
@@ -27,7 +66,37 @@ if (isset($_GET['p']))
 
 
 
-    elseif ($_GET['p'] == 'galerie1'){
+    elseif ($_GET['p'] == 'homeUserFront'){
+        if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
+
+            homeUserFront($_GET['userId']);
+
+        }
+        else
+        {
+            throw new Exception("Erreur vous n'êtes pas connectez. Veuillez vous identifier");
+        }
+
+    }
+
+    elseif ($_GET['p'] == 'userGalerie'){
+        if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
+
+            userGalerie($_GET['userId'],$_GET['username']);
+
+        }
+        else
+        {
+            throw new Exception("Erreur vous n'êtes pas connectez. Veuillez vous identifier");
+        }
+
+    }
+
+
+
+
+
+   elseif ($_GET['p'] == 'galerie1'){
         if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
 
             galerie1();
@@ -164,6 +233,21 @@ if (isset($_GET['p']))
             throw new Exception("Erreur vous n'êtes pas connectez. Veuillez vous identifier");
         }
     }
+
+    elseif ($_GET['p'] == 'frontGalerieViewer'){
+        if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
+            frontGalerieViewer($_GET['id'],$_GET['username']);
+        }
+        else
+        {
+            throw new Exception("Erreur vous n'êtes pas connectez. Veuillez vous identifier");
+        }
+    }
+
+
+
+
+
 
     elseif ($_GET['p'] == 'viewer2'){
         if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){

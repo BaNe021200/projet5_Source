@@ -15,6 +15,9 @@
 <body>
 {% endblock bodyStyle %}
 
+
+
+
 <header>
     <div class="collapse bg-dark" id="navbarHeader">
         <div class="container">
@@ -35,7 +38,7 @@
     </div>
     <div class="navbar navbar-dark {% block navBarBg %}bg-dark{% endblock navBarBg %} box-shadow">
         <div class="container d-flex justify-content-between">
-            <h2  ><a class="text-white" href="index.php?p=home">{% block brand %}Whole Wild World{% endblock brand %}</a></h2>
+            <h2  >{% block brand %}<a class="text-white" href="index.php?p=home">Whole Wild World</a>{% endblock brand %}</h2>
             {% block profilCount %}
 
 

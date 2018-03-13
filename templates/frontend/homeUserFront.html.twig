@@ -1,16 +1,17 @@
 {% extends "layout.html.twig" %}
 
+
 {% block stylesheet %}
     <link rel="stylesheet" href="public/css/users.css">
     <link rel="stylesheet" href="public/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="public/css/tuto.cs">
 {% endblock stylesheet %}
 
 {% block title %} La page de {{ userDatum.username }}{% endblock title %}
 {% block avatar %}
-        <li class="nav-item"><img class="rounded-circle" src="{{ imageProfil }}" alt="" width="37" height="37"></li>
+    <li class="nav-item"><img class="rounded-circle" src="{{ imageProfil }}" alt="" width="37" height="37"></li>
 
-    {% endblock avatar%}{% block bookmark %}<i class="fas fa-caret-down" style="color:#17a2b8" ></i>{% endblock bookmark %}
-{% block brand %}<span class="text-white">Whole Wild World</span>{% endblock brand %}
+{% endblock avatar%}{% block bookmark %}<i class="fas fa-caret-down" style="color:#17a2b8" ></i>{% endblock bookmark %}
 
 
 {% block signUp %}La page de {{ userDatum.username }} {% endblock signUp %}
@@ -29,25 +30,25 @@
 {% block connexionLink %}index.php?p=deconnexion{% endblock %}
 {% block profilCount %}
     <a  href="index.php?p=listProfile"><button type="button"  class="btn btn-info">
-        Profile <span class="badge badge-light">9</span>
-        <span class="sr-only">unread messages</span>
-    </button></a>
+            Profile <span class="badge badge-light">9</span>
+            <span class="sr-only">unread messages</span>
+        </button></a>
 {% endblock %}
 {% block main %}
+       <h1> la page de {{ data.username }}</h1>
 
-    <h1>Hello  {{ userDatum.first_name }}  </h1>
-
-<div class="col-lg-4">
-    {#{%  if imagecenter is not null   %}
-
-        <img class="rounded-circle" id="cropImage" src="{{ imagecenter }}" alt="Generic placeholder image" width="150" height="150" >
-
-   {% else %}#}
-       <img class="rounded-circle" id="cropImage" src="{{ imageProfil  }}" alt="Generic placeholder image" width="150" height="150" >
-
-    {#{% endif %}#}
-
+    <div class="col-lg-2 text-left">
+        <img class="rounded-circle" id="cropImage" src="{{ data.dirname }}/{{ data.filename }}.{{ data.extension }}" alt="Generic placeholder image" width="150" height="150" >
 </div><!-- /.col-lg-4 -->
+    <div class="row">
+        <div class="col-lg-2">
+
+           <h4> <ul class="list-unstyled"><a href="index.php?p=userGalerie&amp;userId={{ data.id }}&amp;username={{ data.username }}"><li>galerie de {{ data.username }}</li></a></ul></h4>
+
+        </div>
+        <div class="col-lg-8"></div>
+        <div class="col-lg-2"></div>
+    </div>
 
 {% endblock %}
 

@@ -36,8 +36,7 @@ require_once 'model/UserManager.php';
     <div class="container">
         <div class="row">
             <!-- début foreach-->
-       <?php while ($data = $usersProfilPictures->fetch()) {
-           ?>
+            <?php foreach ($usersProfilPictures as $usersProfilPicture):  ?>
 
            <!-- Three columns of text below the carousel -->
 
@@ -46,21 +45,41 @@ require_once 'model/UserManager.php';
                 
 
                <img class="rounded-circle"  
-                    src="users/img/user/<?= $data['username'] ?>/crop/<?= $data['filename'] ?>.jpg"
+                    src="users/img/user/<?= $usersProfilPicture['username'] ?>/profilPicture/<?= $usersProfilPicture['filename'] ?>.jpg"
                     alt="Generic placeholder image" width="300" height="300">
-               <h2><?= $data['username']; ?></h2>
+               <h2><?= $usersProfilPicture['username']; ?></h2>
                <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies
                    vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo
                    cursus magna.</p>
                <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
            </div><!-- /.col-lg-4 -->
-
-           <?php
-       }
-       $usersProfilPictures->closeCursor();
-            ?>
+                <?php endforeach;  ?>
             <!--fin foreach-->
-    </div>
+                <div class="col-md-4"></div>
+
+                <div class="col-md-4">
+
+            <!-- début nav-->
+
+        </div>
+            <div class="col-md-4"></div>
+            <!-- fin nav-->
+
+    </div> <nav aria-label="...">
+            <ul class="pagination text-center">
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1">Previous</a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item active">
+                    <a class="page-link" href="#">2 <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#">Next</a>
+                </li>
+            </ul>
+        </nav>
 
     </div>
 
