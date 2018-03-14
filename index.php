@@ -2,6 +2,7 @@
 declare(strict_types=1);
 require_once 'twig.php';
 require_once 'controler/backend.php';
+require_once 'controler/frontend.php';
 
 
 try
@@ -108,10 +109,10 @@ if (isset($_GET['p']))
     }
 
 
-    elseif ($_GET['p'] == 'galerie2'){
+    elseif ($_GET['p'] == 'infosUser'){
         if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
 
-            galerie2();
+            infosUser();
         }
         else
         {
@@ -163,15 +164,7 @@ if (isset($_GET['p']))
         disconnectUser();
     }
 
-    elseif ($_GET['p'] == 'page2'){
-        if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
-            page2();
-        }
-        else
-        {
-            throw new Exception("Erreur vous n'êtes pas connectez. Veuillez vous identifier");
-        }
-    }
+
 
     elseif ($_GET['p'] == 'upload'){
 

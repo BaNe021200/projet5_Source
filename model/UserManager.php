@@ -86,6 +86,50 @@ class UserManager extends Manager
         return $verifyPassword;
     }
 
+        public function getUserName($id)
+        {
+            $pdo=$this->dbConnect();
+            $PdoStat=$pdo->prepare('
+            SELECT id, username
+            FROM projet5_user
+            WHERE id=:id');
+            $PdoStat->bindValue(':id',$id,PDO::PARAM_INT);
+            $UserName=$PdoStat->execute();
+            $UserName=$PdoStat->fetch();
+
+            return $UserName;
+        }
+
+        public function isConnected($id)
+        {
+            $pdo=$this->dbConnect();
+            $pdoStat=$pdo->prepare('
+            UPDATE projet5_user
+            SET connected =:connected
+            WHERE id=:id');
+            $pdoStat->bindValue(':id',$id,PDO::PARAM_INT);
+            $pdoStat->bindValue(':connected',1,PDO::PARAM_INT);
+            $isconnected= $pdoStat->execute();
+
+            return $isconnected;
+
+        }
+
+        public function isConnectedSelf($id)
+        {
+            $pdo=$this->dbConnect();
+            $pdoStat=$pdo->prepare('
+            UPDATE projet5_user
+            SET connected_self =:connectedSelf
+            WHERE id=:id');
+            $pdoStat->bindValue(':id',$id,PDO::PARAM_INT);
+            $pdoStat->bindValue(':connectedSelf',1,PDO::PARAM_INT);
+            $isconnectedSelf= $pdoStat->execute();
+
+            return $isconnectedSelf;
+
+        }
+
         public function getPhoto2Thumb($userId,$photoId)
         {
             $pdo=$this->dbConnect();
@@ -275,9 +319,6 @@ class UserManager extends Manager
             return $userView;
         }
 
-
-
-
         public function getAllFiles()
         {
             $pdo=$this->dbConnect();
@@ -324,9 +365,7 @@ class UserManager extends Manager
             $deletedImage=$pdoStat->execute();
         }
 
-
-
-       /*public function getUserProfilePicture2()
+        /*public function getUserProfilePicture2()
         {
 
             $pdo=$this->dbConnect();
@@ -380,7 +419,7 @@ class UserManager extends Manager
             return $username;
         }*/
 
-         public function getUserProfilePicture()
+        public function getUserProfilePicture()
     {
 
         $pdo=$this->dbConnect();
@@ -421,11 +460,11 @@ class UserManager extends Manager
 
         $PdoStat->closeCursor();
         $PdoStat=$pdo->query('
-            SELECT projet5_images.user_id,filename, projet5_user.id,username,registry_date
+            SELECT projet5_images.user_id,filename, projet5_user.id,username,registry_date,connected
             FROM projet5_images
             INNER JOIN projet5_user
             ON projet5_images.user_id = projet5_user.id   
-            WHERE projet5_images.filename="img-userProfil"
+            WHERE projet5_images.filename="img-userProfil" AND projet5_user.connected_self  IS NULL 
             ORDER BY registry_date DESC LIMIT '.(($currentPage-1)*$perPage). ','.$perPage);
 
         $username= $PdoStat->execute();
@@ -454,7 +493,22 @@ class UserManager extends Manager
 
          }
 
-         public function frontUsergalerie($userId,$username)
+        public function disconnectUser($id){
+            $pdo=$this->dbConnect();
+            $pdoStat=$pdo->prepare('
+            UPDATE projet5_user
+            SET connected_self =:connectedSelf
+            WHERE id=:id');
+            $pdoStat->bindValue(':id',$id,PDO::PARAM_INT);
+            $pdoStat->bindValue(':connectedSelf',null,PDO::PARAM_INT);
+            $disconnectUser= $pdoStat->execute();
+
+
+        }
+
+
+
+        public function frontUsergalerie($userId,$username)
          {
              $pdo=$this->dbConnect();
              $pdoStat=$pdo->prepare('
@@ -476,7 +530,19 @@ class UserManager extends Manager
 
          }
 
+        public function getConnectedUsers()
+        {
+            $pdo=$this->dbConnect();
+            $PdoStat=$pdo->prepare('
+            SELECT username, connected
+            FROM projet5_user
+            WHERE connected IS NULL limit 0,6');
+            $connected= $PdoStat->execute();
+            $connected= $PdoStat->fetchAll();
 
+            return $connected;
+
+        }
 
 
 

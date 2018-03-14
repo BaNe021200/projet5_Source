@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 require_once 'model/UserManager.php';
 require_once 'twig.php';
-require_once 'functionUpload.php';
+require_once 'functions.php';
 require_once 'model/User.php';
 require_once 'resize2.php';
 require_once 'crop.php';
@@ -86,11 +86,16 @@ function emailcontrol()
 {
     if (!empty($_POST['email']))
     {
-        $_POST['email'] = htmlspecialchars($_POST['email']);
+        /*$_POST['email'] = htmlspecialchars($_POST['email']);
         if (preg_match("#^[a-z0-9._-]+@[a-z0-9._-]{2,}\.[a-z]{2,4}$#", $_POST['email']))
         {
             getLastEmail($_POST['email']);//on vérifie que le meail est bine unique
 
+        }*/
+
+        if(filter_var($_POST['email'], FILTER_VALIDATE_EMAIL))
+        {
+            getLastEmail($_POST['email']);
         }
         else
         {
@@ -129,48 +134,6 @@ function controlPasswords()
 
 }
 
-function get_registry()
-{
-
-    $user = new UserManager();
-
-    $newUser = $user->addUser();
-    $message=[];
-    if($newUser)
-    {
-
-        $message[] = 'Bienvenue ! votre inscription à bien été prise en compte, vous pouvez désormais vous connecter avec vos idenfiants';
-    }
-    else
-    {
-        $message[]= 'Nous sommes navrés mais un erreur est survenue et votre inscription n\'a pas pu est prise en compte. vous êtes invitez à recommencer ultérieurement ';
-    }
-    twigRender('frontend/registrySucces.html.twig','message',$message,'','');
-}
-
-function signUp()
-{
-    twigRender('signUp.html.twig','','','','');
-}
-
-function home()
-{
-    $user=new UserManager();
-    $usersProfilPictures=$user->getUserProfilePicture();
-
-
-
-
-
-
-
-
-  //require_once 'templates/frontend/home2.php';
-
-
-twigRender('frontend/home.html.twig','userdata',$usersProfilPictures ,'','');
-}
-
 function homeUser()
 {
     if (file_exists("users/img/user/" . $_COOKIE['username'] . "/crop/img_001-cropped-center.jpg")) {
@@ -179,43 +142,20 @@ function homeUser()
         $src = "users/img/user/" . $_COOKIE['username'] . "/crop/img_001-cropped.jpg";
     }
 
-    //imageProfile();
+    $user= new UserManager();
+    $isConnected = $user->getUserName($_COOKIE['ID']);
+
+    if(($isConnected['id']===$_COOKIE['ID']) && ($isConnected['username']===$_COOKIE['username']))
+    {
+        $user= new UserManager();
+        $connectedSelf=$user->isConnectedSelf($_COOKIE['ID']);
+    }
+
 
 
 
     twigRender('homeUser.html.twig','imageProfil',$src,'','');
 
-}
-
-function listProfile()
-{
-    $user=new UserManager();
-    $usersProfilPictures=$user->getUserProfilePicture(); ;
-
-
-
-
-
-
-
-    twigRender('listProfile.html.twig','userdata',$usersProfilPictures,'','');
-}
-
-function homeUserFront($userId)
-{
-    $user = new UserManager();
-    $data= $user->getUserProfile($userId);
-
-
-    twigRender('frontend/homeUserFront.html.twig','data',$data,'','');
-}
-
-function userGalerie($userId,$username)
-{
-    $user= new UserManager();
-    $userGalerie= $user->frontUsergalerie($userId,$username);
-
-    twigRender('frontend/userGalerie.html.twig','images',$userGalerie,'','');
 }
 
 function pagination($currentPage,$perPage)
@@ -253,11 +193,6 @@ function pagination($currentPage,$perPage)
     }
 }
 
-
-
-
-
-
 function imageProfile()
 {    $user = new UserManager();
     if (!file_exists('users/img/user/'.$_COOKIE['username'].'/profilPicture')) {
@@ -281,22 +216,17 @@ function imageProfile()
 
 }
 
-
-
 function galerie1()
 {
 
     twigRender('galerie1.html.twig','','' ,'','');
 }
 
-function galerie2()
+function infosUser()
 {
     $folder = glob('users/img/user/'.$_COOKIE['username'].'/crop/*-cropped.jpg');
-    twigRender('galerie2.html.twig','image',$folder,'','');
+    twigRender('infosUser.html.twig','image',$folder,'','');
 }
-
-
-
 
 function connectUser()
 {
@@ -325,7 +255,7 @@ function authentificationConnexion()
 
 
             header('Location:index.php?p=homeUser');
-            twigRender('homeUserFront.html.twig','','','','');
+            //twigRender('homeUserFront.html.twig','','','','');
 
 
         } else {
@@ -336,188 +266,19 @@ function authentificationConnexion()
     }
 }
 
-
 function disconnectUser()
 {
+    $user=new UserManager();
+    $disconnectUser =$user->disconnectUser($_COOKIE['ID']);
     session_abort();
     setcookie("ID","", time()- 60);
     setcookie("username","", time()- 60);
     setcookie("first_name","", time()- 60);
 
+
+
    home();
 }
-
-/*function UploadPictures()
-{
-
-    $user=new UserManager();
-
-    $messages = [];
-
-    if(!file_exists('users/img/user/'.$_POST['username']))
-    {   $i=1;
-        newFolder();
-        foreach ($_FILES as $file) {//var_dump($file['name']);
-
-
-            if ($file['error'] == UPLOAD_ERR_NO_FILE) {
-                continue;
-            }
-
-            if (is_uploaded_file($file['tmp_name'])) {
-                //on vérifie que le fichier est d'un type autorisé
-                $typeMime = mime_content_type($file['tmp_name']);
-                if ($typeMime == 'image/jpeg') {
-                    //on verifie la taille du fichier
-                    $size = filesize($file['tmp_name']);
-                    if ($size > 1600000) {
-                        $message = "le fichier est trop gros";
-                    } else {
-
-                        $beforeCleanning = $file['name'];
-                        //on remplace les caractères qui ne sont ni des lettres ni des chiffres par des tirets
-
-                        $onCleanning = preg_replace('~[^\\pL\d]+~u', '-', $beforeCleanning);
-                        //on retire les tirets en début et en fin de chaine
-                        $onCleanning = trim($onCleanning, '-');
-                        //passage d'un encodage utf 8 à ascii afin d'éviter tous problème d'encodage dans le nom du fichier
-                        $onCleanning = iconv('utf-8', 'us-ascii//TRANSLIT', $onCleanning);
-                        //on met le nom de fichier en minuscule
-                        $onCleanning = strtolower($onCleanning);
-                        $afterCleanning = preg_replace('~[^-\w]+~', '', $onCleanning);
-
-
-                        //var_dump($afterCleanning);
-
-
-                        //$extension = substr(strchr($file['name'],"."),1);
-                        $extension = strtolower(substr(strchr($file['name'], "."), 1));
-                        //$destinationPath='upload/user/'.$file['name'];
-                        $destinationPath = 'users/img/user/' . $_POST['username'] . '/' . 'img_00'.$i++ . '.' . $extension;
-                        //var_dump($destinationPath);die;
-
-
-                        $temporaryPath = $file['tmp_name'];
-
-                        if (move_uploaded_file($temporaryPath, $destinationPath)) {
-                            $messages[] = "le fichier " . $file['name'] . " a été correctement uploadé";
-
-
-                        } else {
-                            $messages[] = "le fichier " . $file['name'] . " n'a pas été correctement uploadé";
-
-                        }
-
-                    }
-                } else {
-                    $messages[] = 'type de fichiers non valide';
-                }
-            } else {
-                $messages[] = 'un problème est survenu lors de l\'upload';
-            }
-            $destinationPath= $user->addUserFiles($_SESSION['id']);
-        }//twigRender('homeUserFront.html.twig', 'message', $messages);
-
-    }
-    else
-    { //$i=0;
-      $countFiles = count(glob('users/img/user/'.$_POST['username'].'/*.jpg'))+1;
-      $maxFiles = count(glob('users/img/user/'.$_POST['username'].'/*.jpg'));
-        if ($maxFiles===6) {
-            throw  new Exception(("vous ne pouvez pas uploader plus de 6 photos"));
-        }
-
-
-      /*if ($countFiles !=0 && $countFiles< 5) {
-            for ($i === $countFiles ; $i < 5; $i++) {
-
-
-                $i;  //var_dump($i);die;
-            }
-        }/*
-        elseif ($countFiles===5) {
-            throw  new Exception(("vous ne pouvez pas uploader plus de 5 photos"));
-        }
-        elseif($countFiles===0)
-            {
-                for($i=1;$i<=5; $i++)
-                {
-                    $i;
-                }
-
-            }
-        foreach ($_FILES as $file) {//var_dump($file['name']);
-
-
-            if ($file['error'] == UPLOAD_ERR_NO_FILE) {
-                continue;
-            }
-
-            if (is_uploaded_file($file['tmp_name'])) {
-                //on vérifie que le fichier est d'un type autorisé
-                $typeMime = mime_content_type($file['tmp_name']);
-                if ($typeMime == 'image/jpeg') {
-                    //on verifie la taille du fichier
-                    $size = filesize($file['tmp_name']);
-                    if ($size > 1600000) {
-                        $message = "le fichier est trop gros";
-                    } else {
-
-                        $beforeCleanning = $file['name'];
-                        //on remplace les caractères qui ne sont ni des lettres ni des chiffres par des tirets
-
-                        $onCleanning = preg_replace('~[^\\pL\d]+~u', '-', $beforeCleanning);
-                        //on retire les tirets en début et en fin de chaine
-                        $onCleanning = trim($onCleanning, '-');
-                        //passage d'un encodage utf 8 à ascii afin d'éviter tous problème d'encodage dans le nom du fichier
-                        $onCleanning = iconv('utf-8', 'us-ascii//TRANSLIT', $onCleanning);
-                        //on met le nom de fichier en minuscule
-                        $onCleanning = strtolower($onCleanning);
-                        $afterCleanning = preg_replace('~[^-\w]+~', '', $onCleanning);
-
-
-                        //var_dump($afterCleanning);
-
-
-                        //$extension = substr(strchr($file['name'],"."),1);
-                        $extension = strtolower(substr(strchr($file['name'], "."), 1));
-                        $i=$countFiles++;
-                        $destinationPath = 'users/img/user/' . $_POST['username'] . '/' .  'img_00'.$i++ . '.' . $extension;
-
-
-
-                       // $destinationPath=$user->addUserFiles($_SESSION['id']);
-
-                        $temporaryPath = $file['tmp_name'];
-
-                        if (move_uploaded_file($temporaryPath, $destinationPath)) {
-                            $messages[] = "le fichier " . $file['name'] . " a été correctement uploadé";
-
-
-                        } else {
-                            $messages[] = "le fichier " . $file['name'] . " n'a pas été correctement uploadé";
-
-                        }
-
-                    }
-                } else {
-                    $messages[] = 'type de fichiers non valide';
-                }
-            } else {
-                $messages[] = 'un problème est survenu lors de l\'upload';
-            }
-            $destinationPath= $user->addUserFiles($_SESSION['id']);
-        }
-    }
-    //resizeImage();
-    resizeByHeight();
-    cropImagess();
-
-
-twigRender('success.html.twig','message', $messages,'','');
-
-}*/
-
 
 function uploadPicture($userId,$img)
 {
@@ -708,7 +469,6 @@ twigRender('galerie3.html.twig','images',$folder,'','');
 
 }
 
-
 function getAllImages()
 {
     $user = new UserManager();
@@ -759,7 +519,6 @@ function deleteImage($userId,$imageId)
 
 }
 
-
 function viewerGalerie($imageId)
 {
     $user=new UserManager();
@@ -785,30 +544,7 @@ function viewerGalerie2($imageId)
     twigRender('galerieViewer.html.twig','view',$view,'','');
 }
 
-/*function slideShow($imageId)
-{
-    $folder='users/img/user/'.$_COOKIE['username'].'/';
-    $slide= glob($folder.'*.jpg');
-    usort($slide, 'strnatcmp');
-    $nb=count($slide);
 
-    if(isset($_GET['image']) && ctype_digit($_GET['image']))
-    {
-        $img=$_GET['image'];
-    }
-    else
-    {
-        $img=0;
-    }
-    if($img>0 && $img<$nb)
-    {
-
-    }
-
-
-
-
-}*/
 
 
 
