@@ -18,27 +18,41 @@ class UserManager extends Manager
         $hashPwd = password_hash($_POST['password'], PASSWORD_DEFAULT);
         $JSON= json_encode(["ROLE_USER"]);
         $pdo=$this->dbConnect();//var_dump($pdo);die;
-        $pdoStat = $pdo->prepare('INSERT INTO projet5_user VALUES (NULL,:gender, :first_name, :last_name, :username,:birthday,:email,:password, NOW(),:roles)');
-        $pdoStat->bindValue(':gender', $_POST['gender'], PDO::PARAM_STR);
-        $pdoStat->bindValue(':first_name', $_POST['first_name'], PDO::PARAM_STR);
-        $pdoStat->bindValue(':last_name', $_POST['last_name'], PDO::PARAM_STR);
-        $pdoStat->bindValue(':username', $_POST['username'], PDO::PARAM_STR);
-        $pdoStat->bindValue(':birthday', $_POST['birthday'], PDO::PARAM_STR);
-        $pdoStat->bindValue(':email', $_POST['email'], PDO::PARAM_STR);
-        $pdoStat->bindValue(':password', $hashPwd, PDO::PARAM_STR);
-        $pdoStat->bindValue(':roles', $JSON, PDO::PARAM_STR);
+        $PdoStat = $pdo->prepare('INSERT INTO projet5_user VALUES (NULL,:gender, :first_name, :last_name, :username,:birthday,:email,:password, NOW(),NULL,NULL,:roles)');
+        $PdoStat->bindValue(':gender', $_POST['gender'], PDO::PARAM_STR);
+        $PdoStat->bindValue(':first_name', $_POST['first_name'], PDO::PARAM_STR);
+        $PdoStat->bindValue(':last_name', $_POST['last_name'], PDO::PARAM_STR);
+        $PdoStat->bindValue(':username', $_POST['username'], PDO::PARAM_STR);
+        $PdoStat->bindValue(':birthday', $_POST['birthday'], PDO::PARAM_STR);
+        $PdoStat->bindValue(':email', $_POST['email'], PDO::PARAM_STR);
+        $PdoStat->bindValue(':password', $hashPwd, PDO::PARAM_STR);
+        $PdoStat->bindValue(':roles', $JSON, PDO::PARAM_STR);
+        $newUser= $PdoStat->execute();
+        $lastId= $pdo->lastInsertId();
+        $PdoStat->closeCursor();
+        $PdoStat= $pdo->prepare("UPDATE projet5_user SET username = REPLACE(username,'_',' ')
+        WHERE username=:username");var_dump($_POST['username']);
+        $PdoStat->bindValue(':username',$_POST['username'],PDO::PARAM_STR);
+        $newUser=$PdoStat->execute();var_dump($lastId);
+        $PdoStat->closeCursor();
+        $PdoStat=$pdo->prepare('
+        SELECT first_name,email,username
+        FROM projet5_user
+        WHERE id=:id');
+        $PdoStat->bindValue(':id',$lastId,PDO::PARAM_INT);
+        $newUser = $PdoStat->execute();
+        $newUser = $PdoStat->fetch();
 
-        $newUser= $pdoStat->execute();
         return $newUser;
         }
 
         public function getUserMainData(){
 
         $pdo=$this->dbConnect();
-        $pdoStat=$pdo->prepare('SELECT id,gender, first_name, username  FROM projet5_user WHERE username=:username');
-        $pdoStat->bindValue(':username',$_POST['username'],PDO::PARAM_STR);
-        $userMainData = $pdoStat->execute();
-        $userMainData = $pdoStat->fetch();//var_dump($userMainData);die;
+        $PdoStat=$pdo->prepare('SELECT id,gender, first_name, username  FROM projet5_user WHERE username=:username');
+        $PdoStat->bindValue(':username',$_POST['username'],PDO::PARAM_STR);
+        $userMainData = $PdoStat->execute();
+        $userMainData = $PdoStat->fetch();//var_dump($userMainData);die;
         return $userMainData;
         }
 
@@ -53,9 +67,9 @@ class UserManager extends Manager
         {
             $username= $_POST['username'];
             $pdo= $this->dbConnect();
-            $pdoStat = $pdo->query("SELECT id FROM projet5_user WHERE username = '$username'  ");
-            $veryUsername= $pdoStat->execute();
-            $veryUsername= $pdoStat->fetch();
+            $PdoStat = $pdo->query("SELECT id FROM projet5_user WHERE username = '$username'  ");
+            $veryUsername= $PdoStat->execute();
+            $veryUsername= $PdoStat->fetch();
             $getusernameId= $veryUsername['id'];
             return $getusernameId;
         }
@@ -64,9 +78,9 @@ class UserManager extends Manager
         {
             $email= $_POST['email'];
             $pdo= $this->dbConnect();
-            $pdoStat = $pdo->query("SELECT id FROM projet5_user WHERE email = '$email'  ");
-            $veryEmail= $pdoStat->execute();
-            $veryEmail= $pdoStat->fetch();
+            $PdoStat = $pdo->query("SELECT id FROM projet5_user WHERE email = '$email'  ");
+            $veryEmail= $PdoStat->execute();
+            $veryEmail= $PdoStat->fetch();
             $getEmailId= $veryEmail['id'];
             return $getEmailId;
         }
@@ -78,10 +92,10 @@ class UserManager extends Manager
 
 
         $pdo=$this->dbConnect();
-        $pdoStat=$pdo->prepare('SELECT id, password,gender  FROM projet5_user WHERE username=:username');
-        $pdoStat->bindValue(':username',$_POST['username'],PDO::PARAM_STR);
-        $hashedPass = $pdoStat->execute();
-        $hashedPass = $pdoStat->fetch();
+        $PdoStat=$pdo->prepare('SELECT id, password,gender  FROM projet5_user WHERE username=:username');
+        $PdoStat->bindValue(':username',$_POST['username'],PDO::PARAM_STR);
+        $hashedPass = $PdoStat->execute();
+        $hashedPass = $PdoStat->fetch();
         $verifyPassword = $hashedPass['password'];
         return $verifyPassword;
     }
@@ -103,13 +117,13 @@ class UserManager extends Manager
         public function isConnected($id)
         {
             $pdo=$this->dbConnect();
-            $pdoStat=$pdo->prepare('
+            $PdoStat=$pdo->prepare('
             UPDATE projet5_user
             SET connected =:connected
             WHERE id=:id');
-            $pdoStat->bindValue(':id',$id,PDO::PARAM_INT);
-            $pdoStat->bindValue(':connected',1,PDO::PARAM_INT);
-            $isconnected= $pdoStat->execute();
+            $PdoStat->bindValue(':id',$id,PDO::PARAM_INT);
+            $PdoStat->bindValue(':connected',1,PDO::PARAM_INT);
+            $isconnected= $PdoStat->execute();
 
             return $isconnected;
 
@@ -118,13 +132,14 @@ class UserManager extends Manager
         public function isConnectedSelf($id)
         {
             $pdo=$this->dbConnect();
-            $pdoStat=$pdo->prepare('
+            $PdoStat=$pdo->prepare('
             UPDATE projet5_user
-            SET connected_self =:connectedSelf
+            SET connected = :connected, connected_self =:connectedSelf
             WHERE id=:id');
-            $pdoStat->bindValue(':id',$id,PDO::PARAM_INT);
-            $pdoStat->bindValue(':connectedSelf',1,PDO::PARAM_INT);
-            $isconnectedSelf= $pdoStat->execute();
+            $PdoStat->bindValue(':id',$id,PDO::PARAM_INT);
+            $PdoStat->bindValue(':connected',1,PDO::PARAM_INT);
+            $PdoStat->bindValue(':connectedSelf',1,PDO::PARAM_INT);
+            $isconnectedSelf= $PdoStat->execute();
 
             return $isconnectedSelf;
 
@@ -145,7 +160,7 @@ class UserManager extends Manager
             return $userImages;
         }
 
-        public function addUserFiles($userId,$img)
+        public function addUserPicture($userId,$img)
         {
             /*$images= glob('users/img/user/'.$_SESSION['username'].'/*.jpg');
             foreach ($images as $avatar){$avatar;};
@@ -332,25 +347,25 @@ class UserManager extends Manager
         public function deleteImage($userId,$img){
 
             $pdo=$this->dbConnect();
-            $pdoStat= $pdo->prepare('DELETE FROM projet5_images WHERE user_id=:userId AND filename=:filename ');
-            $pdoStat->bindValue(':userId', $userId,PDO::PARAM_INT);
-            $pdoStat->bindValue(':filename', 'img_00'.$img,PDO::PARAM_STR);
-            $deletedImage=$pdoStat->execute();
-            $pdoStat->closeCursor();
-            $pdoStat= $pdo->prepare('DELETE FROM projet5_images WHERE user_id=:userId AND filename=:filename ');
-            $pdoStat->bindValue(':userId', $userId,PDO::PARAM_INT);
-            $pdoStat->bindValue(':filename', 'img_00'.$img.'-cropped',PDO::PARAM_STR);
-            $deletedImage=$pdoStat->execute();
-            $pdoStat->closeCursor();
-            $pdoStat= $pdo->prepare('DELETE FROM projet5_images WHERE user_id=:userId AND filename=:filename ');
-            $pdoStat->bindValue(':userId', $userId,PDO::PARAM_INT);
-            $pdoStat->bindValue(':filename', 'img_00'.$img.'-cropped-center',PDO::PARAM_STR);
-            $deletedImage=$pdoStat->execute();
-            $pdoStat->closeCursor();
-            $pdoStat= $pdo->prepare('DELETE FROM projet5_thumbnails WHERE user_id=:userId AND thumbnail=:thumbnail ');
-            $pdoStat->bindValue(':userId', $userId,PDO::PARAM_INT);
-            $pdoStat->bindValue(':thumbnail', 'users/img/user/'.$_COOKIE['username'].'/thumbnails/img_00'.$img.'-thumb.jpg',PDO::PARAM_STR);
-            $deletedImage=$pdoStat->execute();
+            $PdoStat= $pdo->prepare('DELETE FROM projet5_images WHERE user_id=:userId AND filename=:filename ');
+            $PdoStat->bindValue(':userId', $userId,PDO::PARAM_INT);
+            $PdoStat->bindValue(':filename', 'img_00'.$img,PDO::PARAM_STR);
+            $deletedImage=$PdoStat->execute();
+            $PdoStat->closeCursor();
+            $PdoStat= $pdo->prepare('DELETE FROM projet5_images WHERE user_id=:userId AND filename=:filename ');
+            $PdoStat->bindValue(':userId', $userId,PDO::PARAM_INT);
+            $PdoStat->bindValue(':filename', 'img_00'.$img.'-cropped',PDO::PARAM_STR);
+            $deletedImage=$PdoStat->execute();
+            $PdoStat->closeCursor();
+            $PdoStat= $pdo->prepare('DELETE FROM projet5_images WHERE user_id=:userId AND filename=:filename ');
+            $PdoStat->bindValue(':userId', $userId,PDO::PARAM_INT);
+            $PdoStat->bindValue(':filename', 'img_00'.$img.'-cropped-center',PDO::PARAM_STR);
+            $deletedImage=$PdoStat->execute();
+            $PdoStat->closeCursor();
+            $PdoStat= $pdo->prepare('DELETE FROM projet5_thumbnails WHERE user_id=:userId AND thumbnail=:thumbnail ');
+            $PdoStat->bindValue(':userId', $userId,PDO::PARAM_INT);
+            $PdoStat->bindValue(':thumbnail', 'users/img/user/'.$_COOKIE['username'].'/thumbnails/img_00'.$img.'-thumb.jpg',PDO::PARAM_STR);
+            $deletedImage=$PdoStat->execute();
 
 
         }
@@ -358,11 +373,11 @@ class UserManager extends Manager
         public function deleteImageCroppedCenter($userId,$img)
         {
             $pdo=$this->dbConnect();
-            $pdoStat= $pdo->prepare('DELETE FROM projet5_images WHERE id=:id AND user_id=:userId ');
-            $pdoStat->bindValue(':id', $img,PDO::PARAM_STR);
-            $pdoStat->bindValue(':userId', $userId,PDO::PARAM_INT);
+            $PdoStat= $pdo->prepare('DELETE FROM projet5_images WHERE id=:id AND user_id=:userId ');
+            $PdoStat->bindValue(':id', $img,PDO::PARAM_STR);
+            $PdoStat->bindValue(':userId', $userId,PDO::PARAM_INT);
 
-            $deletedImage=$pdoStat->execute();
+            $deletedImage=$PdoStat->execute();
         }
 
         /*public function getUserProfilePicture2()
@@ -419,75 +434,103 @@ class UserManager extends Manager
             return $username;
         }*/
 
-        public function getUserProfilePicture()
-    {
-
-        $pdo=$this->dbConnect();
-        $PdoStat=$pdo->query('
-            SELECT COUNT(id) AS nbUsers
-            FROM projet5_user');
-        $data=$PdoStat->execute();
-        $data=$PdoStat->fetch();
-        foreach ($data as $datum)
+        public function homeDisplay()
         {
-            $nbUsers=$datum ;
+
+            $pdo = $this->dbConnect();
+            $PdoStat = $pdo->query('
+            SELECT COUNT(filename) AS nbUsers
+            FROM projet5_images WHERE filename="img-userProfil"');
+            $data = $PdoStat->execute();
+            $data = $PdoStat->fetch();
+            return $data;
         }
-        $perPage=6;
-        $nbPage= ceil($nbUsers/$perPage);
+
+
+            /*
+           $nbUsers=$data['nbUsers'];
+           $perPage=6;
+           $nbPage= ceil($nbUsers/$perPage);
 
 
 
-        if (isset($_GET['p'])&& $_GET['p']>0 && $_GET['p']<=$nbPage)
+          /* if (isset($_GET['p'])&& $_GET['p0 && $_GET['p']<=$nbPage)
+           {
+               $currentPage=$_GET['p'];
+           }
+           else{
+               $currentPage='1';
+           }
+
+
+           for ($i=1; $i<=$nbPage; $i++ )
+           {
+               if($i==$currentPage){
+                   echo " $i/";
+               }
+               else{
+                echo"<a href=\"index.php?p=$i\">$i/</a> ";
+               }
+
+           }*/
+
+        public function getUserProfilePicture($currentPage,$perPage)
         {
-            $currentPage=$_GET['p'];
-        }
-        else{
-            $currentPage='1';
-        }
 
-
-        for ($i=1; $i<=$nbPage; $i++ )
-        {
-            if($i==$currentPage){
-                //echo " $i/";
-            }
-            else{
-              // echo"<a href=\"index.php?p=$i\">$i</a> ";
-            }
-
-        }
-
-
-        $PdoStat->closeCursor();
-        $PdoStat=$pdo->query('
+            $pdo=$this->dbConnect();
+            $PdoStat=$pdo->query('
             SELECT projet5_images.user_id,filename, projet5_user.id,username,registry_date,connected
             FROM projet5_images
             INNER JOIN projet5_user
-            ON projet5_images.user_id = projet5_user.id   
-            WHERE projet5_images.filename="img-userProfil" AND projet5_user.connected_self  IS NULL 
+            ON projet5_images.user_id = projet5_user.id
+            WHERE projet5_images.filename="img-userProfil"
+
+            AND projet5_user.connected_self IS NULL
             ORDER BY registry_date DESC LIMIT '.(($currentPage-1)*$perPage). ','.$perPage);
 
-        $username= $PdoStat->execute();
-        $username= $PdoStat->fetchAll();
+            $username= $PdoStat->execute();
+            $username= $PdoStat->fetchAll();
 
-        return $username;
+            return $username;
     }
+
+        public function getUserProfilePictures()
+        {
+
+            $pdo=$this->dbConnect();
+            $PdoStat=$pdo->query('
+            SELECT projet5_images.user_id,filename, projet5_user.id,username,registry_date,connected
+            FROM projet5_images
+            INNER JOIN projet5_user
+            ON projet5_images.user_id = projet5_user.id
+            WHERE projet5_images.filename="img-userProfil"
+
+            AND projet5_user.connected_self IS NULL
+            ORDER BY registry_date DESC LIMIT 0,6');
+
+            $username= $PdoStat->execute();
+            $username= $PdoStat->fetchAll();
+
+            return $username;
+    }
+
+
 
         public function getUserProfile($userId)
          {
              $pdo=$this->dbConnect();
-             $pdoStat=$pdo->prepare('
+             $PdoStat=$pdo->prepare('
              SELECT projet5_images.dirname,filename,extension, projet5_user.id,username
              FROM projet5_images
              INNER JOIN projet5_user
               ON projet5_images.user_id = projet5_user.id
              WHERE user_id = :userId AND filename=:filename');
-             $pdoStat->bindValue(':userId',$userId,PDO::PARAM_INT);
-             $pdoStat->bindValue(':filename',"img-userProfil",PDO::PARAM_STR);
+             $PdoStat->bindValue(':userId',$userId,PDO::PARAM_INT);
+             $PdoStat->bindValue(':filename',"img-userProfil",PDO::PARAM_STR);
 
 
-             $pdoStat->execute();
-             $data=$pdoStat->fetch();
+             $PdoStat->execute();
+             $data=$PdoStat->fetch();
 
              return $data;
 
@@ -495,13 +538,14 @@ class UserManager extends Manager
 
         public function disconnectUser($id){
             $pdo=$this->dbConnect();
-            $pdoStat=$pdo->prepare('
+            $PdoStat=$pdo->prepare('
             UPDATE projet5_user
-            SET connected_self =:connectedSelf
+            SET connected=:connected,connected_self =:connectedSelf
             WHERE id=:id');
-            $pdoStat->bindValue(':id',$id,PDO::PARAM_INT);
-            $pdoStat->bindValue(':connectedSelf',null,PDO::PARAM_INT);
-            $disconnectUser= $pdoStat->execute();
+            $PdoStat->bindValue(':id',$id,PDO::PARAM_INT);
+            $PdoStat->bindValue(':connected',null,PDO::PARAM_INT);
+            $PdoStat->bindValue(':connectedSelf',null,PDO::PARAM_INT);
+            $disconnectUser= $PdoStat->execute();
 
 
         }
@@ -511,17 +555,17 @@ class UserManager extends Manager
         public function frontUsergalerie($userId,$username)
          {
              $pdo=$this->dbConnect();
-             $pdoStat=$pdo->prepare('
+             $PdoStat=$pdo->prepare('
              SELECT projet5_thumbnails.image_id,thumbnail, projet5_user.id,username
              FROM projet5_thumbnails
              INNER JOIN projet5_user
              ON projet5_thumbnails.user_id = projet5_user.id
              WHERE user_id = :userId AND username=:username');
-             $pdoStat->bindValue(':userId',$userId,PDO::PARAM_INT);
-             $pdoStat->bindValue(':username',$username,PDO::PARAM_STR);
+             $PdoStat->bindValue(':userId',$userId,PDO::PARAM_INT);
+             $PdoStat->bindValue(':username',$username,PDO::PARAM_STR);
 
-             $userGalerie = $pdoStat->execute();
-             $userGalerie = $pdoStat->fetchAll();
+             $userGalerie = $PdoStat->execute();
+             $userGalerie = $PdoStat->fetchAll();
 
              return $userGalerie;
 
@@ -543,16 +587,6 @@ class UserManager extends Manager
             return $connected;
 
         }
-
-
-
-
-
-
-
-
-
-
         public  function deleteUserProfilPicture()
         {
             $pdo=$this->dbConnect();
@@ -564,6 +598,28 @@ class UserManager extends Manager
 
 
         }
+
+        public function addUserInfos($userId)
+        {
+            $pdo=$this->dbConnect();
+            $PdoStat=$pdo->prepare('INSERT INTO projet5_infosuser VALUES (NULL,:userId,:search,:purpose,:family,:children,:familyAdd,:physic,:finaly,:school,:schoolAdd, :business,:buinessAdd)');
+            $PdoStat->bindValue(':userId',$userId,PDO::PARAM_INT);
+            $PdoStat->bindValue(':search',$_POST['search'],PDO::PARAM_STR);
+            $PdoStat->bindValue(':purpose',$_POST['purpose'],PDO::PARAM_STR);
+            $PdoStat->bindValue(':family',$_POST['family_situation'],PDO::PARAM_STR);
+            $PdoStat->bindValue(':children',$_POST['children'],PDO::PARAM_STR);
+            $PdoStat->bindValue(':familyAdd',$_POST['family_situation_add'],PDO::PARAM_STR);
+            $PdoStat->bindValue(':physic',$_POST['physic_add'],PDO::PARAM_STR);
+            $PdoStat->bindValue(':finaly',$_POST['finaly'],PDO::PARAM_STR);
+            $PdoStat->bindValue(':school',$_POST['school_level'],PDO::PARAM_STR);
+            $PdoStat->bindValue(':schoolAdd',$_POST['school_level_add'],PDO::PARAM_STR);
+            $PdoStat->bindValue(':business',$_POST['work'],PDO::PARAM_STR);
+            $PdoStat->bindValue(':buinessAdd',$_POST['work_add'],PDO::PARAM_STR);
+            $addInfos = $PdoStat->execute();
+
+        }
+
+
 
 
 

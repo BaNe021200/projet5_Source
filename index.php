@@ -17,7 +17,8 @@ if (isset($_GET['p']))
     elseif ($_GET['p'] == '1'){
         if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
 
-            listProfile();
+           listProfile();
+
 
         }
         else
@@ -27,11 +28,25 @@ if (isset($_GET['p']))
     }
 
     elseif ($_GET['p'] == '2'){
-        if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
+        if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])) {
 
             listProfile();
 
         }
+
+        else
+        {
+            throw new Exception("Erreur vous n'êtes pas connectez. Veuillez vous identifier");
+        }
+    }
+
+    elseif ($_GET['p'] == '3'){
+        if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])) {
+
+          listProfile();
+
+        }
+
         else
         {
             throw new Exception("Erreur vous n'êtes pas connectez. Veuillez vous identifier");
@@ -120,27 +135,72 @@ if (isset($_GET['p']))
         }
     }
 
+    elseif ($_GET['p'] == 'saveUserinfos'){
+        if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
+
+            saveUserinfos($_GET['userid']);
+        }
+        else
+        {
+            throw new Exception("Erreur vous n'êtes pas connectez. Veuillez vous identifier");
+        }
+    }
+
+
+
     elseif ($_GET['p'] == 'signUp'){
+
         signUp();
     }
 
     elseif($_GET['p']== 'register')
     {
         //;
-        if(empty($_POST['first_name']) || empty($_POST['last_name'])){
-            throw new Exception('Les champs noms et prénoms doivent être remplis');
-        }
-        elseif (empty($_POST['username']) || empty($_POST['birthday'])){
-            throw new Exception('Les champs pseudos et anniversaire doivent être remplis');
-        }
-        elseif (empty($_POST['email']) || empty($_POST['password'])){
-            throw new Exception('Les champs email et mot de passe doivent être remplis');
-        }
 
-        else
-        {
-            controlUsername($_POST['username']);
-        }
+
+            if (!empty($_POST['first_name']) || !empty($_POST['last_name']))
+            {
+                if(preg_match('/^[a-zA-Z-]+$/', $_POST['first_name']) && preg_match('/^[a-zA-Z-]+$/',($_POST['last_name'])))
+                    {
+
+                        if (empty($_POST['birthday']))
+                        {
+                            throw new Exception('Le champ anniversaire doit être rempli');
+                        }
+
+
+                        elseif (empty($_POST['email']) || empty($_POST['password']))
+                        {
+                            throw new Exception('Les champs email et mot de passe doivent être remplis');
+                        }
+
+                        if (empty($_POST['username']))
+                        {
+                            throw new Exception('Le champ pseudo doit être remplis');
+
+                        }
+                        elseif (preg_match('/^[a-zA-Z0-9_]+$/',$_POST['username'] ))
+                        {
+                            controlUsername($_POST['username']);
+                        }
+                        else
+                        {
+                            throw new Exception("le champs pseudos n'accepte que des lettres (majuscules et/ou minuscules).Les espaces sont représentés par des tirets bas (underscores : '_') et apparaitront sur le site. ");
+                        }
+
+
+
+                    }
+                else
+                {
+                    throw new Exception('Vos noms et prénoms ne peuvent contenir que des minuscules et des majuscules ainsi que des tirets (-) ');
+                }
+            }
+             else
+            {
+                throw new Exception('Les champs noms et prénoms doivent être remplis');
+            }
+
 
 
 
@@ -251,6 +311,14 @@ if (isset($_GET['p']))
             throw new Exception("Erreur vous n'êtes pas connectez. Veuillez vous identifier");
         }
     }
+
+    elseif ($_GET['p'] == 'test'){
+
+            require_once 'test.php';
+
+    }
+
+
 
 
 

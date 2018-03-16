@@ -28,16 +28,16 @@ use model\User;
 
 function controlUsername($username)
 {
-    $userManager= new UserManager();
-    $getUsername = $userManager->controlUsername($username);
-    if(is_null($getUsername))
-    {
-        calendarControl();
-    }
-    else
-    {
-        throw new Exception("Le pseudo ".$username." existe déjà !");
-    }
+        $userManager= new UserManager();
+        $getUsername = $userManager->controlUsername($username);
+        if(is_null($getUsername))
+        {
+            calendarControl();
+        }
+        else
+        {
+            throw new Exception("Le pseudo ".$username." existe déjà !");
+        }
 }
 
 //on contrôle la date
@@ -158,15 +158,70 @@ function homeUser()
 
 }
 
-function pagination($currentPage,$perPage)
+function listProfile()
+{
+    $user=new UserManager();
+    //$userProfileNbx=$user->getUserProfileNbx();
+
+    $data= $user->homeDisplay();
+    $nbUsers=$data['nbUsers'];
+    /*foreach ($data as $datum)
+    {
+        $nbUsers=$datum ;
+    }*/
+    $perPage=6;
+    $nbPage= ceil($nbUsers/$perPage);
+
+
+
+    if (isset($_GET['p'])&& $_GET['p']>0 && $_GET['p']<=$nbPage)
+    {
+        $currentPage=$_GET['p'];
+    }
+    else{
+        $currentPage='1';
+    }
+
+
+    /*for ($i=1; $i<=$nbPage; $i++ )
+    {
+        if($i==$currentPage){
+            echo " $i";
+        }
+        else{
+            echo"<a href=\"index.php?p=$i\">/$i</a> ";
+        }
+
+    }*/
+    $infos=
+        [
+
+            'currentPage' => $currentPage,
+             'perPage'    => $perPage,
+              'nbPage'    => $nbPage,
+
+        ];
+
+
+
+    $userProfilePictures=$user->getUserProfilePicture($currentPage,$perPage);
+
+
+
+
+
+    twigRender('frontend/listProfile.html.twig','userdata',$userProfilePictures,'infos',$infos);
+}
+
+function pagination()
 {
     $user=new UserManager();
     $data= $user->homeDisplay();
-
-    foreach ($data as $datum)
+    $nbUsers=$data['nbUsers']; var_dump($nbUsers);
+    /*foreach ($data as $datum)
     {
         $nbUsers=$datum ;
-    }
+    }*/
     $perPage=6;
     $nbPage= ceil($nbUsers/$perPage);
 
@@ -184,7 +239,7 @@ function pagination($currentPage,$perPage)
     for ($i=1; $i<=$nbPage; $i++ )
     {
         if($i==$currentPage){
-            echo " $i/";
+            echo " $i";
         }
         else{
             echo"<a href=\"index.php?p=$i\">$i</a> ";
@@ -224,8 +279,9 @@ function galerie1()
 
 function infosUser()
 {
-    $folder = glob('users/img/user/'.$_COOKIE['username'].'/crop/*-cropped.jpg');
-    twigRender('infosUser.html.twig','image',$folder,'','');
+    $user= new UserManager();
+    $getinfos= $user->getUserName($_COOKIE['ID']);
+    twigRender('infosUser.html.twig','infos',$getinfos,'','');
 }
 
 function connectUser()
@@ -269,7 +325,7 @@ function authentificationConnexion()
 function disconnectUser()
 {
     $user=new UserManager();
-    $disconnectUser =$user->disconnectUser($_COOKIE['ID']);
+    @$disconnectUser =$user->disconnectUser($_COOKIE['ID']);
     session_abort();
     setcookie("ID","", time()- 60);
     setcookie("username","", time()- 60);
@@ -311,7 +367,7 @@ function uploadPicture($userId,$img)
 
                         //$destinationPath='upload/user/'.$file['name'];
                         $destinationPath ="users/img/user/".$_COOKIE['username'].'/img_00'.$img.'.jpg';
-                        $uploadimage= $user->addUserFiles($_COOKIE['ID'],$destinationPath);
+                        $uploadimage= $user->addUserPicture($_COOKIE['ID'],$destinationPath);
 
 
 
@@ -363,7 +419,7 @@ function uploadPicture($userId,$img)
 
 
                         $destinationPath ="users/img/user/".$_COOKIE['username'].'/img_00'.$img.'.jpg';
-                        $uploadimage= $user->addUserFiles($_COOKIE['ID'],$destinationPath);
+                        $uploadimage= $user->addUserPicture($_COOKIE['ID'],$destinationPath);
 
 
                         $temporaryPath = $file['tmp_name'];
@@ -544,7 +600,13 @@ function viewerGalerie2($imageId)
     twigRender('galerieViewer.html.twig','view',$view,'','');
 }
 
+function saveUserinfos($userId)
+{
+    $user=new UserManager();
+    $userInfos = $user->addUserInfos($userId);
 
+    header('Location: index.php?p=homeUser');
+}
 
 
 

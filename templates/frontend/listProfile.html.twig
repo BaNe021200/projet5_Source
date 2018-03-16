@@ -3,10 +3,10 @@
 {% block stylesheet %}
 
     <link rel="stylesheet" href="public/css/galerie3.css">
+    <link rel="stylesheet" href="public/css/tuto.cs">
+
 
 {% endblock %}
-
-
 
 
 
@@ -15,7 +15,7 @@
 
 
 
-
+   
 
     <div class="container marketing">
 
@@ -47,15 +47,40 @@
                 </div>
 
             {% endfor %}
+            <div class="col-md 12 text-center">
+
+
+
+                     </div>
 
         </div>
 
 
 
+        {% for i in 1..infos.nbPage %}
+
+            {% if i == currentPage %}
+                {{ i }}
+
+            {% elseif i == currentPage + 1 %}
+                <a href="index.php?p={{ i }}" class="suivant">{{ i }}</a>
+
+            {% else %}
+                <a href="index.php?p={{ i }}">{{ i }}</a>
+            {% endif %}
+
+        {% endfor %}
+
+
+
+
+
+
+
+
+
 
     </div>
-
-
 
 
 

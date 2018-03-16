@@ -1,8 +1,10 @@
 {% extends "layout.html.twig" %}
+{% import 'form.html.twig' as form %}
 
 {% block stylesheet %}
     <link rel="stylesheet" href="public/css/users.css">
     <link rel="stylesheet" href="public/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="public/css/tuto.cs">
 {% endblock stylesheet %}
 
 {% block title %} La page de {{ userDatum.username }}{% endblock title %}
@@ -35,19 +37,43 @@
 {% endblock %}
 {% block main %}
 
-    <h1>Hello  {{ userDatum.first_name }}  </h1>
+    <div class="row">
+        <div class="col-lg-3 "><h1>Hello  {{ userDatum.first_name }}  </h1></div>
+        <div class="col-lg-6 ">
 
-<div class="col-lg-4">
-    {#{%  if imagecenter is not null   %}
 
-        <img class="rounded-circle" id="cropImage" src="{{ imagecenter }}" alt="Generic placeholder image" width="150" height="150" >
 
-   {% else %}#}
-       <img class="rounded-circle" id="cropImage" src="{{ imageProfil  }}" alt="Generic placeholder image" width="150" height="150" >
 
-    {#{% endif %}#}
 
-</div><!-- /.col-lg-4 -->
+           </div>
+
+    </div>
+
+
+
+    <div class="row">
+        <div class="col-lg-2 text-right">
+
+            <img class="rounded-circle" id="cropImage" src="{{ imageProfil }}" alt="Generic placeholder image"
+                 width="150" height="150">
+
+            <ul class="list-unstyled">
+                <li> Modifier vos informations</li>
+                <li>voir votre profil</li>
+            </ul>
+
+        </div>
+        <div class="col-lg-8 text-justify">
+
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus atque blanditiis culpa cumque dolor et eveniet harum id iusto labore modi necessitatibus nemo nesciunt omnis quibusdam, quos sit suscipit, totam?
+
+
+
+
+        </div>
+        <div class="col-lg-2">fdsfdsf</div>
+
+    </div>
 
 {% endblock %}
 

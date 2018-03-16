@@ -11,7 +11,7 @@ use PDO;
 
 class Manager
 {
-    protected  function  dbConnect()
+   protected  function  dbConnect()
     {
         $db = new \PDO('mysql:host=localhost;dbname=twig;charset=utf8', 'root', 'nzB69yCSBDz9eK46');
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

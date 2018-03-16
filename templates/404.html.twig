@@ -2,6 +2,7 @@
 
 {% block stylesheet %}
     <link rel="stylesheet" href="public/css/style.css">
+    <link rel="stylesheet" href="public/dist/css/bootstrap.min.css">
 {% endblock %}
 {% block navBarBg %}
   bg-invert
@@ -20,7 +21,7 @@
 
     <h1>Ne vous laissez pas distraire : <br>
         une erreur est survenue !<br>
-        <span class="red">{{ errorMessage }}</span>
+        <span class="alert-danger red">{{ errorMessage }}</span>
 
     </h1>
 {% endblock %}

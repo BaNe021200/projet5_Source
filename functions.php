@@ -33,6 +33,12 @@ function str_random($length){
     return substr(str_shuffle(str_repeat($alphabet, $length)), 0, $length);
 }
 
+function displayUserName($name)
+{
+    $username=$name;
+
+    $username = str_replace('_',' ',$username);
+}
 
 function resizeByHeight()
 {

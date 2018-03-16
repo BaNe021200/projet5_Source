@@ -34,7 +34,7 @@ function get_registry()
 
     $user = new UserManager();
 
-    $newUser = $user->addUser();
+    $newUser = $user->addUser();var_dump($newUser);
     $message=[];
     if($newUser)
     {
@@ -45,6 +45,9 @@ function get_registry()
     {
         $message[]= 'Nous sommes navrés mais un erreur est survenue et votre inscription n\'a pas pu est prise en compte. vous êtes invitez à recommencer ultérieurement ';
     }
+
+       mail($newUser['email'],'Confirmation d\'incription','bonjour'.$newUser['first_name'], 'votre inscription est confirmé. Notez votre pseudo : '.$newUser['username']. 'Votre mot de passe est celui que vous avez tapé pour vous inscrire. Merci et à bientôt' );
+
     twigRender('frontend/registrySucces.html.twig','message',$message,'','');
 
 }
@@ -52,7 +55,7 @@ function get_registry()
 function home()
 {
     $user=new UserManager();
-    $usersProfilPictures=$user->getUserProfilePicture();
+    $usersProfilPictures=$user->getUserProfilePictures();
 
     twigRender('frontend/home.html.twig','userdata',$usersProfilPictures ,'','');
 }
@@ -62,17 +65,3 @@ function signUp()
     twigRender('frontend/signUp.html.twig','','','','');
 }
 
-function listProfile()
-{
-    $user=new UserManager();
-   $usersProfilPictures=$user->getUserProfilePicture();
-    //$usersProfilPictures=$user->getConnectedUsers();
-
-
-
-
-
-
-
-    twigRender('frontend/listProfile.html.twig','userdata',$usersProfilPictures,'','');
-}

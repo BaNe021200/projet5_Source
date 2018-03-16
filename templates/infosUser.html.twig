@@ -14,7 +14,7 @@
 
     <section><!--début ok1-->
         <div class="container">
-            <form class="form-horizontal" role="form" method="POST" action="">
+            <form class="form-horizontal" role="form" method="POST" action="index.php?p=saveUserinfos&amp;userid={{ infos.id }}">
                 {{ form.rowVerticalSpace() }}
                 <h2>{{ form.col363('vos informations') }}</h2>
 
@@ -24,17 +24,17 @@
 
                     {{ form.col12radioInline3(
                         'Vous recherchez :',
-                        'gender1','gender','Une femme','female',
-                        'gender2','gender','Un homme','male',
-                        'gender3','gender','Autre','otherGender'
+                        'search1','search','Une femme','female',
+                        'search2','search','Un homme','male',
+                        'search3','search','Autre','otherGender'
                      )}}
 
                     {{ form.col12radioInline4(
                         'Pour :',
-                        'gender1','purpose','Rencontre amoureuse','love',
-                        'gender2','purpose','Amitié','friendship',
-                        'gender3','purpose','Sortie','walk',
-                        'gender4','purpose','Autre','otherPurpose'
+                        'purpose1','purpose','Rencontre amoureuse','love',
+                        'purpose2','purpose','Amitié','friendship',
+                        'purpose3','purpose','Sortie','walk',
+                        'purpose4','purpose','Autre','otherPurpose'
                      )}}
 
 
@@ -48,11 +48,11 @@
 
                     {{ form.col12radioInline5(
                         'vous êtes :',
-                        'familiy_situation1','familiy_situation','libre comme l\'air','freeAsBird',
-                        'familiy_situation2','familiy_situation','la corde au cou','unhappyCouple',
-                        'familiy_situation3','familiy_situation','en couple mais heureux(se)','happyCouple',
-                        'familiy_situation4','familiy_situation','divorcé(e)','divorced',
-                        'familiy_situation5','familiy_situation','séparé(e)','separated'
+                        'familiy_situation1','family_situation','libre comme l\'air','freeAsBird',
+                        'familiy_situation2','family_situation','la corde au cou','unhappyCouple',
+                        'familiy_situation3','family_situation','en couple mais heureux(se)','happyCouple',
+                        'familiy_situation4','family_situation','divorcé(e)','divorced',
+                        'familiy_situation5','family_situation','séparé(e)','separated'
 
                     )}}
 
@@ -67,7 +67,7 @@
                     ) }}
 
                      {{ form.rowVerticalSpace() }}
-                    {{ form.colcentertextarea(2,8,'familiy_situation_add','Vous m\'intriguez, pourriez-vous m\'en dire plus ?',50,10) }}
+                    {{ form.colcentertextarea(2,8,'family_situation_add','Vous m\'intriguez, pourriez-vous m\'en dire plus ?',50,10) }}
 
                 </fieldset>
 
@@ -79,7 +79,7 @@
 
                      <h3>{{ form.col363('Et physiquement ?') }}</h3>
                          {{ form.col12('Comment vous décririez vous ?') }}
-                         {{ form.colcentertextarea(2,8,'physic-add','Comment êtes-vous ?Quel est votre ressenti ?...',50,10) }}
+                         {{ form.colcentertextarea(2,8,'physic_add','Comment êtes-vous ?Quel est votre ressenti ?...',50,10) }}
 
 
 
@@ -138,7 +138,7 @@
                                    'work5','work','Autre','Other'
                                ) }}
                                {{ form.rowVerticalSpace() }}
-                               {{ form.colcentertextarea(2,8,'work-add','Si vous avez des précision à apporter, c\'est ici',50,10) }}
+                               {{ form.colcentertextarea(2,8,'work_add','Si vous avez des précision à apporter, c\'est ici',50,10) }}
 
 
                        </fieldset>
@@ -156,11 +156,14 @@
 
                        <div class="row">
                            <div class="col-md-3"></div>
-                           <div class="col-md-6">
-                               <button type="submit" id="register" class="btn btn-success"><i class="fa fa-user-plus"></i> Register</button>
+                           <div class="col-md-6 text-center">
+                               {{ form.rowVerticalSpace() }}
+                               <button type="submit" id="register" class="btn btn-success"><i class="fa fa-user-plus"></i> Valider</button>
                            </div>
+                           <div class="col-md-3"></div>
+
                        </div>
-       
+                {{ form.rowVerticalSpace() }}
             </form>
         </div>
     </section>
