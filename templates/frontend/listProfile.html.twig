@@ -56,20 +56,51 @@
         </div>
 
 
-
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <li class="page-item disabled"> <a class="page-link" href="index.php?p={{ i }}" tabindex="-1">Previous</a> </li>
         {% for i in 1..infos.nbPage %}
 
             {% if i == currentPage %}
+
                 {{ i }}
 
             {% elseif i == currentPage + 1 %}
-                <a href="index.php?p={{ i }}" class="suivant">{{ i }}</a>
+
+
+                <li class="page-item "><a href="index.php?p={{ i }}" class="page-link" >{{ i }}</a> <span class="sr-only">{{ i }}</span>
+                </li>
+
+
 
             {% else %}
-                <a href="index.php?p={{ i }}">{{ i }}</a>
+
+                <li class="page-item "><a href="index.php?p={{ i }}" class="page-link">{{ i }}</a></li>
+
+
             {% endif %}
 
         {% endfor %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="index.php?p={{ i  }}">Next</a>
+                </li>
+            </ul>
+        </nav>
+
+
+      {#  <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+
+
+
+                <a class="page-link" href="#">1</a>
+                <a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#">Next</a>
+                </li>
+            </ul>
+        </nav>#}
 
 
 

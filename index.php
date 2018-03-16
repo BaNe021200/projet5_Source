@@ -160,7 +160,7 @@ if (isset($_GET['p']))
 
             if (!empty($_POST['first_name']) || !empty($_POST['last_name']))
             {
-                if(preg_match('/^[a-zA-Z-]+$/', $_POST['first_name']) && preg_match('/^[a-zA-Z-]+$/',($_POST['last_name'])))
+                if(preg_match('/^[a-zéèA-Z-]+$/', $_POST['first_name']) && preg_match('/^[a-zéèA-Z-]+$/',($_POST['last_name'])))
                     {
 
                         if (empty($_POST['birthday']))

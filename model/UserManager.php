@@ -56,13 +56,16 @@ class UserManager extends Manager
         return $userMainData;
         }
 
-        public function userData(){
+        /*public function userData(){
 
         $pdo=$this->dbConnect();
         $userData = $pdo->query('SELECT * FROM projet5_user');
         return $userData;
-        }
+        }*/
 
+        /*
+         * controlUsername controle dans la bdd si l'username existe déjà
+         */
         public function controlUsername()
         {
             $username= $_POST['username'];
@@ -74,6 +77,9 @@ class UserManager extends Manager
             return $getusernameId;
         }
 
+        /*
+         * getEmail controle dans la bdd si l'email existe déjà
+         */
         public function getEmail()
         {
             $email= $_POST['email'];
@@ -129,6 +135,26 @@ class UserManager extends Manager
 
         }
 
+        public function getConnectedUsers()
+        {
+            $pdo=$this->dbConnect();
+            $PdoStat=$pdo->prepare('
+                SELECT username, connected
+                FROM projet5_user
+                WHERE connected IS NULL limit 0,6');
+            $connected= $PdoStat->execute();
+            $connected= $PdoStat->fetchAll();
+
+            return $connected;
+
+        }
+
+
+
+        /*
+         * function isConnectedSelf($id)
+         * rajoute 1 dans le champ connectedSezlf de la BDD
+         */
         public function isConnectedSelf($id)
         {
             $pdo=$this->dbConnect();
@@ -284,26 +310,22 @@ class UserManager extends Manager
 
         }
 
-        public function getUserFiles($userId)
-        {
-            /*
-            $pdo=$this->dbConnect();
-            $PdoStat=$pdo->prepare('SELECT id, dirname,filename,extension FROM projet5_images WHERE  user_id=:userId ');
-            $PdoStat->bindValue(':userId',$userId,PDO::PARAM_STR);
-            $userImages=$PdoStat->execute();
-            $userImages = $PdoStat->fetchAll();
-            return $userImages;
-            */
+        /*
+         * pas d'usage connu pour getUserFiles
+         */
+       /*public function getUserFiles($userId)
+{
 
 
-            $pdo=$this->dbConnect();
-            $PdoStat=$pdo->prepare('SELECT * FROM projet5_images WHERE  user_id=:userId AND dirname=:dirname');
-            $PdoStat->bindValue(':userId',$userId,PDO::PARAM_STR);
-            $PdoStat->bindValue(':dirname','users/img/user/'.$_COOKIE['username'],PDO::PARAM_STR);
-            $userImages=$PdoStat->execute();
-            $userImages = $PdoStat->fetchAll();
-            return $userImages;
-        }
+
+    $pdo=$this->dbConnect();
+    $PdoStat=$pdo->prepare('SELECT * FROM projet5_images WHERE  user_id=:userId AND dirname=:dirname');
+    $PdoStat->bindValue(':userId',$userId,PDO::PARAM_STR);
+    $PdoStat->bindValue(':dirname','users/img/user/'.$_COOKIE['username'],PDO::PARAM_STR);
+    $userImages=$PdoStat->execute();
+    $userImages = $PdoStat->fetchAll();
+    return $userImages;
+}*/
 
         public function getUserView($photoId)
         {
@@ -446,34 +468,6 @@ class UserManager extends Manager
             return $data;
         }
 
-
-            /*
-           $nbUsers=$data['nbUsers'];
-           $perPage=6;
-           $nbPage= ceil($nbUsers/$perPage);
-
-
-
-          /* if (isset($_GET['p'])&& $_GET['p0 && $_GET['p']<=$nbPage)
-           {
-               $currentPage=$_GET['p'];
-           }
-           else{
-               $currentPage='1';
-           }
-
-
-           for ($i=1; $i<=$nbPage; $i++ )
-           {
-               if($i==$currentPage){
-                   echo " $i/";
-               }
-               else{
-                echo"<a href=\"index.php?p=$i\">$i/</a> ";
-               }
-
-           }*/
-
         public function getUserProfilePicture($currentPage,$perPage)
         {
 
@@ -514,8 +508,6 @@ class UserManager extends Manager
             return $username;
     }
 
-
-
         public function getUserProfile($userId)
          {
              $pdo=$this->dbConnect();
@@ -550,8 +542,6 @@ class UserManager extends Manager
 
         }
 
-
-
         public function frontUsergalerie($userId,$username)
          {
              $pdo=$this->dbConnect();
@@ -574,19 +564,7 @@ class UserManager extends Manager
 
          }
 
-        public function getConnectedUsers()
-        {
-            $pdo=$this->dbConnect();
-            $PdoStat=$pdo->prepare('
-            SELECT username, connected
-            FROM projet5_user
-            WHERE connected IS NULL limit 0,6');
-            $connected= $PdoStat->execute();
-            $connected= $PdoStat->fetchAll();
 
-            return $connected;
-
-        }
         public  function deleteUserProfilPicture()
         {
             $pdo=$this->dbConnect();

@@ -36,6 +36,28 @@ function get_registry()
 
     $newUser = $user->addUser();var_dump($newUser);
     $message=[];
+    $messagemail ='
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Mail</title>
+</head>
+<body>
+
+<p>
+    bonjour '.$newUser['first_name']. ' ! Bienvenue !  votre inscription est confirmé. Notez votre pseudo : '.$newUser['username']. '<br> Votre mot de passe est celui que vous avez tapé pour vous inscrire. Merci et à bientôt
+
+</p>
+
+
+
+</body></html>' ;
+
+
+
     if($newUser)
     {
 
@@ -46,7 +68,10 @@ function get_registry()
         $message[]= 'Nous sommes navrés mais un erreur est survenue et votre inscription n\'a pas pu est prise en compte. vous êtes invitez à recommencer ultérieurement ';
     }
 
-       mail($newUser['email'],'Confirmation d\'incription','bonjour'.$newUser['first_name'], 'votre inscription est confirmé. Notez votre pseudo : '.$newUser['username']. 'Votre mot de passe est celui que vous avez tapé pour vous inscrire. Merci et à bientôt' );
+       mail($newUser['email'],'Confirmation d\'incription','bonjour '.$newUser['first_name']. ' ! Bienvenue !  votre inscription est confirmé. Notez votre pseudo : '.$newUser['username']. '<br> Votre mot de passe est celui que vous avez tapé pour vous inscrire. Merci et à bientôt' );
+
+
+
 
     twigRender('frontend/registrySucces.html.twig','message',$message,'','');
 
