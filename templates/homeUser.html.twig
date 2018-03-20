@@ -4,6 +4,7 @@
 {% block stylesheet %}
     <link rel="stylesheet" href="public/css/users.css">
     <link rel="stylesheet" href="public/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="public/css/homeUser.css">
     <link rel="stylesheet" href="public/css/tuto.cs">
 {% endblock stylesheet %}
 
@@ -30,8 +31,8 @@
 {% block connexion %}déconnexion{% endblock %}
 {% block connexionLink %}index.php?p=deconnexion{% endblock %}
 {% block profilCount %}
-    <a  href="index.php?p=listProfile"><button type="button"  class="btn btn-info">
-        Profile <span class="badge badge-light">9</span>
+    <a  href="listProfils.php?p=listProfile"><button type="button"  class="btn btn-info">
+        Profils des autres utilisateurs <span class="badge badge-light">9</span>
         <span class="sr-only">unread messages</span>
     </button></a>
 {% endblock %}
@@ -58,12 +59,16 @@
                  width="150" height="150">
 
             <ul class="list-unstyled">
-                <li> Modifier vos informations</li>
+
+
                 <li>voir votre profil</li>
             </ul>
 
         </div>
         <div class="col-lg-8 text-justify">
+
+
+            <h2>Bienvenue sur votre page</h2>
 
             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus atque blanditiis culpa cumque dolor et eveniet harum id iusto labore modi necessitatibus nemo nesciunt omnis quibusdam, quos sit suscipit, totam?
 

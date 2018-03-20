@@ -66,5 +66,20 @@ function resizeByHeight()
 
 }
 
+function newpage(){
+
+    if(!isset ($_GET['p'])){
+
+        for($i=1; $i<=$nbPage; $i++){
+            $_GET['p']== $i;
+        }
+    }
+
+
+
+}
+
+
+
 
 //upload_max_filesize = 40M

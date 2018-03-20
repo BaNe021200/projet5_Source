@@ -1,12 +1,15 @@
 <?php
 declare(strict_types=1);
 
+
+
 require_once 'model/UserManager.php';
 require_once 'twig.php';
 require_once 'functions.php';
 require_once 'model/User.php';
 require_once 'resize2.php';
 require_once 'crop.php';
+//require_once 'listProfils.php';
 
 use model\UserManager;
 use model\User;
@@ -145,12 +148,14 @@ function homeUser()
     $user= new UserManager();
     $isConnected = $user->getUserName($_COOKIE['ID']);
 
+
     if(($isConnected['id']===$_COOKIE['ID']) && ($isConnected['username']===$_COOKIE['username']))
     {
         $user= new UserManager();
         $connectedSelf=$user->isConnectedSelf($_COOKIE['ID']);
     }
 
+    $iNLine=$user->whoIsOnLine($_COOKIE['ID'],$_COOKIE['ip']);
 
 
 
@@ -158,19 +163,16 @@ function homeUser()
 
 }
 
-function listProfile()
+/*function listProfile()
 {
     $user=new UserManager();
     //$userProfileNbx=$user->getUserProfileNbx();
 
     $data= $user->homeDisplay();
     $nbUsers=$data['nbUsers'];
-    /*foreach ($data as $datum)
-    {
-        $nbUsers=$datum ;
-    }*/
+
     $perPage=6;
-    $nbPage= ceil($nbUsers/$perPage);
+    $nbPage= ceil($nbUsers/$perPage);var_dump($nbPage);
 
 
 
@@ -181,47 +183,35 @@ function listProfile()
     else{
         $currentPage='1';
     }
+    if(!isset ($_GET['p'])){
 
-
-    /*for ($i=1; $i<=$nbPage; $i++ )
-    {
-        if($i==$currentPage){
-            echo " $i";
+        for($i=1; $i<=$nbPage; $i++){
+            $_GET['p']== $i;
         }
-        else{
-            echo"<a href=\"index.php?p=$i\">/$i</a> ";
-        }
+    }
 
-    }*/
-    $infos=
-        [
+    $infos=[
 
-            'currentPage' => $currentPage,
-             'perPage'    => $perPage,
-              'nbPage'    => $nbPage,
+        'currentPage' => $currentPage,
+        'perPage'    => $perPage,
+        'nbPage'    => $nbPage,
 
-        ];
-
-
+    ];
+        var_dump($currentPage);
 
     $userProfilePictures=$user->getUserProfilePicture($currentPage,$perPage);
-
-
-
-
-
     twigRender('frontend/listProfile.html.twig','userdata',$userProfilePictures,'infos',$infos);
-}
+}*/
 
-function pagination()
+/*function pagination()
 {
     $user=new UserManager();
     $data= $user->homeDisplay();
-    $nbUsers=$data['nbUsers']; var_dump($nbUsers);
-    /*foreach ($data as $datum)
+    $nbUsers=$data['nbUsers'];
+    foreach ($data as $datum)
     {
         $nbUsers=$datum ;
-    }*/
+    }
     $perPage=6;
     $nbPage= ceil($nbUsers/$perPage);
 
@@ -246,7 +236,7 @@ function pagination()
         }
 
     }
-}
+}*/
 
 function imageProfile()
 {    $user = new UserManager();
@@ -280,8 +270,12 @@ function galerie1()
 function infosUser()
 {
     $user= new UserManager();
-    $getinfos= $user->getUserName($_COOKIE['ID']);
-    twigRender('infosUser.html.twig','infos',$getinfos,'','');
+    $getinfos= $user->getUserInfos($_COOKIE['ID']);
+
+
+
+
+    twigRender('infosUser.html.twig','session',$_SESSION,'infos',$getinfos);
 }
 
 function connectUser()
@@ -299,14 +293,17 @@ function authentificationConnexion()
         if (password_verify($pwd, $authentification)) {
 
             //session_start();
+
             $_SESSION['id'] = $userDatum['id'];//;
             $_SESSION['username'] = $userDatum['username'];
             $_SESSION['first_name'] = $userDatum['first_name'];
             $_SESSION['gender'] = $userDatum['gender'];
+            $_SESSION['ip'] =$_SERVER['SERVER_ADDR'];
 
             setcookie("ID", $_SESSION['id'], time() + 3600 * 24 * 365, '', '', false, true);
             setcookie("username", $_SESSION['username'], time() + 3600 * 24 * 365, '', '', false, true);
             setcookie("first_name", $_SESSION['first_name'], time() + 3600 * 24 * 365, '', '', false, true);
+            setcookie("ip", $_SESSION['ip'], time() + 3600 * 24 * 365, '', '', false, true);
 
 
 
@@ -326,10 +323,11 @@ function disconnectUser()
 {
     $user=new UserManager();
     @$disconnectUser =$user->disconnectUser($_COOKIE['ID']);
-    session_abort();
+    session_destroy();
     setcookie("ID","", time()- 60);
     setcookie("username","", time()- 60);
     setcookie("first_name","", time()- 60);
+    setcookie("ip","", time()- 60);
 
 
 
@@ -425,11 +423,11 @@ function uploadPicture($userId,$img)
                         $temporaryPath = $file['tmp_name'];
 
                         if (move_uploaded_file($temporaryPath, $destinationPath)) {
-                            $messages[] = "le fichier " . $file['name'] . " a été correctement uploadé";
+                            $messages[] = "le fichier a été correctement uploadé";
 
 
                         } else {
-                            $messages[] = "le fichier " . $file['name'] . " n'a pas été correctement uploadé";
+                            $messages[] = "le fichier n'a pas été correctement uploadé";
 
                         }
 
@@ -440,7 +438,7 @@ function uploadPicture($userId,$img)
             } else {
 
                 if($file['error']==2){$messages[]= 'votre fichier est trop volumineux';}
-                if($file['error']==1){$messages[]= 'votre fichier excède la taille de configuration du serveur';}
+                if($file['error']==1){$messages[]= 'votre fichier excède la taille de configuration du serveur. il doit être impérativement < 1.4Mo';}
 
                 //$messages[] = 'un problème est survenu lors de l\'upload';
             }
@@ -602,8 +600,30 @@ function viewerGalerie2($imageId)
 
 function saveUserinfos($userId)
 {
+
+
+
+    $_SESSION['postal_code']= $_POST['postal_code'];
+    $_SESSION['city']= $_POST['city'];
+    $_SESSION['search']= $_POST['search'];
+    $_SESSION['purpose']= $_POST['purpose'];
+    $_SESSION['family_situation']= $_POST['family_situation'];
+    $_SESSION['children']= $_POST['children'];
+    $_SESSION['family_situation_add']= $_POST['family_situation_add'];
+    $_SESSION['physic_add']= $_POST['physic_add'];
+    $_SESSION['speech']= $_POST['speech'];
+    $_SESSION['school_level']= $_POST['school_level'];
+    $_SESSION['school_level_add']= $_POST['school_level_add'];
+    $_SESSION['work']= $_POST['work'];
+    $_SESSION['work_add']= $_POST['work_add'];
+
+
     $user=new UserManager();
-    $userInfos = $user->addUserInfos($userId);
+    $userInfos = $user->addUserInfos($userId);var_dump($userInfos);
+
+
+
+
 
     header('Location: index.php?p=homeUser');
 }

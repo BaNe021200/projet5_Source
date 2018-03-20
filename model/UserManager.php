@@ -31,9 +31,9 @@ class UserManager extends Manager
         $lastId= $pdo->lastInsertId();
         $PdoStat->closeCursor();
         $PdoStat= $pdo->prepare("UPDATE projet5_user SET username = REPLACE(username,'_',' ')
-        WHERE username=:username");var_dump($_POST['username']);
+        WHERE username=:username");
         $PdoStat->bindValue(':username',$_POST['username'],PDO::PARAM_STR);
-        $newUser=$PdoStat->execute();var_dump($lastId);
+        $newUser=$PdoStat->execute();
         $PdoStat->closeCursor();
         $PdoStat=$pdo->prepare('
         SELECT first_name,email,username
@@ -580,24 +580,127 @@ class UserManager extends Manager
         public function addUserInfos($userId)
         {
             $pdo=$this->dbConnect();
-            $PdoStat=$pdo->prepare('INSERT INTO projet5_infosuser VALUES (NULL,:userId,:search,:purpose,:family,:children,:familyAdd,:physic,:finaly,:school,:schoolAdd, :business,:buinessAdd)');
+            $PdoStat=$pdo->prepare('REPLACE INTO projet5_infosuser VALUES (NULL,:userId,:search,:postal_code,:city,:purpose,:family,:children,:familyAdd,:physic,:speech,:school,:schoolAdd, :business,:buinessAdd)');
             $PdoStat->bindValue(':userId',$userId,PDO::PARAM_INT);
             $PdoStat->bindValue(':search',$_POST['search'],PDO::PARAM_STR);
+            $PdoStat->bindValue(':postal_code',$_POST['postal_code'],PDO::PARAM_STR);
+            $PdoStat->bindValue(':city',$_POST['city'],PDO::PARAM_STR);
             $PdoStat->bindValue(':purpose',$_POST['purpose'],PDO::PARAM_STR);
             $PdoStat->bindValue(':family',$_POST['family_situation'],PDO::PARAM_STR);
             $PdoStat->bindValue(':children',$_POST['children'],PDO::PARAM_STR);
             $PdoStat->bindValue(':familyAdd',$_POST['family_situation_add'],PDO::PARAM_STR);
             $PdoStat->bindValue(':physic',$_POST['physic_add'],PDO::PARAM_STR);
-            $PdoStat->bindValue(':finaly',$_POST['finaly'],PDO::PARAM_STR);
+            $PdoStat->bindValue(':speech',$_POST['speech'],PDO::PARAM_STR);
             $PdoStat->bindValue(':school',$_POST['school_level'],PDO::PARAM_STR);
             $PdoStat->bindValue(':schoolAdd',$_POST['school_level_add'],PDO::PARAM_STR);
             $PdoStat->bindValue(':business',$_POST['work'],PDO::PARAM_STR);
             $PdoStat->bindValue(':buinessAdd',$_POST['work_add'],PDO::PARAM_STR);
-            $addInfos = $PdoStat->execute();
+            $addInfos = $PdoStat->execute();var_dump($addInfos);
+
+            if($addInfos)
+            {
+                unset($_SESSION['postal_code']);
+                unset($_SESSION['city']);
+                unset($_SESSION['search']);
+                unset($_SESSION['purpose']);
+                unset($_SESSION['family_situation']);
+                unset($_SESSION['children']);
+                unset($_SESSION['family_situation_add']);
+                unset($_SESSION['physic_add']);
+                unset($_SESSION['speech']);
+                unset($_SESSION['school_level']);
+                unset($_SESSION['school_level_add']);
+                unset($_SESSION['work']);
+                unset($_SESSION['work_add']);
+}
 
         }
 
+        public function getUserInfos($userId)
+        {
 
+            $pdo=$this->dbConnect();
+            $PdoStat=$pdo->prepare('
+            SELECT *
+            FROM projet5_infosuser
+            WHERE user_id=:userId');
+            $PdoStat->bindValue(':userId',$userId,PDO::PARAM_INT);
+            $userInfos= $PdoStat->execute();
+            $userInfos=$PdoStat->fetchAll();
+
+            return $userInfos;
+        }
+
+
+
+
+
+        public function whoIsOnLine($id,$ip)
+        {
+
+            $pdo=$this->dbConnect();
+            $PdoStat=$pdo->prepare('INSERT INTO projet5_whosonline VALUES(:id, :time,:ip)
+            ON DUPLICATE KEY UPDATE
+            online_time = :time , online_id = :id');
+            $PdoStat->bindValue(':id',$id,PDO::PARAM_INT);
+            $PdoStat->bindValue(':time',time(), PDO::PARAM_INT);
+            $PdoStat->bindValue(':ip', $ip, PDO::PARAM_INT);
+            $PdoStat->execute();
+            $PdoStat->CloseCursor();
+            $time_max = time() - (60 * 5);
+            $PdoStat=$pdo->prepare('DELETE FROM projet5_whosonline WHERE online_time < :timemax');
+            $PdoStat->bindValue(':timemax',$time_max, PDO::PARAM_INT);
+            $PdoStat->execute();
+            $PdoStat->CloseCursor();
+
+        }
+
+        public function countWhoIsOnLine()
+        {
+            $count_online = 0;
+            //count users
+            $pdo=$this->dbConnect();
+            $count_visitors=$pdo->query('SELECT COUNT(*) AS nbr_visiteurs FROM projet5_whosonline WHERE online_id = 0')->fetchColumn();
+            $count_visitors->CloseCursor();
+
+            //count Users online
+            $texte_a_afficher = "<br />Liste des personnes en ligne : ";
+            $time_max = time() - (60 * 5);
+            $PdoStat=$pdo->prepare('SELECT id, username 
+            FROM projet5_whosonline 
+            LEFT JOIN projet5_user ON online_id = id
+            WHERE online_time > :timemax AND online_id <> 0');
+            $PdoStat->bindValue(':timemax',$time_max, PDO::PARAM_INT);
+            $PdoStat->execute();
+            $count_membres=0;
+            while ($data = $PdoStat->fetch())
+            {
+                $count_membres ++;
+                $texte_a_afficher .= '<a href="./voirprofil.php?m='.$data['membre_id'].'&amp;action=consulter">
+	'.stripslashes(htmlspecialchars($data['membre_pseudo'])).'</a> ,';
+            }
+
+            $texte_a_afficher = substr($texte_a_afficher, 0, -1);
+            $count_online = $count_visitors + $count_membres;
+            echo '<p>Il y a '.$count_online.' connectés ('.$count_membres.' membres et '.$count_visitors.' invités)';
+            echo $texte_a_afficher.'</p>';
+            $PdoStat->CloseCursor();
+        }
+
+        public function getTowns()
+        {
+            $pdo=$this->dbConnect2();
+            $PdoStat = $pdo->query('
+            SELECT ville_nom_simple
+            FROM villes_france_free');
+            $towns=$PdoStat->execute();
+            $towns=$PdoStat->fetchAll();
+
+            return $towns;
+
+
+
+        }
 
 
 

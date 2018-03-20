@@ -5,6 +5,7 @@
     {{ parent() }}
 
     <link rel="stylesheet" href="carousel.css" xmlns="http://www.w3.org/1999/html">
+    <link rel="stylesheet" href="public/css/cities.css">
     <link rel="stylesheet" href="public/css/tuto.cs">
 {% endblock stylesheet %}
 
@@ -12,30 +13,87 @@
 
 {% block main %}
 
+
+
+
+
     <section><!--début ok1-->
         <div class="container">
-            <form class="form-horizontal" role="form" method="POST" action="index.php?p=saveUserinfos&amp;userid={{ infos.id }}">
-                {{ form.rowVerticalSpace() }}
+            <form class="form-horizontal" role="form" method="POST" action="index.php?p=saveUserinfos&amp;userid={{ userDatum.id }}">
+
+
+
+
                 <h2>{{ form.col363('vos informations') }}</h2>
 
+                   <div class="row">
+
+                        <div class="half">
+                            <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">Vous habitez...</span>
+                            </div>
+                            <input type="text" id="code" name="postal_code" value="{{ session.postal_code  }} {{ infos.0.postal_code }} " class="form-control" placeholder="Code postal" aria-label="Code postal" aria-describedby="basic-addon1">
+                        </div>
+
+
+                   </div>
+                        <div class="half">
+                            <input id="city" placeholder="Ville" name="city" value="{{ session.city }} {{ infos.0.city }} "   autocomplete="off">
+                        </div>
+                       <section id="output"></section>
+
+        </div>
+
+
+
+                            <div class="col-md-12 text-center">
+
+                  vous cherchez :
+                  {{ form.radioInline('search1','search','Une femme','une femme') }}
+                  {{ form.radioInline( 'search2','search','Un homme','un homme') }}
+
+                            </div>
+
+
+                <div class="col-md-12 text-center">
+
+                    vous cherchez :
+                    {{ form.radioInline( 'purpose1','purpose','Rencontre amoureuse','Rencontre amoureuse' ) }}
+                    {{ form.radioInline( 'purpose2','purpose','Amitié','Amitié' ) }}
+                    {{ form.radioInline( 'purpose3','purpose','Sortie','Sortie' ) }}
+                    {{ form.radioInline( 'purpose4','purpose','Autre','Autre' ) }}
+
+                </div>
 
 
 
 
-                    {{ form.col12radioInline3(
-                        'Vous recherchez :',
-                        'search1','search','Une femme','female',
-                        'search2','search','Un homme','male',
-                        'search3','search','Autre','otherGender'
-                     )}}
 
-                    {{ form.col12radioInline4(
-                        'Pour :',
-                        'purpose1','purpose','Rencontre amoureuse','love',
-                        'purpose2','purpose','Amitié','friendship',
-                        'purpose3','purpose','Sortie','walk',
-                        'purpose4','purpose','Autre','otherPurpose'
-                     )}}
+                {{ form.rowVerticalSpace() }}
+
+                {#<div class="row">
+
+                    <div class="half">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">qui habite...</span>
+                            </div>
+                            <input type="text" id="code2" class="form-control" placeholder="Code postal" aria-label="Code postal" aria-describedby="basic-addon1">
+                        </div>
+
+
+                    </div>
+                    <div class="half">
+                        <input id="city2" placeholder="Ville" autocomplete="off">
+                    </div>
+                    <section id="output2"></section>
+
+                </div>#}
+
+
+
+
 
 
 
@@ -48,11 +106,11 @@
 
                     {{ form.col12radioInline5(
                         'vous êtes :',
-                        'familiy_situation1','family_situation','libre comme l\'air','freeAsBird',
-                        'familiy_situation2','family_situation','la corde au cou','unhappyCouple',
-                        'familiy_situation3','family_situation','en couple mais heureux(se)','happyCouple',
-                        'familiy_situation4','family_situation','divorcé(e)','divorced',
-                        'familiy_situation5','family_situation','séparé(e)','separated'
+                        'familiy_situation1','family_situation','libre comme l\'air','libre comme l\'air',
+                        'familiy_situation2','family_situation','la corde au cou','la corde au cou',
+                        'familiy_situation3','family_situation','en couple mais heureux(se)','en couple mais heureux(se)',
+                        'familiy_situation4','family_situation','divorcé(e)','divorcé(e)',
+                        'familiy_situation5','family_situation','séparé(e)','séparé(e)'
 
                     )}}
 
@@ -66,8 +124,20 @@
                         'children5','children','oui, plus de trois','4'
                     ) }}
 
-                     {{ form.rowVerticalSpace() }}
-                    {{ form.colcentertextarea(2,8,'family_situation_add','Vous m\'intriguez, pourriez-vous m\'en dire plus ?',50,10) }}
+
+
+                    <div class="row">
+                        <div class="col-md-2"></div>
+
+                        <textarea class="col-md-8 form-control" name="family_situation_add" id="family_situation_add" cols="50" rows="10" placeholder="Vous m'intriguez, pourriez-vous m'en dire plus ?">{{ session.family_situation_add }}{{ infos.0.family_situation_add }}</textarea>
+
+                        <div class="col-md-2}"></div>
+                    </div>
+
+
+
+
+
 
                 </fieldset>
 
@@ -79,10 +149,16 @@
 
                      <h3>{{ form.col363('Et physiquement ?') }}</h3>
                          {{ form.col12('Comment vous décririez vous ?') }}
-                         {{ form.colcentertextarea(2,8,'physic_add','Comment êtes-vous ?Quel est votre ressenti ?...',50,10) }}
 
 
 
+                        <div class="row">
+                            <div class="col-md-2"></div>
+
+                            <textarea class="col-md-8 form-control" name="physic_add" id="physic_add" cols="50" rows="10" placeholder="Comment êtes-vous ? Décrivrez-vous. Quel est votre ressenti ?...">{{ session.physic_add }}{{ infos.0.physic_add }}</textarea>
+
+                            <div class="col-md-2}"></div>
+                        </div>
 
 
                     </fieldset>
@@ -92,7 +168,17 @@
                          <h3>{{ form.col12('Au final...') }}</h3>
 
 
-                         {{ form.colcentertextarea(2,8,'finaly','...Qu\'attendez-vous d\'un tel site ?',50,10) }}
+
+
+                        <div class="row">
+                            <div class="col-md-2"></div>
+
+                            <textarea class="col-md-8 form-control" name="speech" id="speech" cols="50" rows="10" placeholder="Vous m'intriguez, pourriez-vous m'en dire plus ?">{{ session.speech }}{{ infos.0.speech }}</textarea>
+
+                            <div class="col-md-2}"></div>
+                        </div>
+
+
 
                      </fieldset>
                      </fieldset>
@@ -104,22 +190,35 @@
 
                                  <h4>{{ form.col363('Quel est votre niveau d\'étude ?') }}</h4>
 
-                                   {{ form.col12radioInline8(
+                                   {{ form.col12radioInline9(
                                          '',
-                                        'school_level1','school_level','sans diplôme',"-2",
-                                        'school_level2','school_level','BEP/CAP',"-1",
-                                        'school_level3','school_level','bac',"0",
-                                        'school_level4','school_level','bac+1',"1",
-                                        'school_level5','school_level','bac+2',"2",
-                                        'school_level6','school_level','bac+3',"3",
-                                        'school_level7','school_level','bac+4',"4",
-                                        'school_level8','school_level','bac+5 et plus',"5"
+                                        'school_level1','school_level','sans diplôme',"sans diplôme",
+                                        'school_level2','school_level','BEP/CAP',"BEP/CAP",
+                                        'school_level3','school_level','bac',"bac",
+                                        'school_level4','school_level','bac+1',"bac+1",
+                                        'school_level5','school_level','bac+2',"bac+2",
+                                        'school_level6','school_level','bac+3',"bac+3",
+                                        'school_level7','school_level','bac+4',"bac+4",
+                                        'school_level8','school_level','bac+5 et plus',"bac+5 et plus",
+                                        'school_level9','school_level',"ne souhaite pas en parler","ne souhaite pas en parler"
 
                                     )}}
 
                         {{ form.rowVerticalSpace() }}
 
-                       {{ form.colcentertextarea(2,8,'school_level_add','Si vous avez des précision à apporter, c\'est ici',50,10) }}
+
+
+
+                                 <div class="row">
+                                     <div class="col-md-2"></div>
+
+                                     <textarea class="col-md-8 form-control" name="school_level_add" id="school_level_add" cols="50" rows="10" placeholder="Si vous avez des précision à apporter, c'est ici">{{ session.school_level_add }}{{ infos.0.school_level_add }}</textarea>
+
+                                     <div class="col-md-2}"></div>
+                                 </div>
+
+
+
 
                         </fieldset>
                          {{ form.rowVerticalSpace() }}
@@ -134,24 +233,24 @@
                                    'work1','work','Fonctionnaire','fonctionnaire',
                                    'work2','work','salarié','salarié',
                                    'work3','work','Profession libérale','libéral',
-                                   'work4','work','Sans Emploi','unemployed',
-                                   'work5','work','Autre','Other'
+                                   'work4','work','Sans Emploi','Sans Emploi',
+                                   'work5','work','Autre','Autre'
                                ) }}
                                {{ form.rowVerticalSpace() }}
-                               {{ form.colcentertextarea(2,8,'work_add','Si vous avez des précision à apporter, c\'est ici',50,10) }}
+
+
+
+                               <div class="row">
+                                   <div class="col-md-2"></div>
+
+                                   <textarea class="col-md-8 form-control" name="work_add" id="work_add" cols="50" rows="10" placeholder="Si vous avez des précision à apporter, c'est ici">{{ session.work_add }}{{ infos.0.work_add }}</textarea>
+
+                                   <div class="col-md-2}"></div>
+                               </div>
 
 
                        </fieldset>
                        </fieldset>
-
-
-
-
-
-
-
-
-
 
 
                        <div class="row">
@@ -174,12 +273,17 @@
 
 
 
-
 {% endblock main %}
 
 {% block script %}
     {{ parent() }}
     <script src="public/js/galerie2.js"></script>
+    <script src="public/js/jQuery.js"></script>
+    <script src="public/js/cities_api.js"></script>
+
+    <script src="public/js/cities.js"></script>
+
+
 
 {% endblock %}
 

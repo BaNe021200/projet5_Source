@@ -14,7 +14,7 @@ if (isset($_GET['p']))
         home();
     }
 
-    elseif ($_GET['p'] == '1'){
+   /* elseif ($_GET['p'] == 1){
         if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
 
            listProfile();
@@ -40,7 +40,7 @@ if (isset($_GET['p']))
         }
     }
 
-    elseif ($_GET['p'] == '3'){
+    elseif ($_GET['p'] == ''){
         if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])) {
 
           listProfile();
@@ -51,11 +51,12 @@ if (isset($_GET['p']))
         {
             throw new Exception("Erreur vous n'êtes pas connectez. Veuillez vous identifier");
         }
-    }
+    }*/
 
     elseif ($_GET['p'] == 'listProfile'){
         if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
 
+            require_once 'listProfils.php';
             listProfile();
 
         }
@@ -160,6 +161,14 @@ if (isset($_GET['p']))
 
             if (!empty($_POST['first_name']) || !empty($_POST['last_name']))
             {
+                $_SESSION['first_name']=$_POST['first_name'];
+                $_SESSION['last_name']=$_POST['last_name'];
+                $_SESSION['username']=$_POST['username'];
+                $_SESSION['email']=$_POST['email'];
+                $_SESSION['birthday']=$_POST['birthday'];
+
+
+
                 if(preg_match('/^[a-zéèA-Z-]+$/', $_POST['first_name']) && preg_match('/^[a-zéèA-Z-]+$/',($_POST['last_name'])))
                     {
 
@@ -322,7 +331,9 @@ if (isset($_GET['p']))
 
 
 
-
+    else{
+        throw new Exception('This page doesn\'t exist');
+    }
 }
 
 
