@@ -157,9 +157,9 @@ function homeUser()
 
     $iNLine=$user->whoIsOnLine($_COOKIE['ID'],$_COOKIE['ip']);
 
+    $countUreadMessages = $user->countUnreadMessage($_COOKIE['ID']);
 
-
-    twigRender('homeUser.html.twig','imageProfil',$src,'','');
+    twigRender('homeUser.html.twig','imageProfil',$src,'unreadMessages',$countUreadMessages);
 
 }
 
@@ -628,5 +628,29 @@ function saveUserinfos($userId)
     header('Location: index.php?p=homeUser');
 }
 
+function messages($userId)
+{
 
+    $user= new UserManager();
+    $getUnreadMessages = $user->getUnreadMessages($userId);
+    $getReadMessages = $user->getReadMessages($userId);
+    twigRender('messages.html.twig','messages',$getUnreadMessages,'Messagesread',$getReadMessages);
+}
+
+function readMessage($messageId,$userId)
+{
+    $user= new UserManager();
+   $readMessage =$user->readMessage($messageId,$userId);
+
+
+
+
+
+    twigRender('readMessage.html.twig','mailContents',$readMessage,'','');
+}
+
+function writeMessage($userId)
+{
+    twigRender('writeMessage.html.twig','','','','');
+}
 

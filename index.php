@@ -57,7 +57,7 @@ if (isset($_GET['p']))
         if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
 
             require_once 'listProfils.php';
-            listProfile();
+            //listProfile();
 
         }
         else
@@ -65,9 +65,6 @@ if (isset($_GET['p']))
             throw new Exception("Erreur vous n'êtes pas connectez. Veuillez vous identifier");
         }
     }
-
-
-
 
     elseif ($_GET['p'] == 'homeUser'){
         if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
@@ -80,8 +77,6 @@ if (isset($_GET['p']))
             throw new Exception("Erreur vous n'êtes pas connectez. Veuillez vous identifier");
         }
     }
-
-
 
     elseif ($_GET['p'] == 'homeUserFront'){
         if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
@@ -109,11 +104,7 @@ if (isset($_GET['p']))
 
     }
 
-
-
-
-
-   elseif ($_GET['p'] == 'galerie1'){
+    elseif ($_GET['p'] == 'galerie1'){
         if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
 
             galerie1();
@@ -146,8 +137,6 @@ if (isset($_GET['p']))
             throw new Exception("Erreur vous n'êtes pas connectez. Veuillez vous identifier");
         }
     }
-
-
 
     elseif ($_GET['p'] == 'signUp'){
 
@@ -233,8 +222,6 @@ if (isset($_GET['p']))
         disconnectUser();
     }
 
-
-
     elseif ($_GET['p'] == 'upload'){
 
         uploadPicture($_COOKIE['ID'],$_GET['id']);
@@ -306,11 +293,6 @@ if (isset($_GET['p']))
         }
     }
 
-
-
-
-
-
     elseif ($_GET['p'] == 'viewer2'){
         if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
             viewerGalerie($_GET['img']);
@@ -326,6 +308,61 @@ if (isset($_GET['p']))
             require_once 'test.php';
 
     }
+
+    elseif ($_GET['p'] == 'messages'){
+        if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
+            messages($_COOKIE['ID']);
+        }
+        else
+        {
+            throw new Exception("Erreur vous n'êtes pas connectez. Veuillez vous identifier");
+        }
+    }
+
+    elseif ($_GET['p'] == 'readMessage'){
+        if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
+
+            readMessage($_GET['messageId'],$_COOKIE['ID']);
+
+
+
+
+
+
+
+        }
+        else
+        {
+            throw new Exception("Erreur vous n'êtes pas connectez. Veuillez vous identifier");
+        }
+    }
+
+
+
+    elseif ($_GET['p'] == 'writeMessage'){
+        if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
+            writeMessage($_COOKIE['ID']);
+        }
+        else
+        {
+            throw new Exception("Erreur vous n'êtes pas connectez. Veuillez vous identifier");
+        }
+    }
+
+    elseif ($_GET['p'] == 'sendMessage'){
+        if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
+            sendMessage($_GET['expeditor'],$_GET['receiver']);
+        }
+        else
+        {
+            throw new Exception("Erreur vous n'êtes pas connectez. Veuillez vous identifier");
+        }
+    }
+
+
+
+
+
 
 
 

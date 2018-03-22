@@ -1,7 +1,7 @@
 {% extends "homeUser.html.twig" %}
 {% import 'form.html.twig' as form %}
 {% block stylesheet %}
-
+{{ parent() }}
     <link rel="stylesheet" href="public/css/galerie3.css">
     <link rel="stylesheet" href="public/css/tuto.cs">
 
@@ -11,7 +11,7 @@
 
 
 {% block main %}
-    <h1>profile des utilisateurs</h1>
+    <h1 class="marginLeft">profile des utilisateurs</h1>
 
 
 

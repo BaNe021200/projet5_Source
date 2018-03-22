@@ -3,7 +3,7 @@
 
 {% block stylesheet %}
     {{ parent() }}
-
+    <link rel="stylesheet" href="public/css/infosUSer.css">
     <link rel="stylesheet" href="carousel.css" xmlns="http://www.w3.org/1999/html">
     <link rel="stylesheet" href="public/css/cities.css">
     <link rel="stylesheet" href="public/css/tuto.cs">
@@ -117,11 +117,11 @@
                     {{ form.col12radioInline5(
 
                         'Avez-vous des enfants : ',
-                        'children1','children','Non','0',
-                        'children2','children','Oui,1','1',
-                        'children3','children','Oui,2','2',
-                        'children4','children','Oui,3','3',
-                        'children5','children','oui, plus de trois','4'
+                        'children1','children','Non','pas d\'enfant',
+                        'children2','children','Oui,1','un enfant',
+                        'children3','children','Oui,2','deux enfants',
+                        'children4','children','Oui,3','trois enfants',
+                        'children5','children','oui, plus de trois','plus de trois enfants'
                     ) }}
 
 

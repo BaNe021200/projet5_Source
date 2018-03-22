@@ -9,9 +9,7 @@ require_once 'controler/backend.php';
 use model\UserManager;
 
 
-        function avatar($src)
-        {
-        }
+
 
 
 
@@ -42,6 +40,7 @@ use model\UserManager;
                 'debug' => true
             ]);
             $twig->addExtension(new Twig_Extension_Debug());
+            $twig->addExtension(new Twig_Extensions_Extension_Text());
            // $twig->addExtension(new Twig_Extension_Session());
 
             echo $twig->render($renderPath,[

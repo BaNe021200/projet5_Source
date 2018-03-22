@@ -7,18 +7,20 @@ require_once 'functions.php';
 require_once 'model/User.php';
 require_once 'resize2.php';
 require_once 'crop.php';
+require_once 'lib/Session.php';
 
 use model\UserManager;
 use model\User;
+
 
 
 function homeUserFront($userId)
 {
     $user = new UserManager();
     $data= $user->getUserProfile($userId);
+    $infos=$user->getUserInfos($userId);
 
-
-    twigRender('frontend/homeUserFront.html.twig','data',$data,'','');
+    twigRender('frontend/homeUserFront.html.twig','data',$data,'userInfos',$infos);
 }
 
 function userGalerie($userId,$username)
@@ -93,3 +95,25 @@ function signUp()
     twigRender('frontend/signUp.html.twig','session',$_SESSION,'','');
 }
 
+function sendMessage($expeditor, $receiver)
+{
+
+    $user= New UserManager();
+    $sendMessage = $user->sendMail($expeditor, $receiver);
+
+
+    if ($sendMessage)
+    {
+        $Session = new Session();
+        $Session->setFlash('votre message est envoyé','success');
+        $Session->flash();
+
+        //twigRender('frontend/homeUserFront.html.twig','flash',$Session,'','');
+
+    }
+
+
+
+
+   header('Location:index.php?p=homeUserFront&userId='.$receiver);
+}

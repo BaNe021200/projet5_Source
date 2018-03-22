@@ -1,10 +1,11 @@
 {% extends "layout.html.twig" %}
-
+{% import 'form.html.twig' as form %}
 
 {% block stylesheet %}
     <link rel="stylesheet" href="public/css/users.css">
     <link rel="stylesheet" href="public/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="public/css/tuto.cs">
+    <link rel="stylesheet" href="public/css/homeUser.css">
+    <link rel="stylesheet" href="public/css/homeUserFront.css">
 {% endblock stylesheet %}
 
 {% block title %} La page de {{ userDatum.username }}{% endblock title %}
@@ -19,36 +20,185 @@
 {% block signUpLink %}index.php?p=homeUser {% endblock %}
 
 {% block navMenu %}
+    <span class="txt">
     <li class="nav-item "><a class="nav-link text-white" href="index.php?p=galerie1">configuration de la galerie </a></li>
-    <li class="nav-item "><a class="nav-link text-white" href="index.php?p=galerie3">visualisation de la galerie</a></li>
-    <li class="nav-item "><a class="nav-link text-white" href="index.php?p=galerie2">gestion du profil </a></li>
+    <li class="nav-item "><a class="nav-link text-white"href="index.php?p=galerie3">visualisation de la galerie</a></li>
+    <li class="nav-item "><a class="nav-link text-white" href="index.php?p=infosUser">gestion du profil </a></li>
+    <li class="nav-item "><a class="nav-link text-white" href="index.php?p=mails">Messagerie </a></li>
 
+
+</span>
 
 {% endblock navMenu %}
 
-{% block connexion %}déconnexion{% endblock %}
+{% block connexion %}<span class="deconnexionButton">déconnexion</span>{% endblock %}
 {% block connexionLink %}index.php?p=deconnexion{% endblock %}
 {% block profilCount %}
-    <a  href="index.php?p=listProfile"><button type="button"  class="btn btn-info">
-            Profils des autres utilisateurs <span class="badge badge-light">9</span>
-            <span class="sr-only">unread messages</span>
+    <a  href="index.php?p=listProfile"><button type="button"  class="btn btn-info profilButton">
+            Profils des autres utilisateurs
         </button></a>
 {% endblock %}
 {% block main %}
-       <h1> la page de {{ data.username }}</h1>
 
-    <div class="col-lg-2 text-left">
-        <img class="rounded-circle" id="cropImage" src="{{ data.dirname }}/{{ data.filename }}.{{ data.extension }}" alt="Generic placeholder image" width="150" height="150" >
-</div><!-- /.col-lg-4 -->
     <div class="row">
-        <div class="col-lg-2">
+        <div class="col-md-3">
+            <p class="txt">vous êtes sur</p>
+            <h1> la page de {{ data.username }}</h1>
+            <img class="rounded-circle" id="cropImage" src="{{ data.dirname }}/{{ data.filename }}.{{ data.extension }}" alt="Generic placeholder image" width="150" height="150" >
+           
+            <span class="hidden">{{ form.rowVerticalSpace() }}</span>
 
-           <h4> <ul class="list-unstyled"><a href="index.php?p=userGalerie&amp;userId={{ data.id }}&amp;username={{ data.username }}"><li>galerie de {{ data.username }}</li></a></ul></h4>
+            <h4> <ul class="list-unstyled"><a href="index.php?p=userGalerie&amp;userId={{ data.id }}&amp;username={{ data.username }}"><li><i class="far fa-images fa-1x"></i> galerie de {{ data.username }}</li></a></ul></h4>
+
+
+
+
+            {% for info in userInfos  %}
+            <span class="hiddenColor">{{ form.rowVerticalSpace() }}</span>
+
+            <h4>{{ form.col12("Sa présentation") }}</h4>
+                <p class="presentation text-left">{{ data.username }} est {{ data.gender }}  qui cherche {{ info.search }} pour {{ info.purpose }}</p>
+                <p class="presentation ">
+                    {% if data.gender== "une femme" %}
+                        Elle
+
+                    {% else %}
+                        Il
+                    {% endif %}
+                    habite {{ info.city }} ({{ info.postal_code }})
+                </p>
+
+
+                <h4>{{ form.col12("Sa situation familiale") }}</h4>
+
+                <p class="presentation text-left">  {{ data.username }} est {{ info.family_situation }} et
+
+                    {% if data.gender== "une femme" %}
+                        elle
+
+                    {% else %}
+                        Il
+                    {% endif %}
+                    a {{ info.children }} .
+
+                </p>
+                <p class="txt">
+
+                {% if info.family_situation_add == true %}
+                    {% if data.gender== "une femme" %}
+                        Elle
+
+                    {% else %}
+                        Il
+                    {% endif %}
+
+                    précise:<p class="presentation">{{ info.family_situation_add }}</p>
+
+                {% else %}
+
+                    mais n'apporte pas d'autres précisions.
+                {% endif %}
+                </p>
+
+
+
+
+
+
+
+
+ </div>
+        <div class="col-md-6">
+
+
+            <h2>Son annonce</h2>
+
+            {{ form.rowVerticalSpace() }}
+
+            <p class="presentation">{{ info.physic_add }}</p>
+            <p class="presentation">{{ info.speech }}</p>
+            {% endfor %}
+
+
+            <span class="txt ">{{ form.rowVerticalSpace() }}</span>
+
+
+
+
+                <button type="button"  data-toggle="modal" data-target="#mailModal" class="profilButton btn btn-success txt" data-whatever="{{ data.username }}">
+
+                     Envoyez-lui un message !
+                </button>
+
+            <div class="modal fade"  id="mailModal" tabindex="-1" role="dialog" aria-labelledby="mailModalLabel" aria-hidden="true">
+                <span class="txt">{{ flash }}</span>
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title txt text-center" id="mailModalLabel">new message</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="form-horizontal" method="POST" role="form" action="index.php?p=sendMessage&amp;expeditor={{ userDatum.id }}&amp;receiver={{ data.id }}"  >
+
+
+                                <div class="form-group">
+                                    <label for="title-name" class="col-form-label txt">Titre du message:</label>
+                                    <input type="text" name="title" i placeholder="titre du message" class="form-control txt" id="title" >
+                                </div>
+                                <div class="form-group">
+                                    <label for="message-text" class="col-form-label txt">Message:</label>
+                                    <textarea class="form-control txt" name="message" id="message-text"></textarea>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">fermer</button>
+                                    <button type="submit" class="btn btn-success txt">Send message</button>
+                                </div>
+
+                            </form>
+                        </div>
+
+
+
+
+                    </div>
+                </div>
+            </div>
 
         </div>
-        <div class="col-lg-8"></div>
-        <div class="col-lg-2"></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <div class="col-md-3"></div>
     </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 {% endblock %}
 
@@ -62,5 +212,21 @@
     <script src="public/js/upload.js"></script>
     <script src="public/js/uploadStatement.js"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
+    <script>
+        $('#mailModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var recipient = button.data('whatever') // Extract info from data-* attributes
+            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+            var modal = $(this)
+            modal.find('.modal-title').text('Nouveau message pour ' + recipient)
+            modal.find('.modal-body ').val(recipient)
+        })
+    </script>
+<script src="public/js/alert.js"></script>
+
+
+
+
 
 {% endblock script %}

@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="public/css/users.css">
     <link rel="stylesheet" href="public/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="public/css/homeUser.css">
-    <link rel="stylesheet" href="public/css/tuto.cs">
+
 {% endblock stylesheet %}
 
 {% block title %} La page de {{ userDatum.username }}{% endblock title %}
@@ -24,6 +24,7 @@
     <li class="nav-item "><a class="nav-link text-white" href="index.php?p=galerie1">configuration de la galerie </a></li>
     <li class="nav-item "><a class="nav-link text-white" href="index.php?p=galerie3">visualisation de la galerie</a></li>
     <li class="nav-item "><a class="nav-link text-white" href="index.php?p=infosUser">gestion du profil </a></li>
+    <li class="nav-item "><a class="nav-link text-white" href="index.php?p=messages">Messagerie </a></li>
 
 
 {% endblock navMenu %}
@@ -31,55 +32,98 @@
 {% block connexion %}déconnexion{% endblock %}
 {% block connexionLink %}index.php?p=deconnexion{% endblock %}
 {% block profilCount %}
-    <a  href="listProfils.php?p=listProfile"><button type="button"  class="btn btn-info">
-        Profils des autres utilisateurs <span class="badge badge-light">9</span>
-        <span class="sr-only">unread messages</span>
+    <a  href="listProfils.php?p=listProfile"><button type="button" id="listProfileButton" class="btn btn-info">
+        Profils des autres utilisateurs
+
     </button></a>
-{% endblock %}
+{% endblock profilCount %}
+
+
+
+
+
 {% block main %}
 
-    <div class="row">
-        <div class="col-lg-3 "><h1>Hello  {{ userDatum.first_name }}  </h1></div>
-        <div class="col-lg-6 ">
 
 
 
+        <div class="row">
+            <div class="col-md-3 ">
+                <section id="welcome">
+
+                    <h1>Hello {{ userDatum.first_name }}  </h1>
+                    <img class="rounded-circle" id="cropImage" src="{{ imageProfil }}" alt="Generic placeholder image"
+                         width="150" height="150">
 
 
-           </div>
+                    {{ form.rowVerticalSpace() }}
 
+                    <button type="button" id="listProfileButton" class="btn btn-primary" disabled>
+                        messages non lus
+                        <span class="badge badge-light"> {{ unreadMessages.0 }}
+
+                </span>
+                        <span class="sr-only">unread messages</span>
+                    </button>
+
+
+                </section>
+                <section id="deezer">
+
+
+                </section>
+
+
+            </div>
+
+            <div class="col-md-6 text-left">
+
+                <section id="presentation">
+                    {{ form.rowVerticalSpace() }}
+                    <h2 class="text-center">Bienvenue sur votre page d'accueil <i class="far fa-smile"></i></h2>
+
+                    {{ "Ici vous allez pouvoir configurer tout votre profil.
+
+                dans la barre de navigation, cliquer sur la fleche en dessous de votre avatar. un menu se déroule et vous donne la possibilité de : <ul>
+                <li>configurer votre galerie</li>
+                <li>visualiser cette dernière, c'est ainsi les autres abonné la verrons</li>
+                <li>Gérer vos information informations </li>
+                </ul>" }}
+                </section>
+                <section id="gallerysettings ">
+                    <br>
+                    <h4><i class="far fa-images fa-1x"></i> Gestion de votre galerie</h4>
+
+
+                    {{ "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae, consequuntur dignissimos error exercitationem perspiciatis quibusdam recusandae repudiandae tenetur unde ut. Asperiores eos labore laborum molestias nobis quam qui repellendus voluptatem?Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae, consequuntur dignissimos error exercitationem perspiciatis quibusdam recusandae repudiandae tenetur unde ut. Asperiores eos labore laborum molestias nobis quam qui repellendus voluptatem?Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae, consequuntur dignissimos error exercitationem perspiciatis quibusdam recusandae repudiandae tenetur unde ut. Asperiores eos labore laborum molestias nobis quam qui repellendus voluptatem? " }}
+
+
+                </section>
+
+                <section id="profile">
+                    <br>
+                    <h4><i class="far fa-user"></i> Gestion de votre profile</h4>
+
+                    {{ "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae, consequuntur dignissimos error exercitationem perspiciatis quibusdam recusandae repudiandae tenetur unde ut. Asperiores eos labore laborum molestias nobis quam qui repellendus voluptatem?Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae, consequuntur dignissimos error exercitationem perspiciatis quibusdam recusandae repudiandae tenetur unde ut. Asperiores eos labore laborum molestias nobis quam qui repellendus voluptatem?Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae, consequuntur dignissimos error exercitationem perspiciatis quibusdam recusandae repudiandae tenetur unde ut. Asperiores eos labore laborum molestias nobis quam qui repellendus voluptatem?" }}
+
+
+                </section>
+
+
+            </div>
+
+            <div class="col-md-3"></div>
+
+
+        </div>
     </div>
 
 
 
-    <div class="row">
-        <div class="col-lg-2 text-right">
 
-            <img class="rounded-circle" id="cropImage" src="{{ imageProfil }}" alt="Generic placeholder image"
-                 width="150" height="150">
-
-            <ul class="list-unstyled">
-
-
-                <li>voir votre profil</li>
-            </ul>
-
-        </div>
-        <div class="col-lg-8 text-justify">
-
-
-            <h2>Bienvenue sur votre page</h2>
-
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus atque blanditiis culpa cumque dolor et eveniet harum id iusto labore modi necessitatibus nemo nesciunt omnis quibusdam, quos sit suscipit, totam?
-
-
-
-
-        </div>
-        <div class="col-lg-2">fdsfdsf</div>
-
-    </div>
-
+{% endblock %}
+{% block footer %}
+    
 {% endblock %}
 
 

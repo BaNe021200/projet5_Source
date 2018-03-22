@@ -512,7 +512,7 @@ class UserManager extends Manager
          {
              $pdo=$this->dbConnect();
              $PdoStat=$pdo->prepare('
-             SELECT projet5_images.dirname,filename,extension, projet5_user.id,username
+             SELECT projet5_images.dirname,filename,extension, projet5_user.id,username,gender
              FROM projet5_images
              INNER JOIN projet5_user
               ON projet5_images.user_id = projet5_user.id
@@ -702,8 +702,114 @@ class UserManager extends Manager
 
         }
 
+        public function sendMail($expeditor,$receiver)
+        {
+            $pdo=$this->dbConnect();
+            $Pdostat= $pdo->prepare('
+            INSERT INTO projet5_mails VALUES (NULL, :expeditor,:receiver,:title,:message,Now(),:see )');
+            $Pdostat->bindValue(':expeditor',$expeditor,PDO::PARAM_INT);
+            $Pdostat->bindValue(':receiver',$receiver,PDO::PARAM_INT);
+            $Pdostat->bindValue(':title',$_POST['title'],PDO::PARAM_STR);
+            $Pdostat->bindValue(':message',$_POST['message'],PDO::PARAM_STR);
+            $Pdostat->bindValue(':see',0,PDO::PARAM_STR);
+            $sendMessage=$Pdostat->execute();
+
+            return $sendMessage;
+        }
 
 
+        public function getUnreadMessages($userId)
+        {
+            $pdo=$this->dbConnect();
+            $PdoStat=$pdo->prepare('
+            SELECT projet5_mails.id as mp_id,expeditor,receiver,title,message,DATE_FORMAT(time, \'%d/%m/%Y à %Hh%i\') AS time_date_fr,mp_read, projet5_user.id,username,projet5_images.user_id,dirname,filename,extension
+            FROM projet5_mails
+            JOIN projet5_user
+            ON expeditor =projet5_user.id
+            JOIN projet5_images
+            ON user_id=projet5_user.id
+            WHERE projet5_mails.receiver = :receiver AND mp_read=0 AND filename="img-userProfil" ');
+            
+            $PdoStat->bindValue(':receiver',$userId,PDO::PARAM_INT);
+            $getMessage=$PdoStat->execute();
+            $getMessage=$PdoStat->fetchAll();
+
+            return $getMessage;
+
+
+        }
+
+        public function readMessage($messageId,$userId)
+        {
+            $pdo=$this->dbConnect();
+           $Pdostat=$pdo->prepare('
+           SELECT projet5_mails.id as mp_id,expeditor,receiver,title,message,DATE_FORMAT(time, \' % d /%m /%Y à % Hh % i\') AS time_date_fr,mp_read, projet5_user.id,username,projet5_images.user_id,dirname,filename,extension
+            FROM projet5_mails
+            JOIN projet5_user
+            ON expeditor =projet5_user.id
+            JOIN projet5_images
+            ON user_id=projet5_user.id
+            WHERE projet5_mails.id=:id AND receiver = :receiver AND filename="img-userProfil" ');
+            $Pdostat->bindValue(':id',$messageId,PDO::PARAM_INT);
+            $Pdostat->bindValue(':receiver',$userId,PDO::PARAM_INT);
+            $Pdostat->bindValue(':id',$messageId,PDO::PARAM_INT);
+            $readMessage=$Pdostat->execute();
+            $readMessage=$Pdostat->fetch();
+            $Pdostat->closeCursor();
+            $Pdostat=$pdo->prepare('
+            UPDATE projet5_mails
+            SET mp_read=1
+            WHERE projet5_mails.id = :mpId
+            ');
+            $Pdostat->bindValue('mpId',$messageId,PDO::PARAM_INT);
+            $updateStatus= $Pdostat->execute();
+
+           return $readMessage;var_dump($readMessage);die;
+
+
+        }
+
+        public function getReadMessages($userId)
+        {
+            $pdo=$this->dbConnect();
+            $PdoStat=$pdo->prepare('
+                SELECT projet5_mails.id as mp_id,expeditor,receiver,title,message,DATE_FORMAT(time, \'%d/%m/%Y à %Hh%i\') AS time_date_fr,mp_read, projet5_user.id,username,projet5_images.user_id,dirname,filename,extension
+                FROM projet5_mails
+                JOIN projet5_user
+                ON expeditor =projet5_user.id
+                JOIN projet5_images
+                ON user_id=projet5_user.id
+                WHERE projet5_mails.receiver = :receiver AND mp_read=1 AND filename="img-userProfil" ');
+
+            $PdoStat->bindValue(':receiver',$userId,PDO::PARAM_INT);
+            $getMessage=$PdoStat->execute();
+            $getMessage=$PdoStat->fetchAll();
+
+            return $getMessage;
+
+
+        }
+
+
+
+
+
+        public function countUnreadMessage($userId)
+        {
+            $pdo=$this->dbConnect();
+            $Pdostat=$pdo->prepare('
+            SELECT COUNT(mp_read)
+            FROM projet5_mails
+            WHERE mp_read=0 AND receiver=:receiver');
+            $Pdostat->bindValue('receiver',$userId,PDO::PARAM_INT);
+            $unreadMessages= $Pdostat->execute();
+            $unreadMessages=$Pdostat->fetch();
+
+            return $unreadMessages;
+
+
+
+        }
 
 
 
