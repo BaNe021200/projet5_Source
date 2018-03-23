@@ -728,7 +728,7 @@ class UserManager extends Manager
             ON expeditor =projet5_user.id
             JOIN projet5_images
             ON user_id=projet5_user.id
-            WHERE projet5_mails.receiver = :receiver AND mp_read=0 AND filename="img-userProfil" ');
+            WHERE projet5_mails.receiver = :receiver AND mp_read=0 AND filename="img-userProfil" ORDER By time_date_fr DESC ');
             
             $PdoStat->bindValue(':receiver',$userId,PDO::PARAM_INT);
             $getMessage=$PdoStat->execute();
@@ -739,35 +739,87 @@ class UserManager extends Manager
 
         }
 
-        public function readMessage($messageId,$userId)
-        {
-            $pdo=$this->dbConnect();
-           $Pdostat=$pdo->prepare('
+        public function readUnreadMessages($messageId,$userId)
+{
+    $pdo=$this->dbConnect();
+    $Pdostat=$pdo->prepare('
            SELECT projet5_mails.id as mp_id,expeditor,receiver,title,message,DATE_FORMAT(time, \' % d /%m /%Y à % Hh % i\') AS time_date_fr,mp_read, projet5_user.id,username,projet5_images.user_id,dirname,filename,extension
             FROM projet5_mails
             JOIN projet5_user
             ON expeditor =projet5_user.id
             JOIN projet5_images
             ON user_id=projet5_user.id
-            WHERE projet5_mails.id=:id AND receiver = :receiver AND filename="img-userProfil" ');
-            $Pdostat->bindValue(':id',$messageId,PDO::PARAM_INT);
-            $Pdostat->bindValue(':receiver',$userId,PDO::PARAM_INT);
-            $Pdostat->bindValue(':id',$messageId,PDO::PARAM_INT);
-            $readMessage=$Pdostat->execute();
-            $readMessage=$Pdostat->fetch();
-            $Pdostat->closeCursor();
-            $Pdostat=$pdo->prepare('
+            WHERE projet5_mails.id=:id AND receiver = :receiver AND filename="img-userProfil"  ');
+    $Pdostat->bindValue(':id',$messageId,PDO::PARAM_INT);
+    $Pdostat->bindValue(':receiver',$userId,PDO::PARAM_INT);
+    $Pdostat->bindValue(':id',$messageId,PDO::PARAM_INT);
+    $readMessage=$Pdostat->execute();
+    $readMessage=$Pdostat->fetch();
+    $Pdostat->closeCursor();
+    $Pdostat=$pdo->prepare('
             UPDATE projet5_mails
             SET mp_read=1
+            WHERE projet5_mails.id = :mpId
+            ');
+    $Pdostat->bindValue('mpId',$messageId,PDO::PARAM_INT);
+    $updateStatus= $Pdostat->execute();
+
+    return $readMessage;
+
+
+}
+
+    public function readArchivedMessages($messageId,$userId)
+    {
+        $pdo=$this->dbConnect();
+        $Pdostat=$pdo->prepare('
+           SELECT projet5_mails.id as mp_id,expeditor,receiver,title,message,DATE_FORMAT(time, \' % d /%m /%Y à % Hh % i\') AS time_date_fr,mp_read, projet5_user.id,username,projet5_images.user_id,dirname,filename,extension
+            FROM projet5_mails
+            JOIN projet5_user
+            ON expeditor =projet5_user.id
+            JOIN projet5_images
+            ON user_id=projet5_user.id
+            WHERE projet5_mails.id=:id AND receiver = :receiver AND filename="img-userProfil"  ');
+        $Pdostat->bindValue(':id',$messageId,PDO::PARAM_INT);
+        $Pdostat->bindValue(':receiver',$userId,PDO::PARAM_INT);
+        $Pdostat->bindValue(':id',$messageId,PDO::PARAM_INT);
+        $readMessage=$Pdostat->execute();
+        $readMessage=$Pdostat->fetch();
+
+        return $readMessage;
+
+
+    }
+        public function deleteMessage($messageId)
+        {
+            $pdo=$this->dbConnect();
+            $Pdostat=$pdo->prepare('
+            DELETE
+            FROM projet5_mails
+            WHERE id = :id');
+            $Pdostat->bindValue(':id',$messageId,PDO::PARAM_INT);
+            $deleteMessage=$Pdostat->execute();
+
+        }
+
+
+
+
+
+        public function archiveMessages($messageId,$userId)
+        {
+            $pdo=$this->dbConnect();
+            $Pdostat=$pdo->prepare('
+            UPDATE projet5_mails
+            SET mp_read=2
             WHERE projet5_mails.id = :mpId
             ');
             $Pdostat->bindValue('mpId',$messageId,PDO::PARAM_INT);
             $updateStatus= $Pdostat->execute();
 
-           return $readMessage;var_dump($readMessage);die;
-
 
         }
+
 
         public function getReadMessages($userId)
         {
@@ -779,7 +831,7 @@ class UserManager extends Manager
                 ON expeditor =projet5_user.id
                 JOIN projet5_images
                 ON user_id=projet5_user.id
-                WHERE projet5_mails.receiver = :receiver AND mp_read=1 AND filename="img-userProfil" ');
+                WHERE projet5_mails.receiver = :receiver AND mp_read=1 AND filename="img-userProfil" ORDER By time_date_fr DESC ');
 
             $PdoStat->bindValue(':receiver',$userId,PDO::PARAM_INT);
             $getMessage=$PdoStat->execute();
@@ -789,6 +841,29 @@ class UserManager extends Manager
 
 
         }
+
+    public function getArchiveMessages($userId)
+    {
+        $pdo=$this->dbConnect();
+        $PdoStat=$pdo->prepare('
+                SELECT projet5_mails.id as mp_id,expeditor,receiver,title,message,DATE_FORMAT(time, \'%d/%m/%Y à %Hh%i\') AS time_date_fr,mp_read, projet5_user.id,username,projet5_images.user_id,dirname,filename,extension
+                FROM projet5_mails
+                JOIN projet5_user
+                ON expeditor =projet5_user.id
+                JOIN projet5_images
+                ON user_id=projet5_user.id
+                WHERE projet5_mails.receiver = :receiver AND mp_read=2 AND filename="img-userProfil" ORDER By time_date_fr DESC ');
+
+        $PdoStat->bindValue(':receiver',$userId,PDO::PARAM_INT);
+        $getArchiveMessages=$PdoStat->execute();
+        $getArchiveMessages=$PdoStat->fetchAll();
+
+        return $getArchiveMessages;
+
+
+    }
+
+
 
 
 
@@ -806,9 +881,34 @@ class UserManager extends Manager
             $unreadMessages=$Pdostat->fetch();
 
             return $unreadMessages;
+        }
 
+        public function countReadMessage($userId)
+        {
+            $pdo=$this->dbConnect();
+            $Pdostat=$pdo->prepare('
+            SELECT COUNT(mp_read)
+            FROM projet5_mails
+            WHERE mp_read=1 AND receiver=:receiver');
+            $Pdostat->bindValue('receiver',$userId,PDO::PARAM_INT);
+            $readMessages= $Pdostat->execute();
+            $readMessages=$Pdostat->fetch();
 
+            return $readMessages;
+        }
 
+        public function countArchiveMessage($userId)
+        {
+            $pdo=$this->dbConnect();
+            $Pdostat=$pdo->prepare('
+            SELECT COUNT(mp_read)
+            FROM projet5_mails
+            WHERE mp_read=2 AND receiver=:receiver');
+            $Pdostat->bindValue('receiver',$userId,PDO::PARAM_INT);
+            $archiveMessage= $Pdostat->execute();
+            $archiveMessage=$Pdostat->fetch();
+
+            return $archiveMessage;
         }
 
 

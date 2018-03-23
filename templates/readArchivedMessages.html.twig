@@ -5,12 +5,6 @@
 
 {% block TEST %}
 
-    to :{{ dump(mailContents.username) }}
-    mail id : {{ dump(mailContents.id) }}
-    from: {{ userDatum.username }}
-
-
-
 {% endblock TEST %}
 
 
@@ -25,16 +19,16 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">  <img src="{{ mailContents.dirname }}/{{ mailContents.filename }}.{{ mailContents.extension }}" width="50" height="50" class="mailAvatar"> Message de {{ mailContents.username }}</h4>      </h5>
+                    <h5 class="modal-title" id="exampleModalLongTitle">  <img src="{{ archivedMessages.dirname }}/{{ archivedMessages.filename }}.{{ archivedMessages.extension }}" width="50" height="50" class="mailAvatar"> Message de {{ archivedMessages.username }}</h4>      </h5>
                     <button type="button" class="close" id="crossDismissModal" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    {{ mailContents.message }}
+                    {{ archivedMessages.message }}
                 </div>
                 <div class="modal-footer">
-                    <button type="button" data-target="#AnswerMailModal" data-toggle="modal" data-whatever="{{ mailContents.username }}" class="btn btn-success">repondre</button>
+                    <button type="button"  data-toggle="modal" data-target="#mailModal"  class="btn btn-success">repondre</button>
                     <button type="button" id="dismissModal" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
 
                 </div>
@@ -42,9 +36,9 @@
         </div>
     </div>
 
- <!--fin modal mailViewer-->
+   <!--fin modal mailViewer-->
 
-    <div class="modal fade"  id="AnswerMailModal" tabindex="-1" role="dialog" aria-labelledby="mailModalLabel" aria-hidden="true">
+    <div class="modal fade"  id="mailModal" tabindex="-1" role="dialog" aria-labelledby="mailModalLabel" aria-hidden="true">
         <span class="txt">{{ flash }}</span>
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -55,7 +49,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form class="form-horizontal" method="POST" role="form" action="index.php?p=sendMessage&amp;expeditor={{ userDatum.id }}&amp;receiver={{ mailContents.id }}"  >
+                    <form class="form-horizontal" method="POST" role="form" action="index.php?p=sendMessage&amp;expeditor={{ userDatum.id }}&amp;receiver={{ data.id }}"  >
 
 
                         <div class="form-group">
@@ -69,7 +63,7 @@
 
                         <div class="modal-footer">
 
-                            <button type="submit" class="btn btn-success txt">envoyer un message à {{ mailContents.username }}</button>
+                            <button type="submit" class="btn btn-success txt">envoyer un message à {{ data.username }}</button>
                         </div>
 
                     </form>
@@ -81,6 +75,9 @@
             </div>
         </div>
     </div>
+
+
+
 
 
 
@@ -103,8 +100,9 @@
             window.location.href="index.php?p=messages"
         });</script>
 
+
     <script>
-        $('#AnswerMailModal').on('show.bs.modal', function (event) {
+        $('#mailModal').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget) // Button that triggered the modal
             var recipient = button.data('whatever') // Extract info from data-* attributes
             // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
@@ -114,9 +112,6 @@
             modal.find('.modal-body ').val(recipient)
         })
     </script>
-
-
-
 
 
 {% endblock script %}

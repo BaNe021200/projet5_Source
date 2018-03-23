@@ -322,13 +322,47 @@ if (isset($_GET['p']))
     elseif ($_GET['p'] == 'readMessage'){
         if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
 
-            readMessage($_GET['messageId'],$_COOKIE['ID']);
+            readUnreadMessages($_GET['messageId'],$_COOKIE['ID']);
+
+        }
+        else
+        {
+            throw new Exception("Erreur vous n'êtes pas connectez. Veuillez vous identifier");
+        }
+    }
+
+    elseif ($_GET['p'] == 'readArchivedMessages'){
+        if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
+
+            readArchivedMessages($_GET['messageId'],$_COOKIE['ID']);
+
+        }
+        else
+        {
+            throw new Exception("Erreur vous n'êtes pas connectez. Veuillez vous identifier");
+        }
+    }
+
+    elseif ($_GET['p'] == 'deleteMessage'){
+        if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
+
+            deleteMessage($_GET['messageId']);
+
+        }
+        else
+        {
+            throw new Exception("Erreur vous n'êtes pas connectez. Veuillez vous identifier");
+        }
+    }
 
 
 
 
 
+    elseif ($_GET['p'] == 'archiveMessages'){
+        if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
 
+            archiveMessages($_GET['messageId'],$_COOKIE['ID']);
 
         }
         else

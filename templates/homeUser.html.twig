@@ -39,6 +39,9 @@
 {% endblock profilCount %}
 
 
+{% block TEST %}
+
+{% endblock TEST %}
 
 
 
@@ -58,13 +61,13 @@
 
                     {{ form.rowVerticalSpace() }}
 
-                    <button type="button" id="listProfileButton" class="btn btn-primary" disabled>
+                  <a href="index.php?p=messages"><button type="button" id="listProfileButton" class="btn btn-primary" >
                         messages non lus
                         <span class="badge badge-light"> {{ unreadMessages.0 }}
 
                 </span>
                         <span class="sr-only">unread messages</span>
-                    </button>
+                    </button></a>
 
 
                 </section>

@@ -18,7 +18,7 @@ use model\UserManager;
 
         function twigRender($renderPath,$argument1,$argument2,$argument3,$argument4)
         {
-            //$user = new UserManager();
+            $user = new UserManager();
             // $userData = $user->userData();
             // $userDatum = $user->getUserMainData();
 
@@ -28,8 +28,11 @@ use model\UserManager;
                 @$src = "users/img/user/" . $_COOKIE['username'] . "/crop/img_001-cropped.jpg";
             }
 
-
-
+            @$getArchiveMessages=$user->getArchiveMessages($_COOKIE['ID']);
+            @$getReadMessages=$user->getReadMessages($_COOKIE['ID']);
+            @$countUreadMessages = $user->countUnreadMessage($_COOKIE['ID']);
+            @$countReadMessages = $user->countReadMessage($_COOKIE['ID']);
+            @$archiveMessage = $user->countArchiveMessage($_COOKIE['ID']);
 
 
 
@@ -46,6 +49,11 @@ use model\UserManager;
             echo $twig->render($renderPath,[
                 'userDatum' => $_SESSION,
                 @'imageProfil'=>$src,
+                'Messagesread'=>$getReadMessages,
+                'archiveMessages'=>$getArchiveMessages,
+                'unreadMessages'=>$countUreadMessages,
+                'countReadMessages'=>$countReadMessages,
+                'countArchiveMessages'=>$archiveMessage,
 
                 $argument1 => $argument2,
                 $argument3 => $argument4,

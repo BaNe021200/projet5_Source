@@ -157,9 +157,9 @@ function homeUser()
 
     $iNLine=$user->whoIsOnLine($_COOKIE['ID'],$_COOKIE['ip']);
 
-    $countUreadMessages = $user->countUnreadMessage($_COOKIE['ID']);
 
-    twigRender('homeUser.html.twig','imageProfil',$src,'unreadMessages',$countUreadMessages);
+
+    twigRender('homeUser.html.twig','imageProfil',$src,'','');
 
 }
 
@@ -634,20 +634,57 @@ function messages($userId)
     $user= new UserManager();
     $getUnreadMessages = $user->getUnreadMessages($userId);
     $getReadMessages = $user->getReadMessages($userId);
-    twigRender('messages.html.twig','messages',$getUnreadMessages,'Messagesread',$getReadMessages);
+
+    twigRender('messages.html.twig','messages',$getUnreadMessages,'','');
+
 }
 
-function readMessage($messageId,$userId)
+/**
+ * @param $messageId id du message à lire que l'on récupère dans la vue messages.twig
+ * @param $userId id de l'utilisateur connecté que l'on récupère grâce au cookie
+ * function qui lit les messages
+ *
+ */
+function readUnreadMessages($messageId,$userId)
 {
     $user= new UserManager();
-   $readMessage =$user->readMessage($messageId,$userId);
+   $readUnreadMessage =$user->readUnreadMessages($messageId,$userId);
 
-
-
-
-
-    twigRender('readMessage.html.twig','mailContents',$readMessage,'','');
+twigRender('readMessage.html.twig','mailContents',$readUnreadMessage,'','');
 }
+
+function readArchivedMessages($messageId,$userId)
+{
+    $user= new UserManager();
+    $readArchivedMessages =$user->readArchivedMessages($messageId,$userId);
+
+    twigRender('readArchivedMessages.html.twig','archivedMessages',$readArchivedMessages,'','');
+}
+
+
+function deleteMessage($messageId)
+{
+    $user= new UserManager();
+    $deleteMessage =$user->deleteMessage($messageId);
+
+    header('Location:index.php?p=messages');
+
+}
+
+
+function archiveMessages($messageId,$userId)
+{
+    $user= new UserManager();
+    $archiveMessages = $user->archiveMessages($messageId,$userId);
+
+    header('Location:index.php?p=messages');
+}
+
+
+
+
+
+
 
 function writeMessage($userId)
 {
