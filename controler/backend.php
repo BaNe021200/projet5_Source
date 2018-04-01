@@ -74,6 +74,7 @@ function birthdayCount()
     $today = new DateTime(date('d-m-Y'));
     $old = $birth->diff($today);
     $age = $old->y;
+
     if($age>=18)
     {
         emailcontrol();//ensuite on controle le mail
@@ -250,6 +251,7 @@ function imageProfile()
     }
     else {
         $deleteimageProfile=$user->deleteUserProfilPicture();
+        $deleteimageProfile=$user->deleteUserProfilPicture();
         if (file_exists("users/img/user/" . $_COOKIE['username'] . "/crop/img_001-cropped-center.jpg")) {
             copy("users/img/user/" . $_COOKIE['username'] . "/crop/img_001-cropped-center.jpg", 'users/img/user/'.$_COOKIE['username'].'/profilPicture/img-userProfil.jpg');
         } else {
@@ -276,6 +278,7 @@ function infosUser()
 
 
     twigRender('infosUser.html.twig','session',$_SESSION,'infos',$getinfos);
+
 }
 
 function connectUser()
@@ -546,20 +549,21 @@ function deleteImage($userId,$imageId)
 {
 
     $user= new UserManager();
-    $imageDeleted=$user->deleteImage($userId,$imageId);var_dump($imageId);
+    $imageDeleted=$user->deleteImage($userId,$imageId);
     $deleteProfilPicture=$user->deleteUserProfilPicture();
     $folderThumbnails="users/img/user/".$_COOKIE['username'].'/thumbnails/img_00'.$imageId.'-thumb.jpg';
     $folderProfilPicture='users/img/user/'.$_COOKIE['username'].'/profilPicture/img-userProfil.jpg';
     $folderCroppedCenterToDelete = "users/img/user/".$_COOKIE['username'].'/crop/img_00'.$imageId.'-cropped-center.jpg';
     $folderCroppedToDelete = "users/img/user/".$_COOKIE['username'].'/crop/img_00'.$imageId.'-cropped.jpg';
     $folderToDelete = "users/img/user/".$_COOKIE['username'].'/img_00'.$imageId.'.jpg';
+    //$folderImgToDelete = "users/img/user/".$_COOKIE['username'];
     if(file_exists($folderThumbnails)){
         unlink($folderToDelete);
         unlink($folderProfilPicture);
-
         unlink($folderCroppedToDelete);
         unlink($folderCroppedCenterToDelete);
         unlink($folderThumbnails);
+
 
     }
     else {
@@ -602,7 +606,7 @@ function saveUserinfos($userId)
 {
 
 
-
+    /*
     $_SESSION['postal_code']= $_POST['postal_code'];
     $_SESSION['city']= $_POST['city'];
     $_SESSION['search']= $_POST['search'];
@@ -615,7 +619,7 @@ function saveUserinfos($userId)
     $_SESSION['school_level']= $_POST['school_level'];
     $_SESSION['school_level_add']= $_POST['school_level_add'];
     $_SESSION['work']= $_POST['work'];
-    $_SESSION['work_add']= $_POST['work_add'];
+    $_SESSION['work_add']= $_POST['work_add'];*/
 
 
     $user=new UserManager();
@@ -628,14 +632,23 @@ function saveUserinfos($userId)
     header('Location: index.php?p=homeUser');
 }
 
+function deleteUserInfos($userId)
+{
+    $user=new UserManager();
+    $deleteInfo=$user->deleteUserInfos($userId);
+    twigRender('infosUser.html.twig','','','','');
+}
+
 function messages($userId)
 {
 
     $user= new UserManager();
     $getUnreadMessages = $user->getUnreadMessages($userId);
     $getReadMessages = $user->getReadMessages($userId);
+    $sentMessages=$user->sentMessages($userId);
 
-    twigRender('messages.html.twig','messages',$getUnreadMessages,'','');
+
+    twigRender('messages.html.twig','messages',$getUnreadMessages,'sentMessages',$sentMessages);
 
 }
 
@@ -661,6 +674,17 @@ function readArchivedMessages($messageId,$userId)
     twigRender('readArchivedMessages.html.twig','archivedMessages',$readArchivedMessages,'','');
 }
 
+function sentMessages($messageId,$userId)
+{
+    $user= new UserManager();
+    $sentMessages= $user->sentMessage($messageId,$userId);
+
+    twigRender('sentMessages.html.twig','sentMessages',$sentMessages,'','');
+}
+
+
+
+
 
 function deleteMessage($messageId)
 {
@@ -670,6 +694,67 @@ function deleteMessage($messageId)
     header('Location:index.php?p=messages');
 
 }
+
+function eraseUser($userId)
+{
+    $folderThumbnails="users/img/user/".$_COOKIE['username'].'/thumbnails/*.jpg';
+    $dirThumbnails="users/img/user/".$_COOKIE['username'].'/thumbnails';
+
+
+    $folderProfilPicture='users/img/user/'.$_COOKIE['username'].'/profilPicture/img-userProfil.jpg';
+    $dirProfilPicture='users/img/user/'.$_COOKIE['username'].'/profilPicture';
+
+    $folderCroppedCenterToDelete = "users/img/user/".$_COOKIE['username'].'/crop/img_001-cropped-center.jpg';
+    $dirCroppedCenterToDelete = "users/img/user/".$_COOKIE['username'].'/crop';
+
+    $foldersCroppedToDelete = glob("users/img/user/".$_COOKIE['username'].'/crop/*.jpg');
+
+
+    $folderToDelete = glob("users/img/user/".$_COOKIE['username'].'/*.jpg');
+    $dirToDelete = "users/img/user/".$_COOKIE['username'];
+
+
+    $folderThumbnails= glob('users/img/user/'.$_COOKIE['username'].'/thumbnails/*.jpg');
+    if(file_exists($dirThumbnails))
+    {
+
+        foreach ($folderThumbnails as $folderThumbnail)
+        {
+            unlink($folderThumbnail);
+        }
+
+        unlink($folderProfilPicture);
+
+
+        foreach ($foldersCroppedToDelete as $folderCroppedToDelete )
+        {
+            unlink($folderCroppedToDelete);
+        }
+
+        foreach ($folderToDelete as $fileToDelete)
+        {
+           unlink($fileToDelete);
+        }
+        rmdir($dirThumbnails);
+        rmdir($dirProfilPicture);
+        rmdir($dirCroppedCenterToDelete);
+        rmdir($dirToDelete);
+    }
+
+
+ $user= new UserManager();
+
+    $getmail=$user->getMail($userId);
+
+    mail($getmail['email'],'Confirmation de désinscription','Au revoir,'. $_COOKIE['first_name'].', votre compte est bien détruit.' );
+    disconnectUser();
+    $eraseUser=$user->eraseUser($userId);
+
+    twigRender('frontend/home.html.twig','','','','');
+}
+
+
+
 
 
 function archiveMessages($messageId,$userId)

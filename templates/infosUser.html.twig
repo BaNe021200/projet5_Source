@@ -33,13 +33,14 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="basic-addon1">Vous habitez...</span>
                             </div>
-                            <input type="text" id="code" name="postal_code" value="{{ session.postal_code  }} {{ infos.0.postal_code }} " class="form-control" placeholder="Code postal" aria-label="Code postal" aria-describedby="basic-addon1">
+                            <input type="text" id="code" name="postal_code" value="{{ infos.0.postal_code }} " class="form-control" placeholder="Code postal" aria-label="Code postal" aria-describedby="basic-addon1">
+
                         </div>
 
 
                    </div>
                         <div class="half">
-                            <input id="city" placeholder="Ville" name="city" value="{{ session.city }} {{ infos.0.city }} "   autocomplete="off">
+                            <input id="city" placeholder="Ville" name="city" value="{{ infos.0.city }} "   autocomplete="off">
                         </div>
                        <section id="output"></section>
 
@@ -50,8 +51,10 @@
                             <div class="col-md-12 text-center">
 
                   vous cherchez :
-                  {{ form.radioInline('search1','search','Une femme','une femme') }}
-                  {{ form.radioInline( 'search2','search','Un homme','un homme') }}
+
+                  {{ form.radioInline('search1','search','Une femme','une femme',info.0.search ) }}
+                  {{ form.radioInline( 'search2','search','Un homme','un homme',info.0.search) }}
+
 
                             </div>
 
@@ -60,9 +63,9 @@
 
                     vous cherchez :
                     {{ form.radioInline( 'purpose1','purpose','Rencontre amoureuse','Rencontre amoureuse' ) }}
-                    {{ form.radioInline( 'purpose2','purpose','Amitié','Amitié' ) }}
-                    {{ form.radioInline( 'purpose3','purpose','Sortie','Sortie' ) }}
-                    {{ form.radioInline( 'purpose4','purpose','Autre','Autre' ) }}
+                    {{ form.radioInline( 'purpose2','purpose','Amitié','amitié' ) }}
+                    {{ form.radioInline( 'purpose3','purpose','Sortie','sortie' ) }}
+                    {{ form.radioInline( 'purpose4','purpose','Autre','realtion à préciser' ) }}
 
                 </div>
 
@@ -129,7 +132,7 @@
                     <div class="row">
                         <div class="col-md-2"></div>
 
-                        <textarea class="col-md-8 form-control" name="family_situation_add" id="family_situation_add" cols="50" rows="10" placeholder="Vous m'intriguez, pourriez-vous m'en dire plus ?">{{ session.family_situation_add }}{{ infos.0.family_situation_add }}</textarea>
+                        <textarea class="col-md-8 form-control" name="family_situation_add" id="family_situation_add" cols="50" rows="10" placeholder="Vous m'intriguez, pourriez-vous m'en dire plus ?">{{ infos.0.family_situation_add }}</textarea>
 
                         <div class="col-md-2}"></div>
                     </div>
@@ -147,15 +150,15 @@
                     <fieldset class="form-control"><!--début ok3-->
 
 
-                     <h3>{{ form.col363('Et physiquement ?') }}</h3>
-                         {{ form.col12('Comment vous décririez vous ?') }}
+                     <h3>{{ form.col363('Et de vous, que diriez-vous ?') }}</h3>
+                         {{ form.col12(' ') }}
 
 
 
                         <div class="row">
                             <div class="col-md-2"></div>
 
-                            <textarea class="col-md-8 form-control" name="physic_add" id="physic_add" cols="50" rows="10" placeholder="Comment êtes-vous ? Décrivrez-vous. Quel est votre ressenti ?...">{{ session.physic_add }}{{ infos.0.physic_add }}</textarea>
+                            <textarea class="col-md-8 form-control" name="physic_add" id="physic_add" cols="50" rows="10" placeholder="Comment êtes-vous ? Décrivrez-vous...">{{ session.physic_add }}{{ infos.0.physic_add }}</textarea>
 
                             <div class="col-md-2}"></div>
                         </div>
@@ -173,7 +176,7 @@
                         <div class="row">
                             <div class="col-md-2"></div>
 
-                            <textarea class="col-md-8 form-control" name="speech" id="speech" cols="50" rows="10" placeholder="Vous m'intriguez, pourriez-vous m'en dire plus ?">{{ session.speech }}{{ infos.0.speech }}</textarea>
+                            <textarea class="col-md-8 form-control" name="speech" id="speech" cols="50" rows="10" placeholder="Que cherchez-vous ? Et à quoi vous intéressez-vous ?">{{ session.speech }}{{ infos.0.speech }}</textarea>
 
                             <div class="col-md-2}"></div>
                         </div>
@@ -185,7 +188,7 @@
                      <div class="row"> <div class="col-md-12">&nbsp;</div> </div><!--fin ok3-->
                       <fieldset class="form-control" id="Education">
                              <fieldset class="form-control" id="EducationLevel">
-                                 <h2>{{ form.col12('Education') }}</h2>
+                                 <h2>{{ form.col12('Votre Parcours, votre vie') }}</h2>
 
 
                                  <h4>{{ form.col363('Quel est votre niveau d\'étude ?') }}</h4>
@@ -229,10 +232,10 @@
                                <h3>{{ form.col12('Quelle est votre profession ?') }}</h3>
                                {{ form.col12radioInline5(
 
-                                   'Avez-vous des enfants : ',
+                                   '',
                                    'work1','work','Fonctionnaire','fonctionnaire',
                                    'work2','work','salarié','salarié',
-                                   'work3','work','Profession libérale','libéral',
+                                   'work3','work','Profession libérale','libérale',
                                    'work4','work','Sans Emploi','Sans Emploi',
                                    'work5','work','Autre','Autre'
                                ) }}
@@ -257,7 +260,9 @@
                            <div class="col-md-3"></div>
                            <div class="col-md-6 text-center">
                                {{ form.rowVerticalSpace() }}
-                               <button type="submit" id="register" class="btn btn-success"><i class="fa fa-user-plus"></i> Valider</button>
+                               <button type="submit" id="register" class="btn btn-success"><i class="far fa-file-alt"></i> Valider</button>&nbsp;
+                               <a href="index.php?p=deleteUserInfos&amp;userid={{ userDatum.id }}"><button type="submit" id="eraseInfos"  class="btn btn-warning"><i class="fas fa-eraser"></i> Effacer les infos personnelles</button></a>
+
                            </div>
                            <div class="col-md-3"></div>
 
@@ -270,10 +275,88 @@
 
 
 
+    {% block footer %}
+        <footer class="pt-4 my-md-5 pt-md-5 border-top">
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
 
+
+                    <button type="button" id="eraseProfile" data-target="#eraseProfileModal" data-toggle="modal" class="btn btn-danger"><i class="far fa-trash-alt"></i> Effacer le profile</button>
+
+
+
+
+                </div>
+
+                <!-- Modal -->
+                <div class="modal fade" id="eraseProfileModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header alert alert-danger">
+                                <h5 class="modal-title align-items-center " id="exampleModalLabel">Danger  : RED button !</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Vous êtes sur le point d'éradiquer votre profil ! Peut-être est-ce par erreur. dans ce cas, vite appuyer le bouton vert !</p>
+                                <p>Sinon nous espérons vous avoir aidé dans votre recherche.</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-success" data-dismiss="modal">Fermer</button>
+                                <button type="button"  data-toggle="modal" data-target="#destroyedProfileModal" class="btn btn-danger"><i class="fas fa-fighter-jet"></i> Détruire le profil</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+                <div class="modal fade" id="destroyedProfileModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header alert alert-danger">
+                                <h5 class="modal-title align-items-center " id="exampleModalLabel">Profil en cour de destruction ! !</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+
+                                <p>Votre profil sera détruit dès que vous aurez cliqué sur confirmation de destruction !</p>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-success" data-dismiss="modal">Fermer</button>
+                                <a href="index.php?p=eraseProfil"><button type="button" class="btn btn-danger"><i class="fas fa-fire"></i> confirmation de destruction</button></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+
+
+            </div>
+        </footer>
+    {% endblock footer %}
 
 
 {% endblock main %}
+
+
+
+
+
+
+
 
 {% block script %}
     {{ parent() }}

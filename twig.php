@@ -5,6 +5,7 @@ require_once 'vendor/autoload.php';
 require_once 'model/functions.php';
 require_once 'model/UserManager.php';
 require_once 'controler/backend.php';
+require_once 'lib/Session.php';
 //require_once 'vendor/twig/twig/lib/Twig/Extension/Session.php';
 use model\UserManager;
 
@@ -19,6 +20,11 @@ use model\UserManager;
         function twigRender($renderPath,$argument1,$argument2,$argument3,$argument4)
         {
             $user = new UserManager();
+
+
+
+
+
             // $userData = $user->userData();
             // $userDatum = $user->getUserMainData();
 
@@ -33,6 +39,14 @@ use model\UserManager;
             @$countUreadMessages = $user->countUnreadMessage($_COOKIE['ID']);
             @$countReadMessages = $user->countReadMessage($_COOKIE['ID']);
             @$archiveMessage = $user->countArchiveMessage($_COOKIE['ID']);
+            @$countSentMessage = $user->countSentMessages($_COOKIE['ID']);
+
+
+
+
+
+
+
 
 
 
@@ -44,6 +58,8 @@ use model\UserManager;
             ]);
             $twig->addExtension(new Twig_Extension_Debug());
             $twig->addExtension(new Twig_Extensions_Extension_Text());
+            $twig->addGlobal('unreadMessages',$countUreadMessages);
+
            // $twig->addExtension(new Twig_Extension_Session());
 
             echo $twig->render($renderPath,[
@@ -51,9 +67,13 @@ use model\UserManager;
                 @'imageProfil'=>$src,
                 'Messagesread'=>$getReadMessages,
                 'archiveMessages'=>$getArchiveMessages,
-                'unreadMessages'=>$countUreadMessages,
+               // 'unreadMessages'=>$countUreadMessages,
                 'countReadMessages'=>$countReadMessages,
                 'countArchiveMessages'=>$archiveMessage,
+                'countSentMessages'=>$countSentMessage,
+
+
+
 
                 $argument1 => $argument2,
                 $argument3 => $argument4,

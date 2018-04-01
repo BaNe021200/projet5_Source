@@ -11,47 +11,19 @@ try
 if (isset($_GET['p']))
 {
     if ($_GET['p'] == 'home'){
-        home();
-    }
-
-   /* elseif ($_GET['p'] == 1){
-        if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
-
-           listProfile();
-
-
+        if(isset($_COOKIE['ID'])&& isset($_COOKIE['username']))
+        {
+            require_once 'listProfils.php';
         }
         else
         {
-            throw new Exception("Erreur vous n'êtes pas connectez. Veuillez vous identifier");
+            home();
         }
+
+
     }
 
-    elseif ($_GET['p'] == '2'){
-        if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])) {
 
-            listProfile();
-
-        }
-
-        else
-        {
-            throw new Exception("Erreur vous n'êtes pas connectez. Veuillez vous identifier");
-        }
-    }
-
-    elseif ($_GET['p'] == ''){
-        if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])) {
-
-          listProfile();
-
-        }
-
-        else
-        {
-            throw new Exception("Erreur vous n'êtes pas connectez. Veuillez vous identifier");
-        }
-    }*/
 
     elseif ($_GET['p'] == 'listProfile'){
         if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
@@ -138,9 +110,28 @@ if (isset($_GET['p']))
         }
     }
 
-    elseif ($_GET['p'] == 'signUp'){
+    elseif ($_GET['p'] == 'deleteUserInfos'){
+        if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
 
-        signUp();
+            deleteUserInfos($_GET['userid']);
+        }
+        else
+        {
+            throw new Exception("Erreur vous n'êtes pas connectez. Veuillez vous identifier");
+        }
+    }
+
+    elseif ($_GET['p'] == 'signUp'){
+        if(isset($_COOKIE['ID'])&& isset($_COOKIE['username']))
+        {
+            homeUser();
+        }
+        else
+            {
+                signUp();
+            }
+
+
     }
 
     elseif($_GET['p']== 'register')
@@ -155,8 +146,6 @@ if (isset($_GET['p']))
                 $_SESSION['username']=$_POST['username'];
                 $_SESSION['email']=$_POST['email'];
                 $_SESSION['birthday']=$_POST['birthday'];
-
-
 
                 if(preg_match('/^[a-zéèA-Z-]+$/', $_POST['first_name']) && preg_match('/^[a-zéèA-Z-]+$/',($_POST['last_name'])))
                     {
@@ -253,6 +242,20 @@ if (isset($_GET['p']))
         }
     }
 
+    elseif ($_GET['p'] == 'eraseProfil'){
+        if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
+
+
+
+            eraseUser($_COOKIE['ID']);
+
+        }
+        else
+        {
+            throw new Exception("Erreur vous n'êtes pas connectez. Veuillez vous identifier");
+        }
+    }
+
     elseif ($_GET['p'] == 'recropped'){
         if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
             recropped($_COOKIE['ID'],$_GET['id']);
@@ -305,7 +308,7 @@ if (isset($_GET['p']))
 
     elseif ($_GET['p'] == 'test'){
 
-            require_once 'test.php';
+            require_once 'test_form.php';
 
     }
 
@@ -370,6 +373,18 @@ if (isset($_GET['p']))
             throw new Exception("Erreur vous n'êtes pas connectez. Veuillez vous identifier");
         }
     }
+    elseif ($_GET['p'] == 'sentMessages'){
+        if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
+
+            sentMessages($_GET['messageId'],$_COOKIE['ID']);
+
+        }
+        else
+        {
+            throw new Exception("Erreur vous n'êtes pas connectez. Veuillez vous identifier");
+        }
+    }
+
 
 
 

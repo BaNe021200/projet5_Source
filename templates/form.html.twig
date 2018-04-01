@@ -154,11 +154,11 @@
 
 {% endmacro %}
 
-{% macro radioInline(idFor,name,label,value) %}
+{% macro radioInline(idFor,name,label,value,checked) %}
     &nbsp;
 
     <div class="custom-control custom-radio custom-control-inline">
-    <input type="radio" id="{{ idFor }}" name="{{ name }}" class="custom-control-input" value="{{ value }}" required  >
+    <input type="radio" id="{{ idFor }}" name="{{ name }}" class="custom-control-input" value="{{ value }}" checked="{{ checked }}" required  >
     <label class="custom-control-label" for="{{ idFor }}"> {{ label }}</label>
 </div>
 {% endmacro %}

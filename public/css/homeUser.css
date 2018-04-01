@@ -96,3 +96,18 @@ body{
 }
 
 
+.connected
+{
+
+    border: 5px solid  #00cc00;
+}
+
+.notHere
+{
+    border: 5px solid orange;
+}
+
+.doNotDisturb
+{
+    border: 5px solid  red;
+}

@@ -2,9 +2,9 @@
 
 
 {% block main %}
-
-    <h1>la galerie de {{ images.0.username }}</h1>
-
+     <span class="txt"></span>
+    <h1>la galerie de {{ images.0.username }} &nbsp;<a href="index.php?p=homeUserFront&amp;userId={{ images.0.id }}&amp;username={{ images.0.username }}"><i class="far fa-images fa-1x"></i></a></h1>
+        
     <main role="main">
 
         <div class="album py-5 bg-light">

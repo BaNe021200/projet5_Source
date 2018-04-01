@@ -248,3 +248,57 @@ function slideShow($imageId)
 
 
 }
+
+/*public function getUserProfilePicture2()
+        {
+
+            $pdo=$this->dbConnect();
+            $PdoStat=$pdo->query('
+            SELECT COUNT(id) AS nbUsers
+            FROM projet5_user');
+            $data=$PdoStat->execute();
+            $data=$PdoStat->fetch();
+            foreach ($data as $datum)
+            {
+                $nbUsers=$datum ;
+            }
+            $perPage=6;
+            $nbPage= ceil($nbUsers/$perPage);
+
+
+
+            if (isset($_GET['p'])&& $_GET['p']>0 && $_GET['p']<=$nbPage)
+            {
+                $currentPage=$_GET['p'];
+            }
+            else{
+                $currentPage='1';
+            }
+
+
+            for ($i=1; $i<=$nbPage; $i++ )
+            {
+               if($i==$currentPage){
+                   echo " $i/";
+               }
+               else{
+                   echo"<a href=\"index.php?p=$i\">$i</a> ";
+               }
+
+            }
+
+
+            $PdoStat->closeCursor();
+            $PdoStat=$pdo->query('
+            SELECT projet5_images.user_id,filename, projet5_user.id,username,registry_date
+            FROM projet5_images
+            INNER JOIN projet5_user
+            ON projet5_images.user_id = projet5_user.id
+            WHERE projet5_images.filename="img-userProfil"
+            ORDER BY registry_date DESC LIMIT '.(($currentPage-1)*$perPage). ','.$perPage);
+
+            $username= $PdoStat->execute();
+            $username= $PdoStat->fetchAll();
+
+            return $username;
+        }*/

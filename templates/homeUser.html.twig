@@ -10,7 +10,7 @@
 
 {% block title %} La page de {{ userDatum.username }}{% endblock title %}
 {% block avatar %}
-        <li class="nav-item"><img class="rounded-circle" src="{{ imageProfil }}" alt="" width="37" height="37"></li>
+        <li class="nav-item"><img class="rounded-circle " src="{{ imageProfil }}" alt="" width="37" height="37"></li>
 
     {% endblock avatar%}{% block bookmark %}<i class="fas fa-caret-down" style="color:#17a2b8" ></i>{% endblock bookmark %}
 {% block brand %}<span class="text-white">Whole Wild World</span>{% endblock brand %}
@@ -48,14 +48,14 @@
 {% block main %}
 
 
-
+    <div class="container-fluid">
 
         <div class="row">
             <div class="col-md-3 ">
                 <section id="welcome">
 
                     <h1>Hello {{ userDatum.first_name }}  </h1>
-                    <img class="rounded-circle" id="cropImage" src="{{ imageProfil }}" alt="Generic placeholder image"
+                    <img class="rounded-circle" id="cropImage" src="{{ imageProfil }}" alt="{{"votre future photo sera ici"}}"
                          width="150" height="150">
 
 

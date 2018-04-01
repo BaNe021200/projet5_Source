@@ -9,6 +9,13 @@
 {% endblock stylesheet %}
 
 {% block title %} La page de {{ userDatum.username }}{% endblock title %}
+
+{% block brand %}<h2><span class="text-white">Whole Wild World</span></h2>{% endblock brand %}
+
+
+
+
+
 {% block avatar %}
     <li class="nav-item"><img class="rounded-circle" src="{{ imageProfil }}" alt="" width="37" height="37"></li>
 
@@ -38,34 +45,110 @@
             Profils des autres utilisateurs
         </button></a>
 {% endblock %}
+
+{% block TEST %}
+
+
+{% endblock TEST %}
+
+
+
+
+
+
+
 {% block main %}
 
-    <div class="row">
-        <div class="col-md-3">
-            <p class="txt">vous êtes sur</p>
-            <h1> la page de {{ data.username }}</h1>
-            <img class="rounded-circle" id="cropImage" src="{{ data.dirname }}/{{ data.filename }}.{{ data.extension }}" alt="Generic placeholder image" width="150" height="150" >
-           
-            <span class="hidden">{{ form.rowVerticalSpace() }}</span>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3">
+                <p class="txt">vous êtes sur</p>
+                <h1> la page de {{ data.username }}</h1>
+                <img class="rounded-circle" id="cropImage"
+                     src="{{ data.dirname }}/{{ data.filename }}.{{ data.extension }}" alt="Generic placeholder image"
+                     width="150" height="150">
 
-            <h4> <ul class="list-unstyled"><a href="index.php?p=userGalerie&amp;userId={{ data.id }}&amp;username={{ data.username }}"><li><i class="far fa-images fa-1x"></i> galerie de {{ data.username }}</li></a></ul></h4>
+                <span class="hidden">{{ form.rowVerticalSpace() }}</span>
+
+                <h4>
+                    <ul class="list-unstyled"><a
+                                href="index.php?p=userGalerie&amp;userId={{ data.id }}&amp;username={{ data.username }}">
+                            <li><i class="far fa-images fa-1x"></i> galerie de {{ data.username }}</li>
+                        </a></ul>
+                </h4>
+
+                {{ form.rowVerticalSpace() }}
+
+                <button type="button" data-toggle="modal" data-target="#mailModal"
+                        class="profilButton btn btn-success txt" data-whatever="{{ data.username }}">
 
 
+                    Envoyez-lui un message !
+                </button>
+
+                <div class="modal fade" id="mailModal" tabindex="-1" role="dialog" aria-labelledby="mailModalLabel"
+                     aria-hidden="true">
+                    <span id="alert" class="txt">{{ flash }}</span>
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title txt text-center" id="mailModalLabel">new message</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form class="form-horizontal" method="POST" role="form"
+                                      action="index.php?p=sendMessage&amp;expeditor={{ userDatum.id }}&amp;receiver={{ data.id }}">
 
 
-            {% for info in userInfos  %}
-            <span class="hiddenColor">{{ form.rowVerticalSpace() }}</span>
+                                    <div class="form-group">
+                                        <label for="title-name" class="col-form-label txt">Titre du message:</label>
+                                        <input type="text" name="title" i placeholder="titre du message"
+                                               class="form-control txt" id="title">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="message-text" class="col-form-label txt">Message:</label>
+                                        <textarea class="form-control txt" name="message" id="message-text"></textarea>
+                                    </div>
 
-            <h4>{{ form.col12("Sa présentation") }}</h4>
-                <p class="presentation text-left">{{ data.username }} est {{ data.gender }}  qui cherche {{ info.search }} pour {{ info.purpose }}</p>
+                                    <div class="modal-footer">
+
+                                        <button type="submit" class="btn btn-success txt">envoyer un message
+                                            à {{ data.username }}</button>
+                                    </div>
+
+                                </form>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+
+
+                {% for info in userInfos %}
+                <span class="hiddenColor">{{ form.rowVerticalSpace() }}</span>
+
+                <h4>{{ form.col12("Sa présentation") }}</h4>
+                <p class="presentation text-left">{{ data.username }}, {{ data.user_age }} ans,  est {{ data.gender }} qui
+                    cherche {{ info.search }} pour {{ info.purpose }}.</p>
                 <p class="presentation ">
+                    {% if info.city == true %}
                     {% if data.gender== "une femme" %}
                         Elle
 
                     {% else %}
                         Il
                     {% endif %}
-                    habite {{ info.city }} ({{ info.postal_code }})
+
+                        habite {{ info.city }} ({{ info.postal_code }})
+                        {% else %}
+                    {% endif %}
+
+
+
+
                 </p>
 
 
@@ -84,7 +167,7 @@
                 </p>
                 <p class="txt">
 
-                {% if info.family_situation_add == true %}
+                    {% if info.family_situation_add == true %}
                     {% if data.gender== "une femme" %}
                         Elle
 
@@ -92,98 +175,162 @@
                         Il
                     {% endif %}
 
-                    précise:<p class="presentation">{{ info.family_situation_add }}</p>
+                    précise :
+                <p class="presentation"><span class="hash">"</span>{{ info.family_situation_add }}<span
+                            class="hash">"</span></p>
 
-                {% else %}
+            {% else %}
 
-                    mais n'apporte pas d'autres précisions.
+
                 {% endif %}
                 </p>
 
 
+            </div>
+            <div class="col-md-6">
+
+
+                <h2>Son annonce</h2>
+
+                {{ form.rowVerticalSpace() }}
+
+                {% if info.physic_add==true %}
+                    <p class="presentation"><span class="hash">"</span>{{ info.physic_add }}<span class="hash">"</span></p>
+
+                    {% else %}
+
+                    <p class="presentation">{{ data.username }} n'a pas encore remplie sa présentation personnelle</p>
+                {% endif %}
+
+                {% if info.speech==true %}
+                    <p class="presentation"><span class="hash">"</span>{{ info.speech }}<span class="hash">"</span></p>
+                    {% else %}
+                        <p class="presentation">{{ data.username }} n'a pas encore remplie son annonce</p>
+                {% endif %}
 
 
 
 
 
+                <span class="txt ">{{ form.rowVerticalSpace() }}</span>
+            </div>
+            <div class="col-md-3">
+                {{ form.rowVerticalSpace() }}
 
- </div>
-        <div class="col-md-6">
-
-
-            <h2>Son annonce</h2>
-
-            {{ form.rowVerticalSpace() }}
-
-            <p class="presentation">{{ info.physic_add }}</p>
-            <p class="presentation">{{ info.speech }}</p>
-            {% endfor %}
+                <h4>{{ form.col12("Son Parcours") }}</h4>
 
 
-            <span class="txt ">{{ form.rowVerticalSpace() }}</span>
+                <div class="presentation">
 
+                    Concernant son parcours scolaire, {{ data.username }}
 
+                    {% if info.school_level==true %}
 
+                        {% if info.school_level=="sans diplôme" %}
 
-                <button type="button"  data-toggle="modal" data-target="#mailModal" class="profilButton btn btn-success txt" data-whatever="{{ data.username }}">
+                            n'a pas de diplôme.
 
-                     Envoyez-lui un message !
-                </button>
+                        {% elseif  info.school_level=='ne souhaite pas en parler' %}
 
-            <div class="modal fade"  id="mailModal" tabindex="-1" role="dialog" aria-labelledby="mailModalLabel" aria-hidden="true">
-                <span class="txt">{{ flash }}</span>
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title txt text-center" id="mailModalLabel">new message</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form class="form-horizontal" method="POST" role="form" action="index.php?p=sendMessage&amp;expeditor={{ userDatum.id }}&amp;receiver={{ data.id }}"  >
+                            ne souhaite pas en parler.
 
+                        {% else %}
 
-                                <div class="form-group">
-                                    <label for="title-name" class="col-form-label txt">Titre du message:</label>
-                                    <input type="text" name="title" i placeholder="titre du message" class="form-control txt" id="title" >
-                                </div>
-                                <div class="form-group">
-                                    <label for="message-text" class="col-form-label txt">Message:</label>
-                                    <textarea class="form-control txt" name="message" id="message-text"></textarea>
-                                </div>
+                            a un niveau {{ info.school_level }}.
 
-                                <div class="modal-footer">
+                        {% endif %}
 
-                                    <button type="submit" class="btn btn-success txt">envoyer un message à {{ data.username }}</button>
-                                </div>
+                    {% else %}
 
-                            </form>
-                        </div>
-
-
-
-
-                    </div>
+                        ne l'as pas renseigné...
+                    {% endif %}
                 </div>
+                <div class="presentation">
+                    {% if info.school_level_add == true %}
+
+                        De plus,
+                        {% if data.gender== "une femme" %}
+                            elle
+
+                        {% else %}
+                            il
+                        {% endif %}
+                        précise :{{ "<br>" }} <span class="hash">"</span>{{ info.school_level_add }}<span class="hash">"</span>
+
+                            {% else %}
+
+                        n'apporte pas de présicions
+
+
+                    {% endif %}
+
+            </div>
+
+
+                {{ form.rowVerticalSpace() }}
+
+                <div class="presentation ">
+                    Professionnellement,
+
+
+                    {% if data.gender == "une femme" %}
+                        elle
+
+                    {% else %}
+                        il
+                    {% endif %}
+                    {% if  info.work ==true %}
+                        {% if  info.work =="Sans Emploi" %}
+                            est sans emploi
+
+                        {% elseif  info.work =="Autre" %}
+
+                            excerce dans une catégorie socio-professionnelle à part
+
+                        {% else %}
+
+                            execerce dans la catégorie {{ info.work }}
+
+                        {% endif %}
+
+
+
+                    {% else %}
+                        ne l'a pas renseigné
+                    {% endif %}
+
+                </div>
+
+
+                <div class="presentation">
+
+                    {% if info.work_add == true %}
+                        {% if data.gender == "une femme" %}
+                            Elle
+
+                        {% else %}
+                            Il
+                        {% endif %}
+                        précise :<span class="hash">"</span>{{ info.work_add }}<span class="hash">"</span>
+
+                    {% else %}
+                       et n'apporte pas plus de précision.
+
+                    {% endif %}
+
+
+                </div>
+
+
+                {% endfor %}
+
+
+                </p>
+
+
             </div>
 
         </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        <div class="col-md-3"></div>
     </div>
 
 
@@ -198,9 +345,7 @@
 
 
 
-
-
-{% endblock %}
+{% endblock main %}
 
 
 {% block script %}
@@ -223,7 +368,15 @@
             modal.find('.modal-body ').val(recipient)
         })
     </script>
-<script src="public/js/alert.js"></script>
+    <script src="public/js/jQuery.js"></script>
+    <script>const alert = $('#alert');
+        if(alert.length > 0){
+            alert.hide().slideDown(500);
+            alert.find('.close').click(function(e){
+                e.preventDefault();
+                alert.slideUp();
+            })
+        }</script>
 
 
 

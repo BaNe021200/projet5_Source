@@ -1,5 +1,6 @@
 html,body{
     font-size: 62.5%;
+
 }
 
 h1{font-size: 4rem;}
@@ -33,6 +34,6 @@ h5{font-size: 2rem;}
     border-color: transparent ;
 }
 
-.alert{
+.alert, .hash{
     font-size: 3rem;
 }

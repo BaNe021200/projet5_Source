@@ -13,6 +13,10 @@
 
 
 
+
+
+
+
 {% endblock TEST %}
 
 
@@ -36,8 +40,15 @@
                     <a class="list-group-item list-group-item-info active" id="list-home-list" data-toggle="list" href="#list-home" role="tab" aria-controls="home">Boîte de réception &nbsp;  <span class="badge badge-light"> {{ unreadMessages.0 }}
 
                 </span>
-                        <span class="sr-only">unread messages</span></a>
-                    <a class="list-group-item list-group-item-secondary" id="list-profile-list" data-toggle="list" href="#list-profile" role="tab" aria-controls="profile">Messages envoyés</a>
+                        <span class="sr-only">sent messages</span></a>
+                    <a class="list-group-item list-group-item-secondary" id="list-profile-list" data-toggle="list" href="#list-profile" role="tab" aria-controls="profile">Messages envoyés &nbsp;   <span class="badge badge-light">
+
+                    {{countSentMessages.0}}
+
+
+
+                </span>
+                        <span class="sr-only">archived messages</span></a>
                     <a class="list-group-item list-group-item-success" id="list-messages-list" data-toggle="list" href="#list-messages" role="tab" aria-controls="messages">Messages archivés&nbsp;  <span class="badge badge-light"> {{ countArchiveMessages.0 }}
 
                 </span>
@@ -55,21 +66,22 @@
                         <!--boîte de réception-->
 
                         <table class="table table-hover">
-                           {# <thead>
+                           <thead>
                             <tr>
                                 <th scope="col"></th>
-                                <th scope="col">user</th>
-                                <th scope="col">Last</th>
-                                <th scope="col">Handle</th>
+                                <th scope="col">Expéditeur</th>
+                                <th scope="col">Titre</th>
+                                <th scope="col">Message</th>
+                                <th scope="col">Date</th>
                             </tr>
-                            </thead>#}
+                            </thead>
                             <tbody>
 
 
                                 {% for message in messages %}
                                     <tr>
                                         <td scope="row"><img src="{{ message.dirname }}/{{ message.filename }}.{{ message.extension }}" class="mailAvatar" width="50" height="50"></td>
-                                        <td>{{ message.username }}</td>
+                                        <td>De : <a href="index.php?p=homeUserFront&amp;userId={{ message.expeditor }}">{{ message.username }}</a></td>
                                         <td ><a title="lire le message de {{ message.username }}" href="index.php?p=readMessage&amp;messageId={{ message.mp_id }}"  >{{ message.title }}</a></td>
                                         <td>{{ message.message |truncate}}</td>
                                         <td>{{ message.time_date_fr }}</td>
@@ -123,19 +135,104 @@
 
 
                         </div>
-                    <div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">envoyé</div>
+                    <div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">
+
+
+
+
+                        <!--début messages envoyés-->
+
+                        <table class="table table-hover">
+                             <thead>
+                             <tr>
+                                 <th scope="col"></th>
+                                 <th scope="col">Destinataire</th>
+                                 <th scope="col">Titre</th>
+                                 <th scope="col">Messages</th>
+                                 <th scope="col">date</th>
+                             </tr>
+                             </thead>
+                            <tbody>
+
+
+                            {% for sentMessage in sentMessages %}
+                                <tr>
+                                    <td scope="row"><img src="{{ sentMessage.dirname }}/{{ sentMessage.filename }}.{{ sentMessage.extension }}" class="mailAvatar" width="50" height="50"></td>
+                                    <td><a href="index.php?p=homeUserFront&amp;userId={{ sentMessage.receiver }}">{{ sentMessage.username }}</a></td>
+                                    <td ><a title="lire le message de {{ sentMessage.username }}" href="index.php?p=sentMessages&amp;messageId={{ sentMessage.mp_id }}"  >{{ sentMessage.title }}</a></td>
+                                    <td>{{ sentMessage.message |truncate}}</td>
+                                    <td>{{ sentMessage.time_date_fr }}</td>
+                                    <td><a class="linkColorArchived" href="index.php?p=archiveMessages&amp;messageId={{ sentMessage.mp_id }}"><i title="archiver le message" class="fas fa-archive"></i></a></td>
+                                    <td>
+                                        <div style="color: red"><i data-toggle="modal" data-target="#myModalDeleteUnreadMessage&amp;messageId={{ sentMessage.mp_id }}" data-whatever="{{ sentMessage.username }}" class="fas fa-times" title="effacer le message"></i></div></td>
+
+
+
+                                </tr>
+
+                                <div class="modal fade" id="myModalDeleteUnreadMessage&amp;messageId={{ sentMessage.mp_id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Danger suppression !</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Vous êtes sur point de supprimer le message {{ sentMessage.title }} de {{ sentMessage.username }}...continuer ?</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button"  class="btn btn-primary" data-dismiss="modal">Annuler</button>
+                                                <a href="index.php?p=deleteMessage&amp;messageId={{ sentMessage.mp_id }}"><button type="button" class="btn btn-danger">Supprimer</button></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--fin modal delete-->
+
+
+
+
+
+
+
+
+                            {% endfor %}
+
+
+
+
+                            </tbody>
+                        </table>
+
+
+
+
+
+
+                        <!--fin messages envoyés-->
+
+
+
+
+
+
+                    </div>
                     <div class="tab-pane fade" id="list-messages" role="tabpanel" aria-labelledby="list-messages-list">
 
                         <!--messages archivés-->
                         <table class="table table-hover">
-                            {# <thead>
+                             <thead>
                              <tr>
                                  <th scope="col"></th>
-                                 <th scope="col">user</th>
-                                 <th scope="col">Last</th>
-                                 <th scope="col">Handle</th>
+                                 <th scope="col">Expéditeur</th>
+                                 <th scope="col">Titre</th>
+                                 <th scope="col">Message</th>
+                                 <th scope="col">Date</th>
                              </tr>
-                             </thead>#}
+                             </thead>
                             <tbody>
 
 
@@ -205,21 +302,22 @@
                             <!--messages lus-->
 
                         <table class="table table-hover">
-                            {# <thead>
+                             <thead>
                              <tr>
                                  <th scope="col"></th>
-                                 <th scope="col">user</th>
-                                 <th scope="col">Last</th>
-                                 <th scope="col">Handle</th>
+                                 <th scope="col">Expéditeur</th>
+                                 <th scope="col">Titre</th>
+                                 <th scope="col">Message</th>
+                                 <th scope="col">Date</th>
                              </tr>
-                             </thead>#}
+                             </thead>
                             <tbody>
 
 
                             {% for Messageread in Messagesread %}
                                 <tr>
                                     <td scope="row"><img src="{{ Messageread.dirname }}/{{ Messageread.filename }}.{{ Messageread.extension }}" class="mailAvatar" width="50" height="50"></td>
-                                    <td>{{ Messageread.username }}</td>
+                                    <td><a href="index.php?p=homeUserFront&amp;userId={{ Messageread.expeditor }}">{{ Messageread.username }}</a></td>
                                     <td ><a title="lire le message de {{ Messageread.username }}" href="index.php?p=readMessage&amp;messageId={{ Messageread.mp_id }}&amp;messageTitle={{ Messageread.title }}&amp;messageContent={{ Messageread.message }}&amp;dir={{ Messageread.dirname }}&amp;filename={{ Messageread.filename }}&amp;ext={{ Messageread.extension }}&amp;username={{ Messageread.username }}"  >{{ Messageread.title }}</a></td>
                                     <td>{{ Messageread.message |truncate}}</td>
                                     <td>{{ Messageread.time_date_fr }}</td>
@@ -296,4 +394,5 @@
 
 
 {% endblock main %}
+
 

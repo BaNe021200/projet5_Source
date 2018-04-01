@@ -37,6 +37,10 @@ function get_registry()
     $user = new UserManager();
 
     $newUser = $user->addUser();
+
+
+
+
     $message=[];
     $messagemail ='
 <html>
@@ -107,13 +111,13 @@ function sendMessage($expeditor, $receiver)
         $Session = new Session();
         $Session->setFlash('votre message est envoyé','success');
         $Session->flash();
+        header('Location:index.php?p=homeUserFront&userId='.$receiver);
 
-        //twigRender('frontend/homeUserFront.html.twig','flash',$Session,'','');
-
+        //twigRender('messages.html.twig','','','','');
     }
 
 
 
 
-   header('Location:index.php?p=homeUserFront&userId='.$receiver);
+
 }
