@@ -547,34 +547,55 @@ function pathInfosuserImages()
 
 function deleteImage($userId,$imageId)
 {
-
+    //var_dump($imageId);die;
     $user= new UserManager();
     $imageDeleted=$user->deleteImage($userId,$imageId);
-    $deleteProfilPicture=$user->deleteUserProfilPicture();
-    $folderThumbnails="users/img/user/".$_COOKIE['username'].'/thumbnails/img_00'.$imageId.'-thumb.jpg';
-    $folderProfilPicture='users/img/user/'.$_COOKIE['username'].'/profilPicture/img-userProfil.jpg';
-    $folderCroppedCenterToDelete = "users/img/user/".$_COOKIE['username'].'/crop/img_00'.$imageId.'-cropped-center.jpg';
-    $folderCroppedToDelete = "users/img/user/".$_COOKIE['username'].'/crop/img_00'.$imageId.'-cropped.jpg';
-    $folderToDelete = "users/img/user/".$_COOKIE['username'].'/img_00'.$imageId.'.jpg';
-    //$folderImgToDelete = "users/img/user/".$_COOKIE['username'];
-    if(file_exists($folderThumbnails)){
-        unlink($folderToDelete);
-        unlink($folderProfilPicture);
-        unlink($folderCroppedToDelete);
-        unlink($folderCroppedCenterToDelete);
-        unlink($folderThumbnails);
+    if($imageId==='1')
+    {
+
+        $deleteProfilPicture=$user->deleteUserProfilPicture();
+        $folderThumbnails="users/img/user/".$_COOKIE['username'].'/thumbnails/img_00'.$imageId.'-thumb.jpg';
+        $folderProfilPicture='users/img/user/'.$_COOKIE['username'].'/profilPicture/img-userProfil.jpg';
+        $folderCroppedCenterToDelete = "users/img/user/".$_COOKIE['username'].'/crop/img_00'.$imageId.'-cropped-center.jpg';
+        $folderCroppedToDelete = "users/img/user/".$_COOKIE['username'].'/crop/img_00'.$imageId.'-cropped.jpg';
+        $folderToDelete = "users/img/user/".$_COOKIE['username'].'/img_00'.$imageId.'.jpg';
+
+        if(file_exists($folderThumbnails)){
+            unlink($folderToDelete);
+            unlink($folderProfilPicture);
+            unlink($folderCroppedToDelete);
+            unlink($folderCroppedCenterToDelete);
+            unlink($folderThumbnails);
 
 
-    }
-    else {
-        throw new Exception('Il N\'y a rien à effacer');
+        }
+        else {
+            throw new Exception('Il N\'y a rien à effacer');
+        }
+    }else
+    {
+
+        $folderThumbnails="users/img/user/".$_COOKIE['username'].'/thumbnails/img_00'.$imageId.'-thumb.jpg';
+
+        $folderCroppedCenterToDelete = "users/img/user/".$_COOKIE['username'].'/crop/img_00'.$imageId.'-cropped-center.jpg';
+        $folderCroppedToDelete = "users/img/user/".$_COOKIE['username'].'/crop/img_00'.$imageId.'-cropped.jpg';
+        $folderToDelete = "users/img/user/".$_COOKIE['username'].'/img_00'.$imageId.'.jpg';
+
+        if(file_exists($folderThumbnails)){
+            unlink($folderToDelete);
+
+            unlink($folderCroppedToDelete);
+            unlink($folderCroppedCenterToDelete);
+            unlink($folderThumbnails);
+
+
+        }
+        else {
+            throw new Exception('Il N\'y a rien à effacer');
+        }
     }
 
     header('Location:index.php?p=galerie1');
-
-
-
-
 }
 
 function viewerGalerie($imageId)
