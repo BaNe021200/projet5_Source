@@ -408,7 +408,16 @@ if (isset($_GET['p']))
         }
     }
 
-
+    elseif ($_GET['p'] == 'messageToWebmaster')
+    {
+        if(isset($_COOKIE['ID'])&& isset($_COOKIE['username'])){
+            sendMessageToWebmaster($_GET['expeditor'],$_GET['receiver']);
+        }
+        else
+        {
+            throw new Exception("Erreur vous n'êtes pas connectez. Veuillez vous identifier");
+        }
+    }
 
 
 

@@ -716,6 +716,35 @@ function deleteMessage($messageId)
 
 }
 
+function sendMessageToWebmaster($expeditor,$receiver)
+{
+    $user= New UserManager();
+    $sendMessage = $user->sendMail($expeditor, $receiver);
+    $data= $user->getUserProfile($receiver);
+
+    if($sendMessage)
+    {
+        $Session = new Session();
+        $Session->setFlash('votre message est envoyé','success');
+        $Session->flash();
+
+    }
+    //header('Location:index.php?p=homeUser');
+    mail('mail@site.com',"'nouveau message de'.$expeditor","$expeditor.'vous a envoyeé un mùessage'");
+    twigRender('homeUser.html.twig','','','data',$data);
+
+
+
+}
+
+
+
+
+
+
+
+
+
 function eraseUser($userId)
 {
     $folderThumbnails="users/img/user/".$_COOKIE['username'].'/thumbnails/*.jpg';
