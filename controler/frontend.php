@@ -111,9 +111,16 @@ function sendMessage($expeditor, $receiver)
         $Session = new Session();
         $Session->setFlash('votre message est envoyé','success');
         $Session->flash();
-        header('Location:index.php?p=homeUserFront&userId='.$receiver);
+        //header('Location:index.php?p=homeUserFront&userId='.$receiver);
 
-        //twigRender('messages.html.twig','','','','');
+       twigRender('homeUser.html.twig','','','','');
+    }
+    else
+    {
+        $Session = new Session();
+        $Session->setFlash('Une erreur est survenue votre message n\'est pas envoyé','danger');
+        $Session->flash();
+        twigRender('homeUser.html.twig','','','','');
     }
 
 

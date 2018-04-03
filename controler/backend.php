@@ -754,7 +754,7 @@ function eraseUser($userId)
 
         foreach ($folderToDelete as $fileToDelete)
         {
-           unlink($fileToDelete);
+            unlink($fileToDelete);
         }
         rmdir($dirThumbnails);
         rmdir($dirProfilPicture);
@@ -763,15 +763,26 @@ function eraseUser($userId)
     }
 
 
- $user= new UserManager();
+    $user= new UserManager();
 
     $getmail=$user->getMail($userId);
 
     mail($getmail['email'],'Confirmation de désinscription','Au revoir,'. $_COOKIE['first_name'].', votre compte est bien détruit.' );
     disconnectUser();
+    $message= [];
     $eraseUser=$user->eraseUser($userId);
 
-    twigRender('frontend/home.html.twig','','','','');
+
+    if($eraseUser)
+    {
+        $message[]='Votre profil est détruit...Au revoir !';
+    }
+    else
+    {
+        $message[]='votre profil fait de la résistance et ne peut-être détruit pour le moment';
+    }
+    twigRender('frontend/eraseUser.html.twig','message',$message,'','');
+
 }
 
 

@@ -93,6 +93,7 @@ class UserManager extends Manager
             WHERE id= :id');
             $PdoStat->bindValue(':id',$userId,PDO::PARAM_INT);
             $eraseUser= $PdoStat->execute();
+            return $eraseUser;
 
         }
 
@@ -630,7 +631,7 @@ class UserManager extends Manager
             $PdoStat->bindValue(':buinessAdd',$_POST['work_add'],PDO::PARAM_STR);
             $addInfos = $PdoStat->execute();var_dump($addInfos);
 
-            if($addInfos)
+            /*if($addInfos)
             {
                 unset($_SESSION['postal_code']);
                 unset($_SESSION['city']);
@@ -645,7 +646,7 @@ class UserManager extends Manager
                 unset($_SESSION['school_level_add']);
                 unset($_SESSION['work']);
                 unset($_SESSION['work_add']);
-}
+            }*/
 
         }
 
@@ -666,6 +667,7 @@ class UserManager extends Manager
 
         function deleteUserInfos($userId)
         {
+
             $pdo=$this->dbConnect();
             $PdoStat=$pdo->prepare('
             DELETE 
@@ -673,6 +675,8 @@ class UserManager extends Manager
             WHERE user_id= :id');
             $PdoStat->bindValue(':id',$userId,PDO::PARAM_INT);
             $eraseUser= $PdoStat->execute();
+
+            return $eraseUser;
         }
 
 
