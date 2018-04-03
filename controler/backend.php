@@ -375,11 +375,11 @@ function uploadPicture($userId,$img)
                         $temporaryPath = $file['tmp_name'];
 
                         if (move_uploaded_file($temporaryPath, $destinationPath)) {
-                            $messages[] = "le fichier " . $file['name'] . " a été correctement uploadé";
+                            $messages[] = "le fichier a été correctement uploadé";
 
 
                         } else {
-                            $messages[] = "le fichier " . $file['name'] . " n'a pas été correctement uploadé";
+                            $messages[] = "le fichier  n'a pas été correctement uploadé";
 
                         }
 
